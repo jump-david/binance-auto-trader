@@ -8,6 +8,9 @@
 - 실제 Binance 포지션과 서버 측 보호 주문은 종료하지 않으며, 다음 실행 때 로컬 상태 복원 후 거래소와 동기화
 - User Data Stream 정리 요청을 백그라운드 처리해 느린 네트워크가 앱 종료를 막지 않도록 개선
 - 매매 진입·청산 전략 로직 변경 없음
+- Developer ID 서명과 Apple 공증을 완료한 DMG 설치 이미지 추가
+- Chrome 다운로드 후 실제 macOS 최초 실행 확인 경로 검증 완료
+- DMG를 권장 배포 형식으로 제공하며 ZIP은 보조 형식으로 유지
 
 ## English
 
@@ -17,3 +20,6 @@
 - Existing Binance positions and server-side protective orders remain open; local state is restored and synchronized with the exchange at the next launch
 - Moved User Data Stream cleanup to a background task so a slow network cannot block application shutdown
 - No entry or exit strategy logic changes
+- Added Developer ID-signed and Apple-notarized DMG installer images
+- Verified the real macOS first-launch flow after downloading with Chrome
+- DMG is now the recommended distribution format; ZIP remains available as an alternative

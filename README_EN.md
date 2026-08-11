@@ -6,8 +6,9 @@ A macOS desktop application for automated trading on Binance USDⓈ-M Futures.
 
 Download the latest notarized builds from this repository's **Releases** page.
 
-- Korean: `BinanceAutoTrader-v34.51.4-Korean-macOS-arm64.zip`
-- English: `BinanceAutoTrader-v34.51.4-English-macOS-arm64.zip`
+- Korean (recommended): `BinanceAutoTrader-v34.51.4-Korean-macOS-arm64.dmg`
+- English (recommended): `BinanceAutoTrader-v34.51.4-English-macOS-arm64.dmg`
+- ZIP archives remain available in Releases as an alternative format.
 - Platform: Apple Silicon macOS (arm64)
 
 Verify downloaded files with `SHA256SUMS.txt`.
@@ -22,6 +23,10 @@ shasum -a 256 -c SHA256SUMS.txt
 - API and secret keys remain in a local `.env` file on the user's Mac
 - Withdrawal permission is not required
 - Use only the minimum Futures permissions and enable an IP allowlist when possible
+
+## Install
+
+Open the DMG, drag the app to `Applications`, and launch it. On first launch, macOS displays its normal downloaded-app confirmation. Confirm that the dialog says Apple checked the app for malicious software, then click **Open**.
 
 ## Risk notice
 

@@ -6,8 +6,9 @@
 
 공증된 최신 실행 파일은 이 저장소의 **Releases**에서 내려받을 수 있습니다.
 
-- Korean: `BinanceAutoTrader-v34.51.4-Korean-macOS-arm64.zip`
-- English: `BinanceAutoTrader-v34.51.4-English-macOS-arm64.zip`
+- Korean (권장): `BinanceAutoTrader-v34.51.4-Korean-macOS-arm64.dmg`
+- English (권장): `BinanceAutoTrader-v34.51.4-English-macOS-arm64.dmg`
+- ZIP 파일도 Releases에서 보조 배포 형식으로 제공합니다.
 - 지원 환경: Apple Silicon macOS (arm64)
 
 다운로드 후 `SHA256SUMS.txt`를 이용해 파일 무결성을 확인할 수 있습니다.
@@ -22,6 +23,10 @@ shasum -a 256 -c SHA256SUMS.txt
 - API Key와 Secret Key는 사용자 Mac의 로컬 `.env`에 저장
 - 출금 권한은 필요하지 않음
 - API 키에는 선물 거래에 필요한 최소 권한과 IP 제한 사용 권장
+
+## 설치
+
+DMG를 열고 앱을 `Applications` 폴더로 드래그한 뒤 실행하세요. 최초 실행 때 macOS가 인터넷에서 내려받은 앱인지 묻는 정상 확인창이 표시되며, Apple의 악성 소프트웨어 검사 완료 문구를 확인한 뒤 **열기**를 누르면 됩니다.
 
 ## 주의
 
