@@ -6,8 +6,8 @@ A macOS desktop application for automated trading on Binance USDⓈ-M Futures.
 
 Download the latest notarized builds from this repository's **Releases** page.
 
-- Korean: `BinanceAutoTrader-v34.51.3-Korean-macOS-arm64.zip`
-- English: `BinanceAutoTrader-v34.51.3-English-macOS-arm64.zip`
+- Korean: `BinanceAutoTrader-v34.51.4-Korean-macOS-arm64.zip`
+- English: `BinanceAutoTrader-v34.51.4-English-macOS-arm64.zip`
 - Platform: Apple Silicon macOS (arm64)
 
 Verify downloaded files with `SHA256SUMS.txt`.
