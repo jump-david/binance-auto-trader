@@ -28,6 +28,8 @@ shasum -a 256 -c SHA256SUMS.txt
 
 Open the DMG, drag the app to `Applications`, and launch it. On first launch, macOS displays its normal downloaded-app confirmation. Confirm that the dialog says Apple checked the app for malicious software, then click **Open**.
 
+See [User Data Storage Locations](STORAGE_GUIDE_EN.md) for the macOS and Windows locations of API settings, position state, logs, and backtest results.
+
 ## Risk notice
 
 Cryptocurrency futures trading can result in substantial losses. This software does not guarantee profits. You are responsible for reviewing its configuration and orders and for all trading outcomes. Test thoroughly before using live funds.
