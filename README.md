@@ -6,8 +6,8 @@
 
 공증된 최신 실행 파일은 이 저장소의 **Releases**에서 내려받을 수 있습니다.
 
-- Korean: `BinanceAutoTrader-v34.51.2-Korean-macOS-arm64.zip`
-- English: `BinanceAutoTrader-v34.51.2-English-macOS-arm64.zip`
+- Korean: `BinanceAutoTrader-v34.51.3-Korean-macOS-arm64.zip`
+- English: `BinanceAutoTrader-v34.51.3-English-macOS-arm64.zip`
 - 지원 환경: Apple Silicon macOS (arm64)
 
 다운로드 후 `SHA256SUMS.txt`를 이용해 파일 무결성을 확인할 수 있습니다.

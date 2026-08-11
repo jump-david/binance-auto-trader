@@ -1,2 +1,2 @@
-633d3b6acc96c9c0d7ee34e1360164e1b91df50061fa425c2e33cf93682527bd  BinanceAutoTrader-v34.51.2-English-macOS-arm64.zip
-06ad8ad0003db49782ce3f68684c60cb3ac4b725a82ec5c10f9e6747529eddd9  BinanceAutoTrader-v34.51.2-Korean-macOS-arm64.zip
+2515f1c66560d410b88c624ea76b77dd51450e6aa75e21626cbb14b6d4d8c756  BinanceAutoTrader-v34.51.3-English-macOS-arm64.zip
+e7dff347ab14974a724792b8a4d74922003ddda3f5788abc6e23caf8a752a1a6  BinanceAutoTrader-v34.51.3-Korean-macOS-arm64.zip
