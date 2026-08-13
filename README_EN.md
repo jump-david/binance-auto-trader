@@ -1,15 +1,16 @@
 # Binance Auto Trader
 
-A macOS desktop application for automated trading on Binance USDⓈ-M Futures.
+A Windows and macOS desktop application for automated trading on Binance USDⓈ-M Futures.
 
 ## Download
 
 Download the latest notarized builds from this repository's **Releases** page.
 
-- Korean (recommended): `BinanceAutoTrader-v34.51.4-Korean-macOS-arm64.dmg`
-- English (recommended): `BinanceAutoTrader-v34.51.4-English-macOS-arm64.dmg`
-- ZIP archives remain available in Releases as an alternative format.
-- Platform: Apple Silicon macOS (arm64)
+- Windows Korean: `BinanceAutoTrader-v34.51.4-Korean-Windows-x64-Setup.exe`
+- Windows English: `BinanceAutoTrader-v34.51.4-English-Windows-x64-Setup.exe`
+- macOS Korean: `BinanceAutoTrader-v34.51.4-Korean-macOS-arm64.dmg`
+- macOS English: `BinanceAutoTrader-v34.51.4-English-macOS-arm64.dmg`
+- Platforms: Windows 10/11 x64 and Apple Silicon macOS arm64
 
 Verify downloaded files with `SHA256SUMS.txt`.
 
@@ -26,7 +27,7 @@ shasum -a 256 -c SHA256SUMS.txt
 
 ## Install
 
-Open the DMG, drag the app to `Applications`, and launch it. On first launch, macOS displays its normal downloaded-app confirmation. Confirm that the dialog says Apple checked the app for malicious software, then click **Open**.
+On Windows, run Setup. The installer is Authenticode-signed by `Jeongin Park`. On macOS, open the DMG, drag the app to `Applications`, and launch it.
 
 See [User Data Storage Locations](STORAGE_GUIDE_EN.md) for the macOS and Windows locations of API settings, position state, logs, and backtest results.
 
