@@ -31,6 +31,15 @@ On Windows, run Setup. The installer is Authenticode-signed by `Jeongin Park`. O
 
 See [User Data Storage Locations](STORAGE_GUIDE_EN.md) for the macOS and Windows locations of API settings, position state, logs, and backtest results.
 
+## Documentation and test records
+
+I publish what this bot does, including the runs where the hypothesis failed.
+
+- [How it was built](https://medium.com/@jiaym/i-built-a-crypto-trading-bot-that-switches-strategy-based-on-volatility-then-ran-it-on-2-000-166f9f7eb14d) — regime routing, the three-timeframe entry engine, and what happens when the bot dies
+- [First week on $2,000](https://medium.com/@jiaym/my-trading-bot-lost-money-for-five-straight-days-then-the-settings-stopped-changing-11d149274f69) — a live account, five losing days, and what changed when I stopped touching the settings
+
+Full research notes, in Korean: [blog.naver.com/jump_david](https://blog.naver.com/jump_david)
+
 ## Risk notice
 
 Cryptocurrency futures trading can result in substantial losses. This software does not guarantee profits. You are responsible for reviewing its configuration and orders and for all trading outcomes. Test thoroughly before using live funds.
