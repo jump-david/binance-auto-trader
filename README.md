@@ -31,6 +31,18 @@ Windows에서는 Setup을 실행하세요. 설치 프로그램은 `Jeongin Park`
 
 API 설정, 포지션 상태, 로그와 백테스트 결과의 macOS·Windows 저장 위치는 [사용자 데이터 저장 위치 안내](STORAGE_GUIDE.md)에서 확인할 수 있습니다.
 
+## 문서
+
+사용법과 전략 검증 기록을 블로그에 정리해 두었습니다.
+
+- [설명서 전체 목차](https://blog.naver.com/jump_david/224377037315) — 화면별 사용법 15편
+- [자동매매 가이드](https://blog.naver.com/PostList.naver?blogId=jump_david&categoryNo=15) — 지표·설정·용어 38편
+- [자동매매 연구소](https://blog.naver.com/PostList.naver?blogId=jump_david&categoryNo=13) — 1년 백테스트 검증 24편. 가설이 틀린 결과도 그대로 공개합니다
+- [기술 문서](https://blog.naver.com/PostList.naver?blogId=jump_david&categoryNo=10) — 백테스트 속도, 데이터 캐시 등 내부 동작
+- [자동매매 운용일지](https://blog.naver.com/PostList.naver?blogId=jump_david&categoryNo=8) — 2,000 USDT 실계좌 기록
+
+영문 기록은 [Medium](https://medium.com/@jiaym)에 있습니다.
+
 ## 주의
 
 암호화폐 선물 거래는 큰 손실을 초래할 수 있습니다. 본 프로그램은 수익을 보장하지 않으며, 사용자는 설정과 주문을 직접 검토하고 모든 거래 결과에 대한 책임을 부담합니다. 실거래 전 테스트 환경에서 충분히 검증하세요.
