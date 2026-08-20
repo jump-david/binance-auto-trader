@@ -14,6 +14,7 @@
 - 스윕 결과의 레짐 키 형식을 정규화해 유효한 결과가 `No trades`로 표시되는 문제를 수정했습니다.
 - 앱의 `CFBundleShortVersionString`과 `CFBundleVersion`을 정식 버전 값으로 기록합니다.
 - 한글·영문 Apple Silicon 앱과 DMG는 Developer ID로 서명하고 Apple 공증을 완료했습니다.
+- 한글·영문 Windows 10/11 x64 설치 프로그램은 `Jeongin Park` 명의로 Authenticode 서명하고 SSL.com RFC 3161 타임스탬프를 적용했습니다.
 
 이번 릴리스는 기록·재현성·데이터 정합성 개선이 중심이며 전략 파라미터를 변경하지 않았습니다.
 
@@ -31,5 +32,6 @@
 - Normalized regime keys in Sweep rendering so valid results no longer appear as `No trades`.
 - Writes proper `CFBundleShortVersionString` and `CFBundleVersion` values into the macOS bundles.
 - Korean and English Apple Silicon apps and DMGs are signed with Developer ID and notarized by Apple.
+- Korean and English Windows 10/11 x64 installers are Authenticode-signed by `Jeongin Park` with an SSL.com RFC 3161 timestamp.
 
 This release focuses on observability, reproducibility, and data consistency. Strategy parameters are unchanged.
