@@ -6,12 +6,14 @@ A macOS desktop application for automated trading on Binance USDⓈ-M Futures.
 
 Download the latest notarized builds from this repository's **Releases** page.
 
-- Korean (recommended): `BinanceAutoTrader-v34.51.4-Korean-macOS-arm64.dmg`
-- English (recommended): `BinanceAutoTrader-v34.51.4-English-macOS-arm64.dmg`
+- Korean (recommended): `BinanceAutoTrader-v34.6-Korean-macOS-arm64.dmg`
+- English (recommended): `BinanceAutoTrader-v34.6-English-macOS-arm64.dmg`
 - ZIP archives remain available in Releases as an alternative format.
 - Platform: Apple Silicon macOS (arm64)
 
 Verify downloaded files with `SHA256SUMS.txt`.
+
+v34.6 aligns live and backtest Dynamic Top N on completed 4-hour UTC buckets and adds automatic candle-cache gap repair, exchange-confirmed close persistence, UTC/KST audit fields, and more reliable Sweep result rendering.
 
 ```bash
 shasum -a 256 -c SHA256SUMS.txt

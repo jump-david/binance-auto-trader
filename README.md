@@ -6,12 +6,14 @@
 
 공증된 최신 실행 파일은 이 저장소의 **Releases**에서 내려받을 수 있습니다.
 
-- Korean (권장): `BinanceAutoTrader-v34.51.4-Korean-macOS-arm64.dmg`
-- English (권장): `BinanceAutoTrader-v34.51.4-English-macOS-arm64.dmg`
+- Korean (권장): `BinanceAutoTrader-v34.6-Korean-macOS-arm64.dmg`
+- English (권장): `BinanceAutoTrader-v34.6-English-macOS-arm64.dmg`
 - ZIP 파일도 Releases에서 보조 배포 형식으로 제공합니다.
 - 지원 환경: Apple Silicon macOS (arm64)
 
 다운로드 후 `SHA256SUMS.txt`를 이용해 파일 무결성을 확인할 수 있습니다.
+
+v34.6은 실거래·백테스트 Dynamic Top N의 4시간 UTC 기준을 통일하고, 캔들 캐시 공백 자동 복구, 거래소에서 확인된 청산 기록 보강, UTC·KST 감사 필드와 스윕 결과 표시 안정화를 포함합니다.
 
 ```bash
 shasum -a 256 -c SHA256SUMS.txt
