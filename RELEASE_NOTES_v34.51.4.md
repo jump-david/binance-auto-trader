@@ -11,6 +11,9 @@
 - Developer ID 서명과 Apple 공증을 완료한 DMG 설치 이미지 추가
 - Chrome 다운로드 후 실제 macOS 최초 실행 확인 경로 검증 완료
 - DMG를 권장 배포 형식으로 제공하며 ZIP은 보조 형식으로 유지
+- Windows 10/11 x64용 한국어·영어 Setup 설치 프로그램 추가
+- SSL.com Authenticode 코드 서명과 RFC 3161 타임스탬프 적용
+- Microsoft Defender 검사와 SignTool 서명 검증 완료
 
 ## English
 
@@ -23,3 +26,6 @@
 - Added Developer ID-signed and Apple-notarized DMG installer images
 - Verified the real macOS first-launch flow after downloading with Chrome
 - DMG is now the recommended distribution format; ZIP remains available as an alternative
+- Added Korean and English Setup installers for Windows 10/11 x64
+- Applied SSL.com Authenticode code signing with an RFC 3161 timestamp
+- Completed Microsoft Defender scanning and SignTool signature verification
