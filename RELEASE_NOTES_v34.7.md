@@ -13,6 +13,7 @@
 - 전략 파라미터는 변경하지 않았습니다.
 
 한글·영문 Apple Silicon 앱, ZIP과 DMG는 Developer ID로 서명하고 Apple 공증을 완료했습니다.
+Windows 10/11 x64 한국어·영문 설치 프로그램은 SSL.com Authenticode 서명과 신뢰된 타임스탬프를 적용하고 Microsoft Defender 검사를 통과했습니다.
 
 ## English
 
@@ -27,3 +28,4 @@
 - Strategy parameters are unchanged.
 
 Korean and English Apple Silicon apps, ZIP archives, and DMGs are Developer ID signed and Apple notarized.
+Korean and English Windows 10/11 x64 installers are SSL.com Authenticode signed with a trusted timestamp and passed Microsoft Defender scanning.
