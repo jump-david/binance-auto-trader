@@ -8,14 +8,14 @@
 
 - Windows 한국어: `BinanceAutoTrader-v34.6-Korean-Windows-x64-Setup.exe`
 - Windows English: `BinanceAutoTrader-v34.6-English-Windows-x64-Setup.exe`
-- macOS 한국어: `BinanceAutoTrader-v34.6-Korean-macOS-arm64.dmg`
-- macOS English: `BinanceAutoTrader-v34.6-English-macOS-arm64.dmg`
+- macOS 한국어: `BinanceAutoTrader-v34.7-Korean-macOS-arm64.dmg`
+- macOS English: `BinanceAutoTrader-v34.7-English-macOS-arm64.dmg`
 - macOS ZIP 파일도 Releases에서 보조 배포 형식으로 제공합니다.
 - 지원 환경: Windows 10/11 x64, Apple Silicon macOS arm64
 
 다운로드 후 `SHA256SUMS.txt`를 이용해 파일 무결성을 확인할 수 있습니다.
 
-v34.6은 실거래·백테스트 Dynamic Top N의 4시간 UTC 기준을 통일하고, 캔들 캐시 공백 자동 복구, 거래소에서 확인된 청산 기록 보강, UTC·KST 감사 필드와 스윕 결과 표시 안정화를 포함합니다.
+v34.7은 로컬 청산과 Binance API 청산 확인이 한 거래를 중복 표시·기록하던 문제를 수정했습니다. 거래소 확인값으로 체결가·수량·실현손익을 보정하면서 앱이 판단한 청산 사유와 레짐은 유지합니다.
 
 ```bash
 shasum -a 256 -c SHA256SUMS.txt
