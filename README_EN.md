@@ -8,14 +8,14 @@ Download the latest notarized builds from this repository's **Releases** page.
 
 - Windows Korean: `BinanceAutoTrader-v34.7-Korean-Windows-x64-Setup.exe`
 - Windows English: `BinanceAutoTrader-v34.7-English-Windows-x64-Setup.exe`
-- macOS Korean: `BinanceAutoTrader-v34.7-Korean-macOS-arm64.dmg`
-- macOS English: `BinanceAutoTrader-v34.7-English-macOS-arm64.dmg`
+- macOS Korean: `BinanceAutoTrader-v34.8-Korean-macOS-arm64.dmg`
+- macOS English: `BinanceAutoTrader-v34.8-English-macOS-arm64.dmg`
 - macOS ZIP archives remain available in Releases as an alternative format.
 - Platforms: Windows 10/11 x64 and Apple Silicon macOS arm64
 
 Verify downloaded files with `SHA256SUMS.txt`.
 
-v34.7 fixes duplicate trade-history and CSV close records when a locally observed close is later confirmed by the Binance API. Exchange-confirmed fill price, quantity, and realized PnL are reconciled while preserving the bot's exit reason and regime.
+v34.8 preserves a due UTC 4-hour Dynamic Top N refresh when another candle-cache worker is active and prevents new entries from an expired universe until the current snapshot is ready. Existing positions and protective orders remain monitored.
 
 ```bash
 shasum -a 256 -c SHA256SUMS.txt
