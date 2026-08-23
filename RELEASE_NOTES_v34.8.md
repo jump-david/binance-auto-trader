@@ -12,6 +12,8 @@
 
 한글·영문 Apple Silicon 앱, ZIP과 DMG는 Developer ID로 서명하고 Apple 공증을 완료했습니다.
 
+한글·영문 Windows 10/11 x64 설치 프로그램을 추가했습니다. 앱 실행 파일과 설치 프로그램은 `Jeongin Park` 명의로 Authenticode 서명했으며 SSL.com RFC 3161 타임스탬프를 적용했습니다. 두 설치 프로그램은 Microsoft Defender 검사, 설치·업그레이드·제거·재설치, 사용자 데이터 보존 검증을 통과했습니다.
+
 ## English
 
 - Fixed a live Dynamic Top N issue where a UTC 4-hour refresh could be discarded when another candle-cache worker was already running.
@@ -23,3 +25,5 @@
 - Added regression coverage for missed UTC 4-hour recovery and pending-cache preservation; all 13 reproducibility tests pass.
 
 Korean and English Apple Silicon apps, ZIP archives, and DMGs are Developer ID signed and Apple notarized.
+
+Korean and English Windows 10/11 x64 installers are now available. The application executables and installers are Authenticode-signed by `Jeongin Park` with SSL.com RFC 3161 timestamps. Both installers passed Microsoft Defender scanning and install, upgrade, uninstall, reinstall, and user-data preservation validation.

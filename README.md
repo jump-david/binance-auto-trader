@@ -6,8 +6,8 @@
 
 공증된 최신 실행 파일은 이 저장소의 **Releases**에서 내려받을 수 있습니다.
 
-- Windows 한국어: `BinanceAutoTrader-v34.7-Korean-Windows-x64-Setup.exe`
-- Windows English: `BinanceAutoTrader-v34.7-English-Windows-x64-Setup.exe`
+- Windows 한국어: `BinanceAutoTrader-v34.8-Korean-Windows-x64-Setup.exe`
+- Windows English: `BinanceAutoTrader-v34.8-English-Windows-x64-Setup.exe`
 - macOS 한국어: `BinanceAutoTrader-v34.8-Korean-macOS-arm64.dmg`
 - macOS English: `BinanceAutoTrader-v34.8-English-macOS-arm64.dmg`
 - macOS ZIP 파일도 Releases에서 보조 배포 형식으로 제공합니다.
