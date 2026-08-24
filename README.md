@@ -8,14 +8,14 @@
 
 - Windows 한국어: `BinanceAutoTrader-v34.8-Korean-Windows-x64-Setup.exe`
 - Windows English: `BinanceAutoTrader-v34.8-English-Windows-x64-Setup.exe`
-- macOS 한국어: `BinanceAutoTrader-v34.8-Korean-macOS-arm64.dmg`
-- macOS English: `BinanceAutoTrader-v34.8-English-macOS-arm64.dmg`
+- macOS 한국어: `BinanceAutoTrader-v34.9-Korean-macOS-arm64.dmg`
+- macOS English: `BinanceAutoTrader-v34.9-English-macOS-arm64.dmg`
 - macOS ZIP 파일도 Releases에서 보조 배포 형식으로 제공합니다.
 - 지원 환경: Windows 10/11 x64, Apple Silicon macOS arm64
 
 다운로드 후 `SHA256SUMS.txt`를 이용해 파일 무결성을 확인할 수 있습니다.
 
-v34.8은 다른 캔들 캐시 작업과 겹친 UTC 4시간 Dynamic Top N 갱신을 대기열에 보존하고, 최신 Top N이 준비되지 않은 동안 오래된 종목 목록으로 신규 진입하지 않도록 수정했습니다. 기존 포지션 감시와 보호 주문은 계속 유지됩니다.
+v34.9는 Sweep·Validation 멀티프로세스 백테스트에서 각 진입 시점의 Dynamic Top N 필터가 누락될 수 있던 문제를 수정했습니다. 실거래 Top N, 주문·청산, Trade History와 CSV 로직은 변경하지 않았습니다.
 
 ```bash
 shasum -a 256 -c SHA256SUMS.txt

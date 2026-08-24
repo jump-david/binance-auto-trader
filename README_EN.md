@@ -8,14 +8,14 @@ Download the latest notarized builds from this repository's **Releases** page.
 
 - Windows Korean: `BinanceAutoTrader-v34.8-Korean-Windows-x64-Setup.exe`
 - Windows English: `BinanceAutoTrader-v34.8-English-Windows-x64-Setup.exe`
-- macOS Korean: `BinanceAutoTrader-v34.8-Korean-macOS-arm64.dmg`
-- macOS English: `BinanceAutoTrader-v34.8-English-macOS-arm64.dmg`
+- macOS Korean: `BinanceAutoTrader-v34.9-Korean-macOS-arm64.dmg`
+- macOS English: `BinanceAutoTrader-v34.9-English-macOS-arm64.dmg`
 - macOS ZIP archives remain available in Releases as an alternative format.
 - Platforms: Windows 10/11 x64 and Apple Silicon macOS arm64
 
 Verify downloaded files with `SHA256SUMS.txt`.
 
-v34.8 preserves a due UTC 4-hour Dynamic Top N refresh when another candle-cache worker is active and prevents new entries from an expired universe until the current snapshot is ready. Existing positions and protective orders remain monitored.
+v34.9 fixes a missing entry-time Dynamic Top N filter in the Sweep and Validation multiprocessing backtest workers. Live Top N selection, orders and exits, Trade History, and CSV logic are unchanged.
 
 ```bash
 shasum -a 256 -c SHA256SUMS.txt
