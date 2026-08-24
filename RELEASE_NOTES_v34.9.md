@@ -8,7 +8,7 @@
 - Top N 포함 종목은 허용하고 제외 종목은 차단하는 회귀 테스트를 추가했으며 전체 14개 테스트를 통과했습니다.
 - 실거래 Top N 선정·갱신, 주문·청산, 포지션 관리, Trade History와 CSV 기록 로직은 변경하지 않았습니다.
 
-한글·영문 Apple Silicon 앱, ZIP과 DMG는 Developer ID로 서명하고 Apple 공증을 완료했습니다.
+한글·영문 Apple Silicon 앱, ZIP과 DMG는 Developer ID로 서명하고 Apple 공증을 완료했습니다. Windows 10/11 x64 설치 프로그램은 `Jeongin Park` 명의로 Authenticode 서명하고 SSL.com RFC 3161 SHA-256 타임스탬프를 적용했으며 Microsoft Defender 검사를 통과했습니다.
 
 ## English
 
@@ -18,4 +18,4 @@
 - Added regression coverage that accepts an included symbol and rejects an excluded symbol; all 14 tests pass.
 - Live Top N selection and refresh, orders and exits, position management, Trade History, and CSV recording are unchanged.
 
-Korean and English Apple Silicon apps, ZIP archives, and DMGs are Developer ID signed and Apple notarized.
+Korean and English Apple Silicon apps, ZIP archives, and DMGs are Developer ID signed and Apple notarized. The Windows 10/11 x64 installers are Authenticode-signed by `Jeongin Park`, carry SSL.com RFC 3161 SHA-256 timestamps, and passed Microsoft Defender scanning.

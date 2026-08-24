@@ -6,8 +6,8 @@ A Windows and macOS desktop application for automated trading on Binance USDⓈ-
 
 Download the latest notarized builds from this repository's **Releases** page.
 
-- Windows Korean: `BinanceAutoTrader-v34.8-Korean-Windows-x64-Setup.exe`
-- Windows English: `BinanceAutoTrader-v34.8-English-Windows-x64-Setup.exe`
+- Windows Korean: `BinanceAutoTrader-v34.9-Korean-Windows-x64-Setup.exe`
+- Windows English: `BinanceAutoTrader-v34.9-English-Windows-x64-Setup.exe`
 - macOS Korean: `BinanceAutoTrader-v34.9-Korean-macOS-arm64.dmg`
 - macOS English: `BinanceAutoTrader-v34.9-English-macOS-arm64.dmg`
 - macOS ZIP archives remain available in Releases as an alternative format.
