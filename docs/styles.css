@@ -39,6 +39,7 @@ a { color: inherit; }
 .nav-links a { text-decoration: none; }
 .nav-links a:hover { color: var(--text); }
 .manual-tab { color: var(--gold-2); font-weight: 800; }
+.about-tab { color: #8cf1c6; font-weight: 800; }
 .lang { padding: 7px 12px; border: 1px solid var(--line); border-radius: 999px; color: var(--text) !important; }
 .hero { padding: 100px 0 72px; }
 .hero-grid { display: grid; grid-template-columns: 1.3fr .7fr; align-items: center; gap: 70px; }
@@ -115,6 +116,34 @@ h2 { margin: 10px 0 15px; font-size: clamp(2rem, 4vw, 3.4rem); line-height: 1.08
 .step p { margin: 0; color: var(--muted); }
 .warning { padding: 26px; border: 1px solid rgba(255,123,123,.28); border-radius: 16px; background: rgba(255,123,123,.07); color: #ffc1c1; }
 .warning b { color: #fff; }
+.subpage { min-height: 72vh; }
+.about-hero { padding: 100px 0 42px; }
+.about-hero h1 { margin-bottom: 24px; }
+.about-grid { display: grid; grid-template-columns: 1.35fr .65fr; gap: 22px; align-items: stretch; }
+.about-panel { padding: 34px; border: 1px solid var(--line); border-radius: 22px; background: linear-gradient(155deg, rgba(20,35,49,.96), rgba(10,20,29,.94)); }
+.about-panel h2 { font-size: clamp(1.9rem, 3.7vw, 3rem); }
+.about-panel p { color: var(--muted); }
+.about-panel p:last-child { margin-bottom: 0; }
+.fact-panel { border-top: 3px solid var(--green); }
+.fact-list { display: grid; gap: 0; margin: 24px 0 0; }
+.fact-list div { display: grid; grid-template-columns: 105px 1fr; gap: 16px; padding: 13px 0; border-bottom: 1px solid var(--line); }
+.fact-list div:last-child { border-bottom: 0; }
+.fact-list dt { color: var(--muted); }
+.fact-list dd { margin: 0; font-weight: 800; }
+.about-band { background: linear-gradient(180deg, rgba(255,255,255,.018), transparent); }
+.about-cards .card { min-height: 240px; }
+.contact-card { display: grid; grid-template-columns: 1.05fr .95fr; gap: 34px; padding: 42px; border: 1px solid rgba(243,186,47,.28); border-radius: 24px; background: linear-gradient(135deg, rgba(243,186,47,.12), rgba(20,35,49,.88)); }
+.contact-card h2 { font-size: clamp(2rem, 3.8vw, 3.2rem); }
+.contact-card p { color: var(--muted); }
+.contact-address { margin: 20px 0 12px; font-size: clamp(1.2rem, 3vw, 1.7rem); font-weight: 900; color: var(--gold-2) !important; overflow-wrap: anywhere; }
+.contact-address a { text-decoration-color: rgba(243,186,47,.45); text-underline-offset: 5px; }
+.contact-safety { font-size: .88rem; }
+.official-links { display: grid; gap: 10px; align-content: center; }
+.official-links a { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 17px 18px; border: 1px solid var(--line); border-radius: 14px; background: rgba(8,16,24,.48); text-decoration: none; }
+.official-links a:hover { border-color: rgba(243,186,47,.48); }
+.official-links span { color: var(--muted); font-size: .86rem; }
+.official-links strong { color: var(--gold-2); text-align: right; }
+.updated { margin: 18px 0 0; color: #768694; font-size: .86rem; }
 .cta { padding: 46px; border: 1px solid rgba(243,186,47,.25); border-radius: 24px; background: linear-gradient(130deg, rgba(243,186,47,.14), rgba(20,35,49,.8)); display: flex; align-items: center; justify-content: space-between; gap: 30px; }
 .cta h2 { margin: 0 0 8px; font-size: clamp(1.8rem,3vw,2.8rem); }
 .cta p { margin: 0; color: var(--muted); }
@@ -122,10 +151,10 @@ footer { padding: 40px 0 60px; color: #768694; font-size: .88rem; }
 .footer-inner { display: flex; justify-content: space-between; gap: 20px; border-top: 1px solid var(--line); padding-top: 28px; }
 @media (max-width: 820px) {
   .nav-links { gap: 10px; }
-  .nav-links a:not(.lang):not(.manual-tab) { display: none; }
+  .nav-links a:not(.lang):not(.manual-tab):not(.about-tab) { display: none; }
   .hero { padding-top: 72px; }
   h1 { font-size: clamp(1.6rem, 5vw, 2.4rem); }
-  .hero-grid, .security, .platform-grid { grid-template-columns: 1fr; }
+  .hero-grid, .security, .platform-grid, .about-grid, .contact-card { grid-template-columns: 1fr; }
   .hero-grid { gap: 48px; }
   .terminal { max-width: 540px; }
   .trust-grid { grid-template-columns: repeat(2,1fr); padding: 18px 0; }
@@ -136,6 +165,8 @@ footer { padding: 40px 0 60px; color: #768694; font-size: .88rem; }
 }
 @media (max-width: 480px) {
   .wrap { width: min(100% - 26px, 1120px); }
+  .nav-inner { gap: 12px; }
+  .nav-links { gap: 6px; font-size: .78rem; }
   .brand span:last-child { display: none; }
   h1 { font-size: clamp(1rem, 4.9vw, 1.5rem); }
   .actions .button { width: 100%; }
