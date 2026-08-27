@@ -1,0 +1,2400 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Binance Auto Trader v34.9 — User Manual</title>
+<link href="https://www.jumpdavidlab.com/manual/en/" rel="canonical"/>
+<link href="https://www.jumpdavidlab.com/manual/en/" hreflang="en" rel="alternate"/>
+<link href="https://www.jumpdavidlab.com/manual/ko/" hreflang="ko" rel="alternate"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --base:     #0B0F17;
+  --surface:  #131929;
+  --surface2: #1A2438;
+  --border:   #1F2D4A;
+  --border2:  #2A3F60;
+  --accent:   #3B82F6;
+  --accent2:  #60A5FA;
+  --tf:       #3B82F6;
+  --mr:       #A78BFA;
+  --green:    #10B981;
+  --red:      #EF4444;
+  --yellow:   #F59E0B;
+  --text:     #CBD5E1;
+  --text-hi:  #E2E8F0;
+  --text-lo:  #64748B;
+  --text-mid: #94A3B8;
+  --mono:     ui-monospace, 'Cascadia Code', 'SF Mono', 'Consolas', monospace;
+  --sans:     system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  --sidebar-w: 220px;
+  --content-max: 860px;
+}
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(145deg, #17233a 0%, #111827 58%, #0b0f17 100%);
+  border: 1px solid var(--border2);
+  border-radius: 18px;
+  padding: 34px;
+  margin-bottom: 44px;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  width: 240px; height: 240px;
+  right: -80px; top: -110px;
+  border-radius: 50%;
+  background: rgba(59,130,246,.20);
+  filter: blur(18px);
+}
+.hero-kicker { font: 700 10px/1 var(--mono); color: #93c5fd; letter-spacing: .16em; }
+.hero h1 { color: #f8fafc; font-size: 32px; line-height: 1.25; margin: 12px 0 10px; }
+.hero p { max-width: 650px; color: var(--text-mid); font-size: 14px; }
+.hero-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.hero-meta span { font: 700 10px/1 var(--mono); color: var(--text); border: 1px solid var(--border2); background: rgba(11,15,23,.55); border-radius: 999px; padding: 7px 10px; }
+
+.route-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 14px 0 24px; }
+.route-card { display: block; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px; text-decoration: none; color: var(--text); }
+.route-card:hover { border-color: var(--accent); transform: translateY(-1px); }
+.route-card b { display: block; color: var(--text-hi); font-size: 12px; margin-bottom: 4px; }
+.route-card span { color: var(--text-lo); font-size: 11px; }
+.checklist { list-style: none; margin: 10px 0 18px; }
+.checklist li { position: relative; padding: 6px 0 6px 26px; border-bottom: 1px solid var(--border); }
+.checklist li::before { content: '✓'; position: absolute; left: 4px; color: var(--green); font-weight: 800; }
+.kbd { font: 700 10px/1 var(--mono); color: var(--text-hi); background: var(--surface2); border: 1px solid var(--border2); border-bottom-width: 2px; border-radius: 5px; padding: 3px 6px; }
+
+html { font-size: 14px; scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--base);
+  color: var(--text);
+  line-height: 1.7;
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ── Sidebar ─────────────────────────────────────────── */
+#sidebar {
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  width: var(--sidebar-w);
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  padding: 24px 0 40px;
+  z-index: 100;
+}
+
+.sb-logo {
+  padding: 0 16px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 12px;
+}
+.sb-logo .prog { font-family: var(--mono); font-size: 11px; color: var(--accent2); letter-spacing: .08em; }
+.sb-logo .ver  { font-family: var(--mono); font-size: 10px; color: var(--text-lo); margin-top: 2px; }
+
+.sb-section { padding: 4px 16px; margin-top: 14px; }
+.sb-section-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--text-lo);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+#sidebar a {
+  display: block;
+  padding: 4px 16px 4px 20px;
+  font-size: 12.5px;
+  color: var(--text-mid);
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  transition: color .15s, border-color .15s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#sidebar a:hover { color: var(--text-hi); border-left-color: var(--border2); }
+#sidebar a.active { color: var(--accent2); border-left-color: var(--accent); }
+
+/* ── Main ────────────────────────────────────────────── */
+#main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  padding: 48px 48px 80px;
+  max-width: calc(var(--sidebar-w) + var(--content-max) + 96px);
+}
+
+/* ── Section headers ────────────────────────────────── */
+.section { margin-bottom: 56px; scroll-margin-top: 32px; }
+[id] { scroll-margin-top: 32px; }
+
+.section-eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--accent);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.section-eyebrow::before { content: '› '; }
+
+h2 {
+  font-family: var(--sans);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-hi);
+  text-wrap: balance;
+  margin-bottom: 10px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-hi);
+  margin: 28px 0 10px;
+  text-wrap: balance;
+}
+
+h4 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-mid);
+  margin: 20px 0 8px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+p { margin-bottom: 10px; }
+p + p { margin-top: 0; }
+
+/* ── Tables ─────────────────────────────────────────── */
+.tbl-wrap { overflow-x: auto; margin: 12px 0 20px; border-radius: 8px; border: 1px solid var(--border); }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+thead th {
+  background: var(--surface2);
+  color: var(--text-mid);
+  font-weight: 700;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 9px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+tbody tr { border-bottom: 1px solid var(--border); }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: rgba(59,130,246,.04); }
+
+td {
+  padding: 9px 14px;
+  vertical-align: top;
+  color: var(--text);
+  line-height: 1.55;
+}
+
+td:first-child { white-space: nowrap; }
+
+.td-param {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--accent2);
+  white-space: nowrap;
+}
+
+.td-default {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--text-mid);
+  white-space: nowrap;
+}
+
+/* ── Code & formula ─────────────────────────────────── */
+pre, code {
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+code {
+  background: var(--surface2);
+  color: var(--accent2);
+  padding: 1px 5px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+pre {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 20px;
+  overflow-x: auto;
+  color: var(--text);
+  line-height: 1.75;
+  margin: 12px 0 20px;
+}
+
+pre .comment { color: var(--text-lo); }
+pre .val     { color: var(--green); }
+pre .label   { color: var(--yellow); }
+
+/* ── Badges ──────────────────────────────────────────── */
+.badge {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+  letter-spacing: .04em;
+  vertical-align: middle;
+}
+.badge-tf     { background: rgba(59,130,246,.18); color: #93C5FD; border: 1px solid rgba(59,130,246,.3); }
+.badge-mr     { background: rgba(167,139,250,.18); color: #C4B5FD; border: 1px solid rgba(167,139,250,.3); }
+.badge-quiet  { background: rgba(167,139,250,.14); color: #C4B5FD; }
+.badge-normal { background: rgba(59,130,246,.14); color: #93C5FD; }
+.badge-trend  { background: rgba(16,185,129,.14); color: #6EE7B7; }
+.badge-panic  { background: rgba(239,68,68,.14); color: #FCA5A5; }
+
+/* ── Callout boxes ───────────────────────────────────── */
+.callout {
+  border-left: 3px solid var(--border2);
+  background: var(--surface);
+  border-radius: 0 8px 8px 0;
+  padding: 12px 16px;
+  margin: 14px 0;
+  font-size: 12.5px;
+  color: var(--text-mid);
+}
+.callout.warn  { border-left-color: var(--yellow); background: rgba(245,158,11,.06); color: var(--text); }
+.callout.danger{ border-left-color: var(--red);    background: rgba(239,68,68,.06);  color: var(--text); }
+.callout.info  { border-left-color: var(--accent); background: rgba(59,130,246,.06); color: var(--text); }
+.callout.green { border-left-color: var(--green);  background: rgba(16,185,129,.06); color: var(--text); }
+
+.callout strong { color: var(--text-hi); }
+
+/* ── Formula block ───────────────────────────────────── */
+.formula {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 12px 0;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  line-height: 2;
+  color: var(--text);
+}
+.formula .lhs { color: var(--yellow); display: inline-block; min-width: 180px; }
+.formula .op  { color: var(--text-lo); }
+.formula .rhs { color: var(--green); }
+
+/* ── Step list ───────────────────────────────────────── */
+.steps { list-style: none; margin: 12px 0 20px; display: flex; flex-direction: column; gap: 8px; }
+.steps li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+.step-num {
+  flex-shrink: 0;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(59,130,246,.12);
+  border: 1px solid rgba(59,130,246,.25);
+  border-radius: 4px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.step-body { font-size: 12.5px; }
+.step-body strong { color: var(--text-hi); }
+
+/* ── Scanline divider ────────────────────────────────── */
+.scan-rule {
+  margin: 48px 0;
+  border: none;
+  height: 1px;
+  background: repeating-linear-gradient(90deg, var(--border) 0, var(--border) 6px, transparent 6px, transparent 12px);
+  opacity: .6;
+}
+
+/* ── Regime grid ─────────────────────────────────────── */
+.regime-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin: 14px 0 20px;
+}
+.regime-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+}
+.regime-card .r-name { font-family: var(--mono); font-size: 11px; font-weight: 700; margin-bottom: 4px; }
+.regime-card .r-atr  { font-size: 11px; color: var(--text-lo); margin-bottom: 6px; font-family: var(--mono); }
+.regime-card .r-strat{ font-size: 11.5px; margin-bottom: 4px; }
+.regime-card .r-exit { font-size: 11px; color: var(--text-mid); }
+.regime-card.rc-quiet  { border-top: 3px solid var(--mr); }
+.regime-card.rc-normal { border-top: 3px solid var(--tf); }
+.regime-card.rc-trend  { border-top: 3px solid var(--green); }
+.regime-card.rc-panic  { border-top: 3px solid var(--red); }
+
+/* ── Scrollbar ───────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--surface); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+/* ── Small text ──────────────────────────────────────── */
+.Notes { font-size: 11.5px; color: var(--text-lo); margin-top: 6px; }
+
+@media (max-width: 768px) {
+  :root { --sidebar-w: 0px; }
+  #sidebar { display: none; }
+  #main { margin-left: 0; padding: 24px 16px 60px; }
+  .regime-grid { grid-template-columns: 1fr 1fr; }
+  .route-grid { grid-template-columns: 1fr; }
+  .hero { padding: 24px 20px; border-radius: 12px; }
+  .hero h1 { font-size: 25px; }
+}
+</style>
+</head>
+<body>
+<!-- Sidebar -->
+<nav id="sidebar"><div class="sb-logo">
+<div class="prog">BINANCE AUTO TRADER</div>
+<div class="ver">v34.9 · User Manual</div>
+</div><div class="sb-section"><div class="sb-section-label">Website</div><a href="../../">← Main site</a><a href="../ko/" lang="ko">한국어 매뉴얼</a></div><div class="sb-section"><div class="sb-section-label">10 minutes to start</div><a href="#overview">read first</a><a href="#install">Sign up · API settings</a><a href="#quickstart">First run order</a></div><div class="sb-section"><div class="sb-section-label">How to use the screen</div><a href="#trading">Trading Settings</a><a href="#workspace-panels">screen panel</a><a href="#trade-history">Trade History</a><a href="#cache-manager">Cache Manager</a></div><div class="sb-section"><div class="sb-section-label">Operation after verification</div><a href="#sweep">1. Sweep</a><a href="#validation">2. Validation</a><a href="#walkforward">3. Walk-forward</a><a href="#live-checklist">4. Check live trading</a></div><div class="sb-section"><div class="sb-section-label">Understanding Strategy</div><a href="#three-tf-engine">3-TF Entry Engine</a><a href="#regime">Market Regime</a><a href="#tf">Trend Following</a><a href="#mr">Mean Reversion</a><a href="#exit">Position Close priority</a><a href="#sizing">position sizing</a></div><div class="sb-section"><div class="sb-section-label">problem solving</div><a href="#troubleshoot">Frequently Asked Questions</a><a href="#logs">Log interpretation</a><a href="#glossary">glossary of terms</a></div><div class="sb-section"><div class="sb-section-label">Advanced Note</div><a href="#monitor">API Monitor</a><a href="#websocket">communication structure</a><a href="#architecture">overall architecture</a><a href="#data-flow">data flow</a><a href="#cache-structure">cache structure</a><a href="#dynamic-topn">Dynamic Top N</a><a href="#backtest-engine">backtest engine</a><a href="#performance">Performance Optimization</a></div></nav>
+<!-- Main Content -->
+<main id="main">
+<header class="hero">
+<div class="hero-kicker">OFFLINE USER GUIDE · v34.9</div>
+<h1>Binance Auto Trader<br/>user manual</h1>
+<p>We have configured it so that even first-time installers can follow the instructions in order from connecting API to backtesting and starting actual trading. Everything you need is in this HTML file and it will open even without an internet connection.</p>
+<div class="hero-meta"><span>WINDOWS · macOS · LINUX</span><span>BINANCE USDⓈ-M FUTURES</span><span>GUI API SETUP</span></div>
+</header>
+<!-- ══ 1. Overview ══════════════════════════════════════════ -->
+<section class="section" id="overview">
+<div class="section-eyebrow">read first</div>
+<h2>If this is your first time, just follow these steps</h2>
+<p>Binance Auto Trader categorizes market conditions in the Binance USDⓈ-M futures market, <span class="badge badge-tf">Trend Following</span> class <span class="badge badge-mr">Mean Reversion</span> Execute your strategy automatically. It is important not to start with actual trading immediately after turning on the program, but to follow the order below.</p>
+<div class="route-grid">
+  <a class="route-card" href="#install"><b>1 · Account linking</b><span>Sign up for Binance → Create API Key → Enter GUI</span></a>
+  <a class="route-card" href="#sweep"><b>2 · Strategy verification</b><span>Sweep → Validation → Walk-forward</span></a>
+  <a class="route-card" href="#live-checklist"><b>3. Small amount of live trading</b><span>After checking the checklist, start conservatively.</span></a>
+</div>
+<div class="callout danger"><strong>Investment Risk Guide:</strong> This program does not guarantee profits. Futures trading carries the risk of total loss of principal and forced position close. Backtest results do not guarantee future performance, and final trading responsibility rests with the user.</div>
+<h3>The fastest way to read this manual</h3>
+<ul class="checklist">
+<li>First-time user: Sign up · API settings → First execution sequence → Backtest step 3 → Live trading check</li>
+<li>Operating User: Trading Settings → Screen Panel → Trade History → Troubleshooting</li>
+<li>User adjusting strategy: Regime → TF/MR → Position Sizing → Backtest Engine</li>
+</ul>
+<div class="callout info"><strong>Security principles:</strong> API Secret is like a password. Please do not send it to anyone or expose it to screen captures or logs. Automated trading does not require withdrawal permission.</div>
+</section>
+<hr class="scan-rule"/>
+<!-- ══ 2. Install ════════════════════════════════════════════ -->
+<section class="section" id="install">
+<div class="section-eyebrow">Account linking</div>
+<h2>Sign up for Binance and set up API</h2>
+<h3>1. Prepare a Binance account</h3>
+<p>at the top of the program <span class="kbd">Sign up for Binance</span> Click the button to open the signup page. Complete account creation, identity verification, and USDⓈ-M Futures activation in order. If you already have an account, skip this step.</p>
+<div class="callout warn"><strong>Futures trading availability:</strong> Trades for some products may be restricted depending on country/region and account status. If you are not allowed to trade, add them to Excluded Symbols.</div>
+<h3>2. Generate API Key on Binance</h3>
+<ol class="steps">
+<li><div class="step-num">1</div><div class="step-body"><strong>Open API Management</strong><br/>Go to the API management screen of your Binance account.</div></li>
+<li><div class="step-num">2</div><div class="step-body"><strong>Create new API</strong><br/>Give it a friendly name and complete the security authentication.</div></li>
+<li><div class="step-num">3</div><div class="step-body"><strong>Key and secret storage</strong><br/>A Secret can only be displayed once, immediately after creation, so keep it in a safe place.</div></li>
+<li><div class="step-num">4</div><div class="step-body"><strong>Permission settings</strong><br/>It only enables reading and Futures trading permissions, but does not enable withdrawal permissions.</div></li>
+</ol>
+<h3>API permission check</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Permission</th><th>Required?</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>Enable Futures</td><td style="color:var(--green)">Required</td><td>Check on Binance API management page</td></tr>
+<tr><td>Enable Reading</td><td style="color:var(--green)">Required</td><td>View balances and positions</td></tr>
+<tr><td>Enable Spot &amp; Margin Trading</td><td style="color:var(--text-lo)">Not required</td><td>Recommended to disable as it is for Spot trading</td></tr>
+<tr><td>Enable Withdrawals</td><td style="color:var(--red)">Never enable</td><td>No need for automated trading</td></tr>
+<tr><td>IP restrictions</td><td>Highly recommended</td><td>Allow list registration when a 24-hour operating PC has a static IP</td></tr>
+</tbody>
+</table>
+</div>
+<h3>3. Enter API into the program</h3>
+<ol class="steps">
+<li><div class="step-num">1</div><div class="step-body">at the top of the program <span class="kbd">API Settings</span> Press the button.</div></li>
+<li><div class="step-num">2</div><div class="step-body"><strong>API Key</strong> and <strong>Secret Key</strong> Paste . Secret is masked on the screen.</div></li>
+<li><div class="step-num">3</div><div class="step-body">When you first practice <strong>Testnet</strong> Select and enter the testnet-specific key. The live trading key and testnet key are different.</div></li>
+<li><div class="step-num">4</div><div class="step-body">After saving, check the connection status and balance display in Account Dashboard.</div></li>
+</ol>
+<div class="callout green"><strong>Current version: v34.9.</strong> You do not need to create or edit the <code>.env</code> file manually. API credentials and the Testnet selection are saved from the API Settings window.</div>
+<div class="callout danger"><strong>When error API occurs:</strong> Check for spaces before and after, incorrect Secret, Futures permissions, IP restrictions, and mixed use of Testnet/live trading keys.</div>
+</section>
+<hr class="scan-rule"/>
+<!-- ══ 3. Quick Start ════════════════════════════════════════ -->
+<section class="section" id="quickstart">
+<div class="section-eyebrow">10 minutes to start</div>
+<h2>First run order</h2>
+<ul class="steps">
+<li><div class="step-num">1</div><div class="step-body"><strong>run program</strong><br/>Run your distribution executable or the latest Python file. Make sure the window title is the current distribution version.</div></li>
+<li><div class="step-num">2</div><div class="step-body"><strong>Check API connection</strong><br/>
+<span class="kbd">API Settings</span> Save the key and check that the balance appears in Account Dashboard.</div></li>
+<li><div class="step-num">3</div><div class="step-body"><strong>Setting market and excluded items</strong><br/>Select the target among CRYPTO / TRADFI / ALL and enter trading restricted or unwanted items one line at a time in Excluded Symbols.</div></li>
+<li><div class="step-num">4</div><div class="step-body"><strong>Check Cache Manager</strong><br/>The initial candle download continues in the background. Trading can begin once the latest data is available, but it is better to run long-term backtests only after the cache for the required period is ready.</div></li>
+<li><div class="step-num">5</div><div class="step-body"><strong>Execute 3 steps of backtesting</strong><br/>Find candidates with sweep and check for over-optimization with validation and walk-forward.</div></li>
+<li><div class="step-num">6</div><div class="step-body"><strong>Apply recommended settings and check again</strong><br/>After clicking Apply Best Settings, directly check whether the Market, Top N, Timeframe, and regime-specific parameters are reflected in the Trading tab as intended.</div></li>
+<li><div class="step-num">7</div><div class="step-body"><strong>Start with Testnet or a small amount</strong><br/>
+<span class="kbd">Start Auto Trade</span> Press and check Log, Current Top N, Open Positions, and Trade History together.</div></li>
+</ul>
+<h3>Recommended starting value (conservative)</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>parameters</th><th>Recommended value</th><th>reason</th></tr></thead>
+<tbody>
+<tr><td class="td-param">Decision TF</td><td class="td-default">15m</td><td>For direction/trend judgment. Determine EMA, ADX, Volume, Regime, RSI Exhaustion</td></tr>
+<tr><td class="td-param">Execute TF</td><td class="td-default">5m</td><td>For actual entry timing. Order only when a Donchian breakout occurs in the same direction as the decision.</td></tr>
+<tr><td class="td-param">Trailing TF</td><td class="td-default">5m</td><td>If set to shorter or equal to Decision/Execute TF, trailing responds quickly.</td></tr>
+<tr><td class="td-param">Leverage</td><td class="td-default">3 ~ 5</td><td>If it exceeds 5 times, the risk of forced liquidation increases rapidly due to volatility.</td></tr>
+<tr><td class="td-param">Risk %</td><td class="td-default">0.25 ~ 0.5</td><td>Only 0.25~0.5% of the balance is consumed by stopping one position. 0.25 recommended initially</td></tr>
+<tr><td class="td-param">Max Position %</td><td class="td-default">10 ~ 15</td><td>1 position notional cap. If it is too large, there is a risk of balance imbalance.</td></tr>
+<tr><td class="td-param">ATR Mult</td><td class="td-default">1.5 ~ 2.0</td><td>If it is low, the stop loss is too narrow and frequent stop losses occur.</td></tr><tr><td class="td-param">EMA Gap %</td><td>Separation rate (%) of EMA20 and EMA60. LONG is allowed to enter Trend Following only when it is above the EMA Gap, and SHORT is only below the -EMA Gap. 0 disables the filter.</td><td>Not used in Mean Reversion.</td></tr>
+<tr><td class="td-param">Trigger R</td><td class="td-default">1.0 ~ 1.5</td><td>Activate trailing after achieving 1R profit — Minimize stop loss before entering profit zone</td></tr>
+<tr><td class="td-param">Regime active</td><td class="td-default">NORMAL + TREND</td><td>Initial operating standards. The final value is determined by the results of a backtest performed by the user.</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout warn"><strong>The recommended values ​​are only a starting point.</strong> Performance varies depending on market, period, commission, and slippage conditions. Do not use it for live trading, but be sure to verify it under the same conditions.</div>
+</section>
+<hr class="scan-rule"/>
+<!-- ══ 4. Trading Tab ════════════════════════════════════════ -->
+<hr class="scan-rule"/>
+<section class="section" id="cache-manager">
+<div class="section-eyebrow">cache system</div>
+<h2>Cache Manager</h2>
+<p>The program uses Parquet-based candle cache. When running for the first time, the necessary candles are built in the background, and thereafter only newly closed candles are incrementally updated.</p>
+<h3>How it works</h3>
+<ul class="steps">
+<li><div class="step-num">1</div><div class="step-body"><strong>Check manifest</strong><br/>When the program starts, it reads manifest.json to immediately check the cache status for each symbol. The manifest is a lightweight index (65KB level) that stores only the first and last candle times of each symbol.</div></li>
+<li><div class="step-num">2</div><div class="step-body"><strong>Trading first</strong><br/>Automated trading can begin immediately after obtaining the latest data, and the rest of the history continues to be built in the background.</div></li>
+<li><div class="step-num">3</div><div class="step-body"><strong>Periodic incremental updates</strong><br/>We periodically add 4h candles for selected Decision / Execute / Trailing TF and Dynamic TopN volume ranking. After the update is finished, it waits until the next deadline, so the next update is not queued during long downloads.</div></li>
+<li><div class="step-num">4</div><div class="step-body"><strong>Backtest API Skip</strong><br/>When running a backtest, the manifest is loaded into memory and an O(1) freshness check is performed for each symbol. If the cache is fresh, only the parquet file is read and returned without calling API. After the cache build is complete, API calls are reduced to 0 in the iterative backtest.</div></li>
+<li><div class="step-num">5</div><div class="step-body"><strong>safe storage</strong><br/>Protect existing caches even during shutdown using Atomic Write (.tmp→rename). The manifest is saved in batches up to twice at the end of the backtest pass.</div></li>
+</ul>
+<div class="tbl-wrap"><table>
+<thead><tr><th>Metric</th><th>explanation</th></tr></thead>
+<tbody>
+<tr><td class="td-param">Status</td><td><strong>Initial Build</strong>: No cache, first downloading matching 365<br/><strong>Updating</strong>: Existing cache present, adding new candle increments<br/><strong>Ready</strong>: Construction completed<br/><strong>Error</strong>: Network error, etc.</td></tr>
+<tr><td class="td-param">Progress</td><td>Number of (symbols × intervals) processed / total. Example: 490 / 1058 (46%)</td></tr>
+<tr><td class="td-param">Cache Hit</td><td>The manifest covers the number of reads directly from local files without calling API.</td></tr>
+<tr><td class="td-param">API Download</td><td>The number of downloads by calling the actual API without covering the manifest.</td></tr>
+<tr><td class="td-param">Errors</td><td>Number of download failure symbols. Displayed only when an error occurs. Skip that symbol and continue</td></tr>
+<tr><td class="td-param">Mode</td><td><strong>365-day initial download</strong>: First construction<br/><strong>background append</strong>: Periodic incremental update<br/><strong>4h volume cache</strong>: Pre-updated 4-hour bar for Dynamic TopN volume ranking</td></tr>
+<tr><td class="td-param">Next Update</td><td>When the next automatic incremental update is due. After the update is complete, wait until the next closing bar of each interval.</td></tr>
+<tr><td class="td-param">Cache Size</td><td>Local cache directory total size</td></tr>
+<tr><td class="td-param">Last Sync</td><td>Last incremental update completion time</td></tr>
+</tbody></table></div>
+<div class="callout info">
+<strong>API key not required:</strong> Candle Cache construction is done through the Binance public endpoint (<code>/fapi/v1/klines</code>) is used. Even if the API key is not set, the cache will be built normally as long as you have an Internet connection.</div>
+<div class="callout green">
+<strong>Dynamic TopN 4h cache pre-build:</strong> Cache Manager is now required for Decision/Execute/Trailing TF as well as Dynamic TopN volume ranking. <code>4h</code> Candlesticks are also built in advance and updated incrementally in the background. When Sweep is executed, Pass 1 is mostly processed as a local parquet/manifest read rather than a API download, and only the insufficient sections are downloaded to make up for it.</div>
+<div class="callout info">
+<strong>Detailed structure:</strong> The overall relationship between manifest, Candle Cache, market_data, and Indicator Cache is<a href="#cache-structure" style="color:var(--accent2);">Cache Structure Section</a>This is explained in detail.</div>
+</section>
+<section class="section" id="trading">
+<div class="section-eyebrow">tap guide</div><div class="callout green">
+<strong>Recent UI changes</strong><br/>
+<ul>
+<li>Added Top N panel (shows current Top N symbols)</li>
+<li>Currently owned Top N stocks are highlighted in bold blue letters.</li>
+<li>Added Excluded Symbols panel (enter one symbol per line)</li>
+<li>Excluded Symbols are applied equally to live trading, backtesting, validation, and walk-forward.</li>
+<li>Improved Log/Top N/Cache Manager layout</li>
+<li>OPEN status in Trade History shows both date and time</li>
+</ul>
+</div>
+<h2>Trading tab</h2>
+<p>All settings for live automated trading are concentrated in this tab. Setting fields are disabled during automated trading.</p>
+<h3>default settings</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>parameters</th><th>default</th><th>range</th><th>explanation</th></tr></thead>
+<tbody>
+<tr>
+<td class="td-param">Top N Symbols</td><td class="td-default">30</td><td>10~50</td>
+<td>Top N stocks with 24h trading volume are selected for scanning. The bigger it is, the greater the opportunity for entry.·API load increases. The symbol universe automatically updates every 4 hours.</td>
+</tr>
+<tr>
+<td class="td-param">Market Universe</td><td class="td-default">CRYPTO</td><td>CRYPTO / TRADFI / ALL</td>
+<td><strong>CRYPTO:</strong> Coin Futures Top N<br/><strong>TRADFI:</strong> Gold, stocks, ETF, etc. TRADFI futures Top N<br/><strong>ALL:</strong> Top N trading volume combining two markets</td>
+</tr>
+<tr>
+<td class="td-param">Decision TF</td><td class="td-default">15m</td><td>1m~4h</td>
+<td>Candlestick timeframe for judging entry signals. The shorter the signal, the higher the signal frequency and the more noise. Only the completed candle (closed candle) is used for signal judgment.</td>
+</tr>
+<tr>
+<td class="td-param">Trailing TF</td><td class="td-default">5m</td><td>1m~15m</td>
+<td>Timeframe for calculating Trailing Stop ATR. Trailing responds faster when set shorter than Decision TF.</td>
+</tr>
+<tr>
+<td class="td-param">Leverage</td><td class="td-default">5</td><td>1~20</td>
+<td>Futures leverage multiple. Automatically set to the exchange upon entry. Both profits and losses are multiplied. 5x or less is strongly recommended.</td>
+</tr>
+<tr>
+<td class="td-param">Risk %</td><td class="td-default">1.0</td><td>0.1~5.0</td>
+<td>Maximum amount lost when stop loss is activated in one position = Total balance × Risk%. If you do not specify a risk% for each regime, this value will be used as the default fallback.</td>
+</tr>
+<tr>
+<td class="td-param">Max Long Pos.</td><td class="td-default">5</td><td>1~20</td>
+<td>Maximum number of LONG positions held simultaneously. When the limit is reached, entering a new LONG is skipped.</td>
+</tr>
+<tr>
+<td class="td-param">Max Short Pos.</td><td class="td-default">5</td><td>1~20</td>
+<td>Maximum number of SHORT positions held simultaneously. Independent management with LONG.</td>
+</tr>
+<tr>
+<td class="td-param">Max Position %</td><td class="td-default">20</td><td>5~100</td>
+<td>Notional limit for 1 position = Total balance × Max Position% × Leverage. Use the smaller of the Risk reference quantity and this upper limit.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="three-tf-engine">3-TF Entry Engine</h3>
+<p>The Trend Following strategy uses a three-step timeframe structure that separates judgment and execution. The Decision TF authorizes direction, the Execute TF confirms the actual entry timing, and the Trailing TF manages position close after entry.</p>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>division</th><th>role</th><th>Usage Metrics</th><th>example</th></tr></thead>
+<tbody>
+<tr><td class="td-param">Decision TF</td><td>Determination of trade direction and entry permission</td><td>EMA, ADX, Volume, Regime, RSI Exhaustion</td><td>Determine LONG/SHORT direction at 15m</td></tr>
+<tr><td class="td-param">Execute TF</td><td>Check live order timing</td><td>Donchian High/Low Breakthrough</td><td>Enter when there is a breakthrough in the same direction at 5m.</td></tr>
+<tr><td class="td-param">Trailing TF</td><td>Exit and trailing-stop management after entry</td><td>ATR Trailing, Exit Mode</td><td>Stop update based on 5m ATR</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout info"><strong>importance:</strong> The Mean Reversion strategy enters immediately when a signal occurs in the Decision TF and does not use the Execute TF. Only Trend Following uses the three-step structure of Decision→Execute→Trailing.</div>
+<div class="callout warn"><strong>Avoid entry delays:</strong> Even if the Decision TF approves a direction, no order is placed unless the Execute TF confirms a breakout in the same direction. This structure is designed to combine the stability of a 15-minute bar with the fast timing of a 5-minute bar.</div>
+<h3>Regime Settings</h3>
+<p>Strategies and parameters are set independently for each regime (QUIET · NORMAL · TREND · PANIC). If checkbox OFF is checked, there will be no new entries in that regime.</p>
+<div class="callout info"><strong>Dual parameter fields:</strong> The meaning of the Vol/RSI, Trig/BB, and ADX fields changes depending on the selected Strategy. The UI label automatically switches to match Strategy.</div>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>parameters</th><th><span class="badge badge-tf">Trend Following</span></th><th><span class="badge badge-mr">Mean Reversion</span></th></tr></thead>
+<tbody>
+<tr>
+<td class="td-param">Strategy</td>
+<td>trend_following (breakout trend following)</td>
+<td>mean_reversion (mean reversion)</td>
+</tr>
+<tr>
+<td class="td-param">ADX<br/><span style="color:var(--text-lo);font-size:10.5px">ADX Min / ADX Max</span></td>
+<td><strong>ADX Min:</strong> Minimum trend strength allowed for entry. If ADX &lt; this value, entry is ignored. If it is low, the signal increases / false signal ↑</td>
+<td><strong>ADX Max:</strong> Maximum trend strength allowed for entry. ADX &gt; Ignore entry if this value (block entry into trend market)</td>
+</tr>
+<tr>
+<td class="td-param">ATR Mult</td>
+<td colspan="2">commonness. Stop Loss = Entry ATR × ATR Mult. If it is low, there will be frequent stop losses / if it is high, the loss will increase with one stop loss.</td>
+</tr>
+<tr>
+<td class="td-param">Vol Mult<br/>/ RSI Entry</td>
+<td><strong>Vol Mult:</strong> Trading volume &gt; Volume MA × Vol Mult. If it is low, the frequency of entry increases.</td>
+<td><strong>RSI Entry:</strong> LONG: RSI ≤ this value / SHORT: RSI ≥ (100 − this value). If it is low, only extreme oversoldness is captured.</td>
+</tr>
+<tr>
+<td class="td-param">Trigger R<br/>/ BB Sigma</td>
+<td><strong>Trigger R:</strong> Trailing activation distance = Stop loss × Trigger R. If it is low, trailing starts at the beginning of profit.</td>
+<td><strong>BB Sigma:</strong> Bollinger Band Bandwidth multiple (σ). Basic 2.0. If it is low, the frequency of entry increases.</td>
+</tr>
+<tr>
+<td class="td-param">Risk %</td>
+<td colspan="2">Position size adjustment by regime. If not entered, use the default Risk% setting.</td>
+</tr>
+<tr>
+<td class="td-param">Exit Mode</td>
+<td>Choose trailing/partial_tp/fast_exit (see comparison below)</td>
+<td>BB Mid / trailing / partial_tp / fast_exit selectable. BB Mid uses BB Middle at the time of entry as the target price, and the remaining modes use the same exit method as Trend Following.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3>Exit Mode Comparison</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Exit Mode</th><th>movement</th><th>characteristic</th><th>Recommended regime</th></tr></thead>
+<tbody>
+<tr>
+<td class="td-param">trailing</td>
+<td>Close only with stop loss or trailing stop. No separate TP</td>
+<td>Long-term tracking of strong trends is possible. Risk of return of profits in case of sideways movement</td>
+<td>NORMAL, TREND</td>
+</tr>
+<tr>
+<td class="td-param">partial_tp</td>
+<td>When the 1R goal is reached, 50% partial close → Trailing of the remaining 50% continues. RSI 50% position close in advance even when overbought/oversold</td>
+<td>Certain profits + additional profits if the trend continues. balanced</td>
+<td>NORMAL</td>
+</tr>
+<tr>
+<td class="td-param">fast_exit</td>
+<td>Close the entire amount as soon as the 1R goal is reached. No trailing</td>
+<td>Quick confirmation of profits in areas of rapid change. Big trends can be missed</td>
+<td>PANIC</td>
+</tr>
+<tr>
+<td class="td-param">BB Mid</td>
+<td>Mean Reversion only. When the BB middle band (SMA20) is reached, all profits are lost.</td>
+<td>Mean reversion goal achieved and closed. Set target to BB Mid at entry point</td>
+<td>QUIET (recommended)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3>CI Filter (optional)</h3>
+<p>Use Choppiness Index (CI) to block trend following entry in sideways movements. Does not apply to Mean Reversion strategies.</p>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>setting</th><th>explanation</th></tr></thead>
+<tbody>
+<tr><td class="td-param">CI Filter ON</td><td>CI &lt; 61.8 condition added. TF entry is blocked at CI ≥ 61.8 (sideways section)</td></tr>
+<tr><td class="td-param">Period</td><td>CI calculation lookback period (number of bars). Default value 14. The shorter it is, the faster the response and the higher the noise. The longer it is, the more stable it is and the delay in entering the trend.</td></tr>
+</tbody>
+</table>
+</div>
+<h3 id="server-stop">Server Stop (Server-side STOP_MARKET)</h3>
+<p>When entering a position, the Binance server <strong>Order STOP_MARKET</strong> automatically registers. Even in situations where the bot process is down or the network is down, the exchange will execute the stop loss on your behalf.</p>
+<div class="callout green">
+<strong>Double safety net:</strong> The local stop monitor (inside the bot) and the server STOP_MARKET order operate simultaneously. If the bot is running normally, the local monitor clears it first and cancels the server stop. If the bot is offline, server stop works alone.</div>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>movement</th><th>explanation</th></tr></thead>
+<tbody>
+<tr><td class="td-param">Register upon entry</td><td>STOP_MARKET order is automatically registered on Binance immediately after position opening. <code>workingType=MARK_PRICE</code> Use — Prevent unreasonable position close with Last Price spikes</td></tr>
+<tr><td class="td-param">Updated when moving to trailing</td><td>Each time the trailing stop moves, cancel the existing order and re-register at the new price. Server stop prices are always synchronized with the latest trailing stop</td></tr>
+<tr><td class="td-param">Cancellation upon local position close</td><td>When the bot closes a position (STOP, TRAILING_TAKE, TIME_EXIT, etc.), the server stop order is also canceled. No orphan orders left after position close</td></tr>
+<tr><td class="td-param">Cancellation during Emergency Close</td><td>When you click the [Emergency Close All] button, the server stop for each position is canceled first and then the position is closed at market.</td></tr>
+<tr><td class="td-param">Cancellation when an external close is detected</td><td>If the position disappears without the bot's knowledge (manual close, etc.), the server stop is automatically canceled in the next monitor cycle.</td></tr>
+<tr><td class="td-param">Restore after restart</td><td>Saved on restart <code>server_stop_order_id</code> If there is no server stop, automatic re-registration (repair path)</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout info">
+<strong>reduceOnly protection:</strong> STOP_MARKET order is <code>reduceOnly=true</code> It is registered as . Even if the server stop quantity after partial close is greater than the actual remaining amount, excess positions will not be opened because Binance will close only the remaining amount.</div>
+<div class="callout warn">
+<strong>best-effort behavior:</strong> Even if server stop registration fails, bot operation does not stop. <code>[SERVER STOP ERROR]</code> A log is recorded and the local stop monitor continues to operate. However, if the bot is offline and there is no server stop, stop loss will not be executed.</div>
+<h3>Suspension/Emergency Position Close</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>button</th><th>movement</th><th>caution</th></tr></thead>
+<tbody>
+<tr><td class="td-param">Stop</td><td>New entry halted. Existing positions continue to be automatically managed</td><td>Safe exit possible while maintaining position</td></tr>
+<tr><td class="td-param">Emergency Close All</td><td>First cancel the server STOP_MARKET order for each position, then immediately close all positions on the exchange at market price reduce-only</td><td>Slippage may occur in volatility sections</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="scan-rule"/>
+<!-- ══ 5. Sweep Tab ══════════════════════════════════════════ -->
+<section class="section" id="workspace-panels">
+<div class="section-eyebrow">How to use the screen</div>
+<h2>Trading screen panel</h2>
+<p>During live trading, you will check the status panel more often than the settings. You can quickly determine the current program status by learning just the four areas below.</p>
+<div class="tbl-wrap"><table>
+<thead><tr><th>panel</th><th>what does it show</th><th>confirmation point</th></tr></thead>
+<tbody>
+<tr><td class="td-param">Account Dashboard</td><td>Balance, P&amp;L, number of positions, connection status</td><td>Immediately after connecting API, first check if the balance is correct.</td></tr>
+<tr><td class="td-param">Open Positions</td><td>Current direction, entry price, current price, Stop, PnL</td><td>Comparison of quantity and direction with the actual position of the exchange</td></tr>
+<tr><td class="td-param">Current Top N</td><td>Scanned stocks based on current 24-hour trading volume and last update time</td><td>Owned stocks are highlighted in bold blue letters. List updated every 4 hours</td></tr>
+<tr><td class="td-param">Log</td><td>Universe update, signal, order, stop, position close, error</td><td>Don't just look at ERROR, check the previous SIGNAL/OPEN flow chart as well.</td></tr>
+<tr><td class="td-param">API Monitor</td><td>REST call, WebSocket, User Data Stream status</td><td>Call spike, WS SILENT, check for repeat reconnection</td></tr>
+</tbody></table></div>
+<h3>Excluded Symbols</h3>
+<p>Enter the symbols you want to exclude from automated trading, one per line. yes: <code>BTCUSDT</code>. The saved list applies not only to live trading but also to sweep, validation, and walk-forward.</p>
+<div class="callout warn"><strong>TRADFI stocks restricted for trading in Korea:</strong> Please add items that cannot be ordered from your account to the exclusion list in advance. Trade availability may vary depending on user account and region.</div>
+<h3>Start · Stop · Emergency Close</h3>
+<div class="tbl-wrap"><table>
+<thead><tr><th>button</th><th>movement</th><th>When to use</th></tr></thead>
+<tbody>
+<tr><td class="td-param">Start Auto Trade</td><td>Start new signal search and position management with set values</td><td>After checking all settings, API, and balance,</td></tr>
+<tr><td class="td-param">Stop</td><td>Stop new entries and continue to manage existing positions</td><td>When safely stopping a program or preventing new entry</td></tr>
+<tr><td class="td-param">Emergency Close All</td><td>After canceling the server stop, all positions are closed at market price.</td><td>Only in emergency situations where normal stopping is difficult</td></tr>
+</tbody></table></div>
+</section>
+<hr class="scan-rule"/>
+<section class="section" id="trade-history">
+<div class="section-eyebrow">How to use the screen</div>
+<h2>Trade History</h2>
+<p>It shows entry, position close, and realized profit and loss based on the trades managed by the program and Binance conclusion history. When you run the program again, it will load the last three days of Binance trades to supplement your history.</p>
+<div class="tbl-wrap"><table>
+<thead><tr><th>Metric</th><th>explanation</th><th>How to check</th></tr></thead>
+<tbody>
+<tr><td class="td-param">OPEN</td><td>Currently open trades. Open Time displays date and time together</td><td>Open Positions and Symbol/Direction Contrast</td></tr>
+<tr><td class="td-param">CLOSED</td><td>Trade confirmed to be closed</td><td>Check Exit Reason and Fill Price</td></tr>
+<tr><td class="td-param">Realized PnL</td><td>Realized profit and loss based on Binance conclusion</td><td>May differ from simple price difference calculation due to fees and multiple partial trades</td></tr>
+<tr><td class="td-param">SERVER STOP</td><td>Closed with STOP_MARKET order on Binance servers</td><td>Synchronizes after restart even if the program was signed while it was turned off</td></tr>
+<tr><td class="td-param">Exit Reason</td><td>STOP, TRAILING_TAKE, TIME_EXIT, FAST_EXIT, etc.</td><td>When analyzing strategy results, separate performance by reason and check</td></tr>
+</tbody></table></div>
+<div class="callout info"><strong>When the numbers are different from Binance:</strong> Trade History can be updated after synchronizing the most recent execution. If they do not match immediately, please wait for a while and recheck, and the final settlement standard is Binance's Futures Trade History.</div>
+</section>
+<hr class="scan-rule"/>
+<section class="section" id="sweep">
+<div class="section-eyebrow">tap guide</div>
+<h2>Backtest Sweep Tab</h2>
+<p>Batch test multiple parameter combinations to explore optimal parameters for each regime. Sweep is the step of testing each regime independently to find candidate settings, and verification of actual time-base adaptive performance is performed in the Validation tab.</p>
+<h3>Sweep method</h3>
+<div class="callout info">
+<strong>Independent Cartesian Products by Regime:</strong> Parameters within each regime are tested in all combinations (multiplications) and summed across regimes.<br/><br/>Example: QUIET (3 combinations) + NORMAL (12 combinations) + TREND (6 combinations) =<strong>Total 21 times</strong> Run (21 = 3 + 12 + 6)</div>
+<div class="callout green" data-manual-update="sweep-role">
+<strong>What the sweep results mean:</strong> Sweep Test independently separates QUIET / NORMAL / TREND / PANIC to find optimal parameters.
+So the Sweep tab has <strong>Adaptive Regime Best Settings</strong> and <strong>Regime Best Top 10 Ranking</strong> only displays.
+Adaptive Combined performance that reflects actual Top N and time axis regime conversion can be checked in the Validation tab.</div>
+<h3>Enter parameter list</h3>
+<p>If you enter multiple values ​​separated by commas (,) in each parameter field, they will be tested as the Cartesian Product of that regime.</p>
+<pre><span class="comment"># Example: NORMAL regime</span>
+ADX Min:  <span class="val">20, 25, 30</span>
+ATR Mult: <span class="val">1.5, 2.0</span>
+Vol Mult: <span class="val">1.2</span>
+Trigger R: <span class="val">1.0, 1.5</span>
+Risk %:   <span class="val">0.5</span>
+
+<span class="comment"># NORMAL Number of combinations: 3 × 2 × 1 × 2 × 1 = 12</span></pre>
+<div class="callout green">
+<strong>Exit Mode Note:</strong> In Backtest Sweep / Validation / Walk-forward, Exit Mode is not subject to sweep.
+Test by fixing one Exit Mode selected by the user. To compare different Exit Modes, change only the Exit Mode and run again.</div>
+<h3>Sweep setup parameters</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>parameters</th><th>explanation</th></tr></thead>
+<tbody>
+<tr><td class="td-param">Days / Date Range</td><td>Backtest period. Recent Days (last N days) or date range can be specified directly</td></tr>
+<tr><td class="td-param">Top N</td><td>Number of stocks to use for backtesting. The more there are, the more statistical reliability and time increases.</td></tr>
+<tr><td class="td-param">Decision TF / Execute TF / Trailing TF</td><td>A three-step timeframe to use for backtesting. Same as actual trading, Decision is used to determine direction, Execute is used for entry timing, and Trailing is used for position close management.</td></tr>
+<tr><td class="td-param">Leverage / Wallet</td><td>Backtest leverage/virtual initial balance (USDT)</td></tr>
+<tr><td class="td-param">Market Universe</td><td>CRYPTO / TRADFI / ALL. Determine what to backtest scan</td></tr>
+<tr><td class="td-param">Regime checkbox</td><td>Whether to include the regime in the sweep</td></tr>
+</tbody>
+</table>
+</div>
+<h3>Sweep Combos Card</h3>
+<p>This card appears on the right side of the Settings box. Based on the current input value, the number of combinations for each regime, the total, and the estimated time required are calculated in real time.</p>
+<div class="callout"><strong>Estimated time formula:</strong> Based on total number of combinations × 0.04 seconds × Top N × (Days / 30). Varies depending on actual network environment.</div>
+<div class="callout info" data-manual-update="sweep-ui">
+<strong>Displayed items:</strong> In the Sweep tab <code>Adaptive Combined Result</code> and <code>Daily PnL Charts</code> does not display .
+Since the purpose of Sweep is not to verify performance but to explore candidate settings for each regime, actual Adaptive performance and daily profit and loss charts are checked in Validation.</div>
+<h3>Interpretation of results</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>characteristic</th><th>meaning</th><th>standard</th></tr></thead>
+<tbody>
+<tr><td class="td-param">PF (Profit Factor)</td><td>Total Profit / Total Loss</td><td>1.3 or higher is excellent, less than 1.0 is lossable.</td></tr>
+<tr><td class="td-param">Net PnL</td><td>Net profit (including commissions)</td><td>Must be a positive number to be valid</td></tr>
+<tr><td class="td-param">Win Rate</td><td>Profit Trade Ratio (%)</td><td>Standards vary for each strategy. Interpretation with PF</td></tr>
+<tr><td class="td-param">MDD</td><td>Maximum Drawdown — Maximum drawdown. <strong>USDT absolute value</strong> class <strong>% from high point</strong> displayed together.<br/><span style="color:var(--text-lo);font-size:11px;">Example: -234.50 (12.34%)</span></td><td>The lower the better. Caution if % exceeds 20%</td></tr>
+<tr><td class="td-param">Trades</td><td>Total number of trades</td><td>Less than 10 times, statistical reliability is low (INSUFFICIENT)</td></tr>
+<tr><td class="td-param">Score</td><td>PF×0.45 + Net PnL×0.30 + Trades×0.25 Normalized composite score</td><td>Based on top 10 rankings within the regime</td></tr>
+</tbody>
+</table>
+</div>
+<h3>Apply Regime Best</h3>
+<p>After completing the sweep, click the [Apply Regime Best #1] button and the optimal parameters for each regime will be automatically applied to Regime Settings in the Trading tab.</p><div class="callout info">Apply Regime Best #1 copies Strategy, ADX, EMA Gap, ATR, Volume/RSI, Trigger/BB, Risk, and Exit Mode to the Trading tab.</div>
+<div class="callout warn"><strong>caution:</strong> Please make a separate Notes of your current Trading tab settings before applying them. There is no revert function after overwriting.</div>
+</section>
+<hr class="scan-rule"/>
+<!-- ══ 6. Validation Tab ═════════════════════════════════════ -->
+<section class="section" id="validation">
+<div class="section-eyebrow">tap guide</div>
+<h2>Backtest Validation Tab</h2>
+<p>The best settings for each regime selected through sweep are verified using an adaptive method on the actual time axis. By reflecting Top N application, regime conversion, position limits, and profit and loss curve together, we confirm results that are close to actual operation.</p>
+<h3>Sweep vs Validation Comparison</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Metric</th><th>Sweep</th><th>Validation</th></tr></thead>
+<tbody>
+<tr><td>purpose</td><td>Search for optimal parameters by regime</td><td>Verification of actual adaptive performance of selected settings</td></tr>
+<tr><td>Calculation method</td><td>Test each regime independently and separately</td><td>Integrated execution reflecting Top N and time axis regime conversion</td></tr>
+<tr><td>input</td><td>Parameter list (comma separated)</td><td>Single parameter value or Sweep Best applied value</td></tr>
+<tr><td>result</td><td>Adaptive Regime Best Settings + Regime Best Top 10 Ranking</td><td>Adaptive Regime Best Settings + Adaptive Combined Result + Daily PnL Charts</td></tr>
+<tr><td>use</td><td>initial navigation</td><td>Final confirmation and overfitting verification</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout green" data-manual-update="validation-role">
+<strong>Meaning of validation results:</strong> Validation is not a simple summation estimate of the sweep.
+This is the Adaptive Combined result calculated by playing the selected Best Settings in actual chronological order.
+Since the Dynamic Top N and Regime at that time are applied together, the results and figures of Sweep's independent regime may differ.</div>
+<div class="callout info">
+<strong>Recommended verification procedure:</strong><br/>1. Select optimal parameters in sweep<br/>2. Re-verification in another period (Out-of-Sample) with validation<br/>3. If PF ≥ 1.2 or higher in both periods, consider actual operation</div>
+<div class="callout info" data-manual-update="validation-ui">
+<strong>Displayed items:</strong> In the Validation tab <code>Regime Best Top 10 Ranking</code> does not display .
+Validation is a verification step, not a candidate search, so it is checked based on the actual Adaptive Combined Result and Daily PnL Charts.</div>
+</section>
+<hr class="scan-rule"/>
+<!-- ══ 7. Walk-forward ══════════════════════════════════════ -->
+<section class="section" id="walkforward">
+<div class="section-eyebrow">tap guide</div>
+<h2>Walk-forward tab</h2>
+<p>Entered in the Validation tab <strong>single setpoint</strong> By repeatedly applying to multiple time intervals, we check how similar the in-sample (IS) performance remains in the out-of-sample (OOS). Walk-forward is not a function of finding profitable settings, but of the settings you have already chosen. <strong>Time base generalization stability</strong> This is a function to check.</p>
+<h3>Sweep·Validation·Walk-forward comparison</h3>
+<div class="tbl-wrap"><table>
+<thead><tr><th>function</th><th>purpose</th><th>settings source</th></tr></thead>
+<tbody>
+<tr><td class="td-param">Sweep</td><td>Exploring candidate settings in multiple combinations</td><td>Parameter list in Sweep tab</td></tr>
+<tr><td class="td-param">Validation</td><td>Verification of absolute performance of a single selected configuration</td><td>Current settings in the Validation tab</td></tr>
+<tr><td class="td-param">Walk-forward</td><td>Verification of IS/OOS performance similarity and stability of identical settings</td><td>Validation settings snapshot at execution time</td></tr>
+</tbody></table></div>
+<div class="callout green"><strong>importance:</strong> It is not necessary to turn the sweep before running walk-forward. The moment you press the Run button, the Validation tab's Top N, period-related common values, Market, TF, leverage, position limit, active Regime, Strategy·ADX·ATR·Volume/RSI·Trigger/BB·Risk·Exit Mode, and filter settings for each regime are copied once and applied equally to all Windows.</div>
+<h3>How it works</h3>
+<div class="callout info"><strong>Sliding Window Structure:</strong><br/>The entire period is divided by the specified number of windows, and the front part of each window is used as IS, and the back part is used as OOS. Calculate IS and OOS with the same validation settings, then compare the similarity of the two results.</div>
+<pre><span class="comment"># Fix once at run time</span>
+<span class="label">Validation Settings Snapshot</span>→ Commonly applied to all Windows <span class="label">W1</span>→ IS calculation + OOS calculation → PF Similarity evaluation <span class="label">W2</span>→ IS calculation + OOS calculation → PF Similarity evaluation <span class="label">W3</span>→ IS calculation + OOS calculation → PF Similarity evaluation</pre>
+<div class="callout warn"><strong>Change settings while running:</strong> Even if you change the Validation UI value after walk-forward starts, it will not be reflected in the current execution. The new settings will be used from the next launch.</div>
+<h3>Setting method</h3>
+<h4>① Validation tab — Prepare a single setting to be validated</h4>
+<p>Enter the settings you want to validate in the Validation tab. You can apply the Sweep results, or use the settings entered directly by the user.</p>
+<h4>② Walk-forward tab — Period/Window settings</h4>
+<div class="tbl-wrap"><table>
+<thead><tr><th>Metric</th><th>explanation</th><th>Recommended value</th></tr></thead>
+<tbody>
+<tr><td class="td-param">Start date / End date</td><td>Entire analysis period</td><td>Set long enough to cover multiple market phases</td></tr>
+<tr><td class="td-param">Number of windows</td><td>Decide how many sliding sections the entire period will be divided into</td><td>4 to 6</td></tr>
+<tr><td class="td-param">IS rate (%)</td><td>The proportion of IS in each window. The rest is OOS</td><td>Around 70%</td></tr>
+</tbody></table></div>
+<h3>Result Table Columns</h3>
+<div class="tbl-wrap"><table>
+<thead><tr><th>column</th><th>meaning</th><th>analysis</th></tr></thead>
+<tbody>
+<tr><td class="td-param">IS Trade / OOS Trade</td><td>Number of trades in each section</td><td>If the number of trades is too small, the reliability of PF/WR comparison is low.</td></tr>
+<tr><td class="td-param">IS PF / OOS PF</td><td>Profit Factor for each section</td><td>Absolute profitability is interpreted together with validation results</td></tr>
+<tr><td class="td-param">OOS MDD</td><td>OOS USDT·% display of maximum drop</td><td>Check the downside risks arising from OOS</td></tr>
+<tr><td class="td-param">IS WR / OOS WR</td><td>Win rate for each section</td><td>Used with PF</td></tr>
+<tr><td class="td-param">WR Δ</td><td>OOS WR − IS WR</td><td>The closer it is to 0, the more stable the win rate is.</td></tr>
+<tr><td class="td-param">Trade Ratio</td><td>OOS number of trades ÷ number of IS trades</td><td>Because the period length is different, it is for reference only for changes in signal density rather than for independent evaluation.</td></tr>
+<tr><td class="td-param">PF Similarity</td><td><code>min(OOS PF ÷ IS PF, IS PF ÷ OOS PF) × 100</code></td><td>The closer it is to 100%, the more similar IS and OOS PF are. Even if OOS gets better, it does not exceed 100%</td></tr>
+<tr><td class="td-param">Generalization assessment</td><td>Automatic rating based on PF Similarity</td><td>IS/OOS similarity assessment, not absolute profitability</td></tr>
+<tr><td class="td-param">Validation Settings</td><td>Snapshot of settings fixed for this run</td><td>Used to reproduce results under what conditions</td></tr>
+</tbody></table></div>
+<h3>Generalization evaluation criteria</h3>
+<div class="tbl-wrap"><table>
+<thead><tr><th>rating</th><th>PF Similarity</th><th>meaning</th></tr></thead>
+<tbody>
+<tr><td><span style="background:#DBEAFE;color:#1E40AF;padding:1px 8px;border-radius:3px;font-weight:700;font-size:12px;">Excellent</span></td><td>More than 90%</td><td>IS and OOS performance are very similar</td></tr>
+<tr><td><span style="background:#D1FAE5;color:#065F46;padding:1px 8px;border-radius:3px;font-weight:700;font-size:12px;">Good</span></td><td>More than 75%</td><td>Good generalization stability</td></tr>
+<tr><td><span style="background:#FEF3C7;color:#92400E;padding:1px 8px;border-radius:3px;font-weight:700;font-size:12px;">Fair</span></td><td>More than 60%</td><td>Additional confirmation is required as there are differences.</td></tr>
+<tr><td><span style="background:#FFEDD5;color:#9A3412;padding:1px 8px;border-radius:3px;font-weight:700;font-size:12px;">Weak</span></td><td>More than 40%</td><td>IS/OOS performance deviation is large</td></tr>
+<tr><td><span style="background:#FEE2E2;color:#991B1B;padding:1px 8px;border-radius:3px;font-weight:700;font-size:12px;">Poor</span></td><td>less than 40%</td><td>Very large performance instability across time intervals</td></tr>
+</tbody></table></div>
+<div class="callout info"><strong>Reasons for using symmetric calculations:</strong> For example, if IS PF=1.0 and OOS PF=1.6, simple OOS/IS is 160%, but the two performances cannot be considered similar. PF Similarity is calculated to be approximately 62.5%, which correctly reflects the performance gap.</div>
+<h3>last summary window</h3>
+<div class="tbl-wrap"><table>
+<thead><tr><th>Metric</th><th>explanation</th></tr></thead>
+<tbody>
+<tr><td class="td-param">Average PF Similarity</td><td>Average similarity of all windows</td></tr>
+<tr><td class="td-param">Lowest PF Similarity</td><td>The most unstable window similarity</td></tr>
+<tr><td class="td-param">OOS PF ≥ 1.0 Window</td><td>Number of windows for which OOS had the beneficial interest. Separate reference from generalization score</td></tr>
+<tr><td class="td-param">Generalization Risk</td><td>Risk that combines the similarity and lowest section of the entire window. <span style="color:var(--green);font-weight:700;">lowness</span> / <span style="color:var(--yellow);font-weight:700;">middle</span> / <span style="color:var(--red);font-weight:700;">height</span> Show color with</td></tr>
+</tbody></table></div>
+<div class="callout warn"><strong>Interpretation principles:</strong> Validation determines “whether this setting makes money well,” and walk-forward determines “whether it works similarly even when the period changes.” You must pass both results together to be considered a candidate for the actual exam.</div>
+<h3>Recommended Use Procedure</h3>
+<ul class="steps">
+<li><span class="step-num">1</span><span class="step-body"><strong>Sweep</strong><br/>If necessary, explore candidate settings in multiple combinations.</span></li>
+<li><span class="step-num">2</span><span class="step-body"><strong>Validation</strong><br/>See absolute performance including PF, Net PnL, MDD, number of trades, etc. for a single setup of your choice.</span></li>
+<li><span class="step-num">3</span><span class="step-body"><strong>Walk-forward</strong><br/>Check PF Similarity and Generalization Risk of multiple Windows with the same validation settings.</span></li>
+<li><span class="step-num">4</span><span class="step-body"><strong>final judgment</strong><br/>Validation When profitability is sufficient and walk-forward risk is low or acceptable, it is considered as a candidate for practical use.</span></li>
+</ul>
+<h3>run-time</h3>
+<div class="callout green"><strong>Sweep removal by window:</strong> A single validation setting is applied once each to IS and OOS without re-searching for parameter combinations in each window. Therefore, the amount of execution is approximately <strong>Number of windows × 2 times</strong>, and is much faster than previous window-specific optimization methods.</div>
+</section>
+<hr class="scan-rule"/>
+<section class="section" id="live-checklist">
+<div class="section-eyebrow">Live trading conversion</div>
+<h2>Final check before live trading begins</h2>
+<p>If any of the items below are not confirmed, postpone starting actual trading.</p>
+<ul class="checklist">
+<li>In the API settings, I selected live-trading mode and live trading API Key rather than Testnet.</li>
+<li>API has only Reading/Futures permission and no Withdraw permission.</li>
+<li>Account Dashboard balance and Binance Futures balance match.</li>
+<li>Sweep candidates were verified through validation and walk-forward at different periods.</li>
+<li>Even in the results including fees and slippage, PF, MDD, and number of trades are within the acceptable range.</li>
+<li>After Apply Best Settings, I checked the values ​​for Market, Top N, TF, and regime again in the Trading tab.</li>
+<li>Trading restricted items and unwanted items were entered into Excluded Symbols.</li>
+<li>Start with conservative values ​​such as Leverage 3 to 5 times, Risk 0.25 to 0.5%, and Max Position 10 to 15%.</li>
+<li>After starting, the live order, server stop, and position quantity are directly compared in the Binance app.</li>
+<li>You can log in to the Binance app to respond even in the event of an internet outage or program termination.</li>
+</ul>
+<div class="callout danger"><strong>First live trading principles:</strong> Start with a small amount that will not affect operations even if you lose, and increase the size after checking order, commission, slippage, and profit/loss synchronization in at least dozens of live trading.</div>
+</section>
+<hr class="scan-rule"/>
+<!-- ══ 8. Regime ═════════════════════════════════════════════ -->
+<section class="section" id="regime">
+<div class="section-eyebrow">strategy principles</div>
+<h2>Market Regime Classification</h2>
+<p>At each closing time <strong>ATR%</strong> Calculate (= ATR ÷ current price × 100) and classify it into 4 regimes. Strategy and parameters are automatically switched depending on the regime.</p>
+<div class="regime-grid">
+<div class="regime-card rc-quiet">
+<div class="r-name" style="color:var(--mr)">QUIET</div>
+<div class="r-atr">ATR% &lt; 2</div>
+<div class="r-strat"><span class="badge badge-mr">Mean Reversion</span></div>
+<div class="r-exit">Exit: BB Mid</div>
+</div>
+<div class="regime-card rc-normal">
+<div class="r-name" style="color:var(--tf)">NORMAL</div>
+<div class="r-atr">2 ≤ ATR% &lt; 4</div>
+<div class="r-strat"><span class="badge badge-tf">Trend Following</span></div>
+<div class="r-exit">Exit: trailing / partial_tp</div>
+</div>
+<div class="regime-card rc-trend">
+<div class="r-name" style="color:var(--green)">TREND</div>
+<div class="r-atr">4 ≤ ATR% &lt; 8</div>
+<div class="r-strat"><span class="badge badge-tf">Trend Following</span></div>
+<div class="r-exit">Exit: trailing</div>
+</div>
+<div class="regime-card rc-panic">
+<div class="r-name" style="color:var(--red)">PANIC</div>
+<div class="r-atr">ATR% ≥ 8</div>
+<div class="r-strat"><span class="badge badge-tf">Trend Following</span></div>
+<div class="r-exit">Exit: fast_exit</div>
+</div>
+</div>
+<div class="callout"><strong>Frequency of regime changes:</strong> Regimes are reclassified at each bar close. The regime at the time of entry determines the position close strategy for the position, and even if the regime changes during holding, the position close logic of the existing position does not change.</div>
+<h3>Parameter tuning guide for each regime</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>regime</th><th>ATR Mult</th><th>Reasons for recommendation</th></tr></thead>
+<tbody>
+<tr><td class="td-param">QUIET</td><td>1.0 ~ 1.5</td><td>Because it is a low-volatility zone, MR risk is limited with narrow stop losses.</td></tr>
+<tr><td class="td-param">NORMAL</td><td>1.5 ~ 2.0</td><td>Balance settings. Suitable for use with partial_tp</td></tr>
+<tr><td class="td-param">TREND</td><td>2.0 ~ 2.5</td><td>Prevent early stop loss by widening stop loss in strong trends</td></tr>
+<tr><td class="td-param">PANIC</td><td>2.0 ~ 3.0</td><td>Extreme volatility. However, since it is a fast_exit, there are many cases where the actual stop loss is not reached.</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="scan-rule"/>
+<!-- ══ 8. TF Strategy ════════════════════════════════════════ -->
+<section class="section" id="tf">
+<div class="section-eyebrow">Strategy Details</div>
+<h2>Trend Following Strategy</h2>
+<p>Used in the NORMAL · TREND · PANIC regime. EMA cross + Donchian breakout + surge in trading volume + ADX filter Enter when all four conditions are met.</p>
+<h3>Usage Metrics</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>characteristic</th><th>Calculation method</th><th>role</th></tr></thead>
+<tbody>
+<tr><td class="td-param">EMA 20 / 60</td><td>Exponential moving average, period 20·60</td><td>Determination of trend direction. EMA20 &gt; EMA60 = Uptrend</td></tr>
+<tr><td class="td-param">ATR</td><td>SMA method, period 14 (not Wilder RMA)</td><td>Stop loss, trailing distance, Regime ATR% calculation</td></tr>
+<tr><td class="td-param">ADX</td><td>SMA method, period 14</td><td>Trend strength filter. Entry must be ADX ≥ ADX Min</td></tr>
+<tr><td class="td-param">Donchian Channel</td><td>Highest/lowest price of the last 20 bars</td><td>Breakout signal. Closing price &gt; Previous candle Donchian High → LONG</td></tr>
+<tr><td class="td-param">Volume MA</td><td>20-period simple moving average</td><td>Volume surge filter. Volume &gt; MA × Vol Mult</td></tr>
+<tr><td class="td-param">RSI</td><td>Wilder RSI, period 14</td><td>partial_tp mode secondary exit signal (overbought/oversold)</td></tr>
+<tr><td class="td-param">CI</td><td>Choppiness Index, period 14 (default)</td><td>Optional. Blocks sideways entry when adding CI &lt; 61.8 condition</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout"><strong>ATR·ADX Accuracy:</strong> It uses the SMA method rather than the standard Wilder method. ADX numbers may differ from external charts such as TradingView, but internal consistency is maintained as both live and backtest use the same formula.</div>
+<h3>Entry conditions (4+1)</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>condition</th><th>Enter LONG</th><th>Enter SHORT</th></tr></thead>
+<tbody>
+<tr><td>① Trend direction</td><td>EMA20 &gt; EMA60</td><td>EMA20 &lt; EMA60</td></tr>
+<tr><td>② Trend strength</td><td>ADX ≥ ADX Min</td><td>ADX ≥ ADX Min</td></tr>
+<tr><td>③ Rapid increase in trading volume</td><td>Volume &gt; Volume MA × Vol Mul</td><td>Volume &gt; Volume MA × Vol Mul</td></tr>
+<tr><td>④ Price breakthrough</td><td>Wanjeongbong closing price &gt; Ijeonbong Donchian High</td><td>Dongwanbong closing price &lt; previous peak Donchian Low</td></tr>
+<tr><td>⑤ CI filter<em style="color:var(--text-lo)">(select)</em></td><td colspan="2">Added when CI Filter is ON: CI &lt; 61.8</td></tr>
+</tbody>
+</table>
+</div>
+<h3>Trailing stop mechanism</h3>
+<div class="formula">
+<div><span class="lhs">stop loss</span><span class="op">=</span> <span class="rhs">Entry ATR × ATR Mult</span></div>
+<div><span class="lhs">Trailing active distance</span><span class="op">=</span> <span class="rhs">Stop Loss × Trigger R</span></div>
+<div><span class="lhs">Trailing active conditions</span><span class="op">=</span> <span class="rhs">Price movement ≥ trailing active distance</span></div>
+<div><span class="lhs">Trailing Stop Renewal</span><span class="op">=</span> <span class="rhs">Highest price (LONG) − Stop Loss</span></div>
+</div>
+<p>Trailing TF When the bar standard ATR changes, the trailing distance is also dynamically updated.</p>
+<h3>Time Exit</h3>
+<p>After opening a position <strong>72 hours</strong> After this period, compulsory position close will occur. It is a safety net that protects against cases where mean reversion fails over a long period of time.</p>
+</section>
+<hr class="scan-rule"/>
+<!-- ══ 9. MR Strategy ════════════════════════════════════════ -->
+<section class="section" id="mr">
+<div class="section-eyebrow">Strategy Details</div>
+<h2>Mean Reversion Strategy</h2>
+<p>Used in the QUIET regime (ATR% &lt; 2, low volatility sideways). Entry occurs when all three conditions are met: Bollinger Band Breakout + RSI Oversold/Overbought + ADX Max Filter, and returns to the BB middle band (SMA20).</p>
+<h3>Usage Metrics</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>characteristic</th><th>Calculation method</th><th>role</th></tr></thead>
+<tbody>
+<tr><td class="td-param">Bollinger Bands</td><td>20 bars SMA ± BB Sigma × σ</td><td>Entry boundary: exit from the lower band (LONG) / exit from the upper band (SHORT). The middle band (SMA20) is the profit target.</td></tr>
+<tr><td class="td-param">RSI</td><td>Wilder RSI, period 14</td><td>Oversold/overbought confirmation. RSI ≤ RSI Entry → LONG / RSI ≥ (100 − RSI Entry) → SHORT</td></tr>
+<tr><td class="td-param">ATR</td><td>SMA method, period 14</td><td>Stop loss. Stop Loss = Entry Price ± ATR × ATR Mult</td></tr>
+<tr><td class="td-param">ADX</td><td>SMA method, period 14</td><td>Upper limit filter for checking sideways movements. ADX ≤ ADX must be Max to enter</td></tr>
+</tbody>
+</table>
+</div>
+<h3>Entry conditions (all 3)</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>condition</th><th>LONG (oversold rebound)</th><th>SHORT (overbought and reversal)</th></tr></thead>
+<tbody>
+<tr><td>① ADX sideways movement confirmed</td><td>ADX ≤ ADX Max</td><td>ADX ≤ ADX Max</td></tr>
+<tr><td>② RSI oversold/overbought</td><td>RSI ≤ RSI Entry</td><td>RSI ≥ (100 − RSI Entry)</td></tr>
+<tr><td>③ BB band departure</td><td>Closing Price &lt; BB Lower (= SMA20 − BB Sigma × σ)</td><td>Closing price &gt; BB Upper (= SMA20 + BB Sigma × σ)</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout warn">
+<strong>Without CI filter:</strong> MR strategy ignores CI Filter. This is because CI &lt; 61.8 (trend section judgment) does not meet the MR entry conditions. ADX Max does the same.</div>
+<h3>Exit logic</h3>
+<div class="formula">
+<div><span class="lhs">Profit conditions (LONG)</span><span class="op">→</span> <span class="rhs">Current price ≥ entry point BB Mid (SMA20)</span></div>
+<div><span class="lhs">Profit conditions (SHORT)</span><span class="op">→</span> <span class="rhs">Current price ≤ entry point BB Mid (SMA20)</span></div>
+<div><span class="lhs">stop loss condition</span><span class="op">→</span> <span class="rhs">Current price ≤ Entry price − ATR × ATR Mult (LONG)</span></div>
+<div><span class="lhs">Time Exit</span><span class="op">→</span> <span class="rhs">Forced position close if position is held for more than 72 hours</span></div>
+</div>
+<div class="callout"><strong>BB Mid Target Lock:</strong> The profit target is fixed at BB Mid at the time of entry. Even if the actual BB Mid moves while the position is held, the target does not change. If held for a long period of time, it may be closed with a 72h Time Exit before the target is reached.</div>
+</section>
+<hr class="scan-rule"/>
+<!-- ══ 10. Exit ══════════════════════════════════════════════ -->
+<section class="section" id="exit">
+<div class="section-eyebrow">position close strategy</div>
+<h2>Position Close priority</h2>
+<p>In the position monitoring loop, position close conditions are checked in the following order:</p>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>priority</th><th>position close conditions</th><th>corresponding strategy</th></tr></thead>
+<tbody>
+<tr><td class="td-default">1</td><td>fast_exit: Close the entire amount when the 1R goal is reached</td><td><span class="badge badge-tf">TF</span> PANIC</td></tr>
+<tr><td class="td-default">2</td><td>partial_tp: 50% partial close when 1R is reached or RSI is overbought/oversold</td><td><span class="badge badge-tf">TF</span> NORMAL</td></tr>
+<tr><td class="td-default">3</td><td>When BB Mid is reached, all profits are lost.</td><td><span class="badge badge-mr">MR</span> QUIET</td></tr>
+<tr><td class="td-default">4</td><td>Time Exit: Retention exceeds 72 hours</td><td>strategy common</td></tr>
+<tr><td class="td-default">5</td><td>Stop/Trailing Stop: Price reaches stop loss (local monitor)</td><td>strategy common</td></tr>
+<tr><td class="td-default" style="color:var(--text-lo)">Secondary protection</td><td>Server STOP_MARKET: Binance server runs directly when the bot is offline. Automatic cancellation during local position close to avoid overlapping with local position close</td><td>strategy common</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="scan-rule"/>
+<!-- ══ 11. Sizing ════════════════════════════════════════════ -->
+<section class="section" id="sizing">
+<div class="section-eyebrow">Risk Management</div>
+<h2>position sizing</h2>
+<p>Quantity is calculated based on two criteria and the smaller value is used as the final quantity.</p>
+<div class="formula">
+<div><span class="lhs">stop loss</span> <span class="op">=</span> <span class="rhs">Entry ATR × ATR Mult</span></div>
+<div><span class="lhs">Risk standard quantity</span><span class="op">=</span> <span class="rhs">(Total Balance × Risk%) ÷ Stop Loss</span></div>
+<div><span class="lhs">Quantity based on Cap</span> <span class="op">=</span> <span class="rhs">(Total Balance × Max Position% × Leverage) ÷ Current Price</span></div>
+<div><span class="lhs">final quantity</span> <span class="op">=</span> <span class="rhs">min (Risk-based quantity, Cap-based quantity)</span></div>
+</div>
+<div class="callout info">
+<strong>Conditions for skipping orders (safeguards):</strong><br/>• If the final quantity is less than the minQty of the exchange<br/>• When the required margin exceeds 95% of the available balance<br/>• If the same symbol already exists in a local position or on an exchange.</div>
+<h3>Calculation example</h3>
+<pre><span class="comment"># Settings: Balance=1000 USDT, Risk%=0.5, ATR=50, ATR Mult=2.0
+# Leverage=5, Max Position%=15, current price=2000 USDT</span>
+
+<span class="label">stop loss</span>          = <span class="val">50 × 2.0 = 100 USDT</span>
+<span class="label">Risk standard quantity</span>  = <span class="val">(1000 × 0.5%) ÷ 100 = 0.05 units</span>
+<span class="label">Quantity based on Cap</span>   = <span class="val">(1000 × 15% × 5) ÷ 2000 = 0.375</span>
+<span class="label">final quantity</span>       = <span class="val">min(0.05, 0.375) = 0.05 units</span>
+<span class="comment"># → Notional 0.05 × 2000 = 100 USDT / Margin = 100 ÷ 5 = 20 USDT</span></pre>
+</section>
+<hr class="scan-rule"/>
+<!-- ══ 12. WebSocket ═════════════════════════════════════════ -->
+<section class="section" id="websocket">
+<div class="section-eyebrow">operate</div>
+<h2>WebSocket &amp; API Structure</h2>
+<h3>PriceWebSocketManager</h3>
+<p>This is a mark-price WebSocket that only subscribes to currently held positions. Automatically resynchronizes subscriptions when you change positions.</p>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Metric</th><th>detail</th></tr></thead>
+<tbody>
+<tr><td class="td-param">Backend priority</td><td><code>websockets</code> (async) → <code>websocket-client</code> (fallback)</td></tr>
+<tr><td class="td-param">Subscription method</td><td>Active-position only: Subscribe to bookTicker/markPrice only for stocks you own</td></tr>
+<tr><td class="td-param">SSL</td><td>cert_reqs=NONE (Response to certificate issues in some environments)</td></tr>
+<tr><td class="td-param">reconnect</td><td>When changing the subscription type, the existing connection is terminated → automatically reconnected to the new URL</td></tr>
+<tr><td class="td-param">price max_age</td><td>WS prices that have elapsed for more than 10 seconds are invalidated → REST fallback</td></tr>
+</tbody>
+</table>
+</div>
+<h3>UserDataWebSocketManager (UDS)</h3>
+<p>Receive account events (position changes, order execution) in real time with the Binance User Data Stream.</p>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Metric</th><th>detail</th></tr></thead>
+<tbody>
+<tr><td class="td-param">purpose</td><td>REST Real-time detection of position changes without polling</td></tr>
+<tr><td class="td-param">Listen Key</td><td>Automatic issuance + keepalive renewal every 30 minutes</td></tr>
+<tr><td class="td-param">max_age</td><td>If there is no UDS event for more than 300 seconds, REST safety sync is performed.</td></tr>
+</tbody>
+</table>
+</div>
+<h3>REST Fallback</h3>
+<p>If the WS connects but there is no payload for more than 5 seconds, DashboardThread takes a full price snapshot as REST. <code>GLOBAL_PRICE_CACHE</code> Supplements .</p>
+<div class="callout info">
+<strong>When WS is “Connected” but the price is not updated:</strong> API monitor<em>WS Msg/min</em>If this is 0, the WS is only connected and no payload is received. Since the REST fallback operates automatically, there is no problem with the function. <code>pip install websockets</code> Check out .</div>
+</section>
+<hr class="scan-rule"/>
+<!-- ══ 13. Monitor ═══════════════════════════════════════════ -->
+<section class="section" id="monitor">
+<div class="section-eyebrow">operate</div>
+<h2>API Monitor</h2>
+<p>You can check the call status of API in real time in the API Monitor panel at the top of the Trading tab.</p>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>characteristic</th><th>Display value example</th><th>Description and normal criteria</th></tr></thead>
+<tbody>
+<tr>
+<td class="td-param">Health</td>
+<td class="td-default">🟢 Healthy<br/>🟡 Warning<br/>🔴 Critical</td>
+<td>Comprehensive data reception status. <strong>Healthy</strong>= WS LIVE + price cache 90% or more + fallback 5 times or less. <strong>Warning</strong>= Partially normal. <strong>Critical</strong>= Unable to receive price</td>
+</tr>
+<tr>
+<td class="td-param">Data Source</td>
+<td class="td-default">LIVE / MIXED<br/>/ REST / OFFLINE</td>
+<td>Pricing and account data source. <strong>LIVE</strong>= WS+UDS are all normal. <strong>MIXED</strong>= Mixed use of some REST. <strong>REST</strong>= Only REST without WS. <strong>OFFLINE</strong>= No data received</td>
+</tr>
+<tr>
+<td class="td-param">Price WS</td>
+<td class="td-default">🟢 LIVE<br/>🟡 Connected(No Data)<br/>🔴 Disconnected</td>
+<td>Price WebSocket status. <strong>LIVE</strong>= Payload received within 5 seconds + cache over 80%. <strong>Connected(No Data)</strong>= Connected but payload not received → REST fallback in operation</td>
+</tr>
+<tr>
+<td class="td-param">UDS</td>
+<td class="td-default">🟢 LIVE<br/>● Connected<br/>● Reconnecting</td>
+<td>User Data Stream status. <strong>LIVE</strong>= Connect + Receive event within 300 seconds. <strong>Connected</strong>= Connected but no event (normal when there is no trade). <strong>Reconnecting</strong>= Reconnecting</td>
+</tr>
+<tr>
+<td class="td-param">Price Cache</td>
+<td class="td-default">28 / 30 (93%)</td>
+<td>Number of stocks with current prices cached / Total number of stocks scanned (ratio). Anything over 90% is normal. If it is low, WS subscription is missing or REST fallback is insufficient.</td>
+</tr>
+<tr>
+<td class="td-param">Last Price</td>
+<td class="td-default">1.2 sec<br/>waiting</td>
+<td>Price Cache Time elapsed since last update (including WS or REST fallback). Normal within 10 seconds. <strong>waiting</strong>= No price received yet</td>
+</tr>
+<tr>
+<td class="td-param">Last UDS</td>
+<td class="td-default">42.3 sec<br/>no event yet<br/>waiting</td>
+<td>UDS (User Data Stream) Time elapsed since the last account event was received. It can get old without a trade — 300 decision within LIVE seconds. <strong>no event yet</strong>= Connected, but no events yet (normal). <strong>waiting</strong>= UDS not connected</td>
+</tr>
+<tr>
+<td class="td-param">REST/min</td>
+<td class="td-default">45 (1.9%)</td>
+<td>Number of calls to REST API in the last minute (ratio compared to Binance per minute limit of 2, 400). Beware of excessive calls when exceeding 10%</td>
+</tr>
+<tr>
+<td class="td-param">WS Msg/min</td>
+<td class="td-default">120</td>
+<td>Number of price WS payloads received in the last minute. If 0, only WS connection is established and data is not received → REST fallback is in operation. Increases in proportion to the number of stocks held</td>
+</tr>
+<tr>
+<td class="td-param">REST Fallback/min</td>
+<td class="td-default">0 / 3</td>
+<td>Number of times REST price was used instead of WS in the last minute. Normally 0 when WS LIVE, increases when WS is temporarily delayed. The value is automatically updated based on the last minute. Health is judged comprehensively not only by this value but also by Price WS, Cache Fill, and Price Age.</td>
+</tr>
+<tr>
+<td class="td-param">Reconnects</td>
+<td class="td-default">2</td>
+<td>Cumulative number of WS reconnections. A small amount is normal (network is temporarily disconnected). If it continues to increase at a rapid rate, check the endpoint and firewall.</td>
+</tr>
+<tr>
+<td class="td-param">Last REST Sync</td>
+<td class="td-default">38 sec<br/>-</td>
+<td>Elapsed time since the last REST safety sync (full position collation). UDS Automatically performed when the event gap becomes long. <strong>-</strong>= No sync yet</td>
+</tr>
+<tr>
+<td class="td-param">WS Version</td>
+<td class="td-default">1.8.0</td>
+<td>Installed websocket-client version. Recommended version is 1.8.0. If there is a mismatch, output VERSION WARNING to the startup log.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="scan-rule"/>
+<!-- ══ 14. Troubleshoot ══════════════════════════════════════ -->
+<section class="section" id="troubleshoot">
+<div class="section-eyebrow">operate</div>
+<h2>Troubleshooting</h2>
+<h3>When there is no entry signal at all</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>cause</th><th>Check/Resolve</th></tr></thead>
+<tbody>
+<tr><td>Regime checkbox OFF</td><td>Check whether the checkbox for the relevant regime (NORMAL/TREND, etc.) is ON.</td></tr>
+<tr><td>ADX Min is too high</td><td>If ADX is above 30, the signal may be rare. Search for optimal values ​​with Sweep</td></tr>
+<tr><td>Vol Mult too high</td><td>Trading volume explosion conditions are too strict. 1.2~1.5 range recommended</td></tr>
+<tr><td>CI Filter transient blocking</td><td>Check signal occurrence after CI Filter OFF. In sideways markets, CI can always be high</td></tr>
+<tr><td>Reach Max Positions</td><td>If the existing position has reached the Max Long/Short limit, new entry is skipped.</td></tr>
+<tr><td>Top N too few</td><td>If there are too few stocks to scan, the chances of meeting the conditions are low. Increase Top N or switch TRADFI</td></tr>
+</tbody>
+</table>
+</div>
+<h3>WS connection issues</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>symptoms</th><th>solve</th></tr></thead>
+<tbody>
+<tr><td>Price WS: SILENT</td><td><code>pip install websockets</code> After restart. Without the websockets package, the websocket-client fallback causes payload not to be received in some environments.</td></tr>
+<tr><td>Frequent reconnections occur</td><td>Check network stability and check if the Testnet/live trading selection in the API settings window matches the key.</td></tr>
+<tr><td>UDS not connected</td><td>In the API settings window, check whether to save the key, Enable Futures permission, and IP restrictions.</td></tr>
+</tbody>
+</table>
+</div>
+<h3>Position related</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>symptoms</th><th>solve</th></tr></thead>
+<tbody>
+<tr><td>[POSITION UNMANAGED] log</td><td>There is no stop information in the position state file (state/open_positions.json). The position needs to be restored by manual close or restart</td></tr>
+<tr><td>Position disappears after restart</td><td>Check if open_positions.json exists in the state/ folder. Manual comparison with exchange status when file is damaged</td></tr>
+<tr><td>Order omitted due to quantity calculation error</td><td>Insufficient balance or less than minQty for price. Increase balance or adjust leverage/Risk%</td></tr>
+<tr><td>Attempts to repeatedly enter the same stock</td><td>Normal operation. Stocks already owned are automatically skipped.</td></tr>
+<tr><td>[SERVER STOP ERROR] Repeat output</td><td>Binance STOP_MARKET registration failed due to error API. The local stop monitor continues to operate. Check whether API Key has Enable Futures permission. In case of network problem, automatic retry in the next cycle</td></tr>
+<tr><td>Position Close recorded as SERVER_STOP_FILLED</td><td>Normal operation with Binance server stop while bot is offline. Automatically detects and records in the next monitor cycle after restart</td></tr>
+<tr><td>Old STOP orders remain on Binance</td><td>Could be a previously created or orphaned stop order left behind by a crash. Recommended manual cancellation and bot restart in Binance app/web</td></tr>
+</tbody>
+</table>
+</div>
+<h3>Backtesting is slow</h3>
+<div class="callout">
+<strong>Parallel downloads are limited to workers=2.</strong> This is an intentionally restricted setting due to past IP ban cases. Reduce the Top N and duration, or if you already have a downloaded cache, it will be faster on rerun.</div>
+<h3>Disable Apply Regime Best button</h3>
+<p>If the button is disabled even after the sweep is completed, <code>backtest_results/parameter_sweep_summary.csv</code> The file does not exist. Check the log to see if the sweep was completed normally.</p>
+<div class="callout warn">
+<strong>Live trade conversion:</strong> After selecting the live trading mode and live trading key in the API settings window,<a href="#live-checklist" style="color:var(--accent2)">Live trading final checklist</a>Check them all out.</div>
+</section>
+<hr class="scan-rule"/>
+<!-- ══ 15. Logs ════════════════════════════════════════════ -->
+<section class="section" id="logs">
+<div class="section-eyebrow">reference</div>
+<h2>Log interpretation</h2>
+<p>The format and meaning of messages displayed in the Log window are organized in chronological order. In the message <code>{}</code> Parts are replaced with actual values.</p>
+<!-- ─ 시작 ─ -->
+<h3>① At startup (Startup)</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th style="width:46%">log message</th><th>Meaning/Action</th></tr></thead>
+<tbody>
+<tr>
+<td class="td-param" style="white-space:normal">Strategy : universe=ALL, top_n=30, entry=15m, trailing=5m, ...</td>
+<td>Output a summary of settings at startup. Verify that parameters are applied as intended</td>
+</tr>
+<tr>
+<td class="td-param">BASE_URL=https://fapi.binance.com</td>
+<td>Check mainnet connection. If it is testnet <code>testnet.binancefuture.com</code> mark</td>
+</tr>
+<tr>
+<td class="td-param">Server time synced. offset={n} ms</td>
+<td>Time synchronization with Binance server completed. If the offset is more than 1,000ms, beware of server time discrepancy.</td>
+</tr>
+<tr>
+<td class="td-param" style="color:var(--red)">API KEY / SECRET KEY missing in .env</td>
+<td><strong>error.</strong> No API information saved. Enter and save the Key and Secret in the API settings button at the top of the program.</td>
+</tr>
+<tr>
+<td class="td-param">[WS] Price websocket enabled: active-position bookTicker + REST fallback</td>
+<td>Pricing WebSocket normal start. Subscribe to only the positions held and REST is waiting</td>
+</tr>
+<tr>
+<td class="td-param">[UDS] User data stream enabled (REST safety sync kept)</td>
+<td>Starting an account event stream. Real-time reception of closing and position changes</td>
+</tr>
+<tr>
+<td class="td-param" style="white-space:normal">[WS VERSION WARNING] websocket-client 1.9.x may not receive...</td>
+<td><strong>Warning:</strong> websocket-client version is different from recommended (1.8.0). <code>pip install websocket-client==1.8.0</code> After restart</td>
+</tr>
+<tr>
+<td class="td-param">Symbol universe refresh: 4h fixed</td>
+<td>Notice that the scanned item universe is automatically updated every 4 hours.</td>
+</tr>
+<tr>
+<td class="td-param" style="white-space:normal">Position restore: supervised=3, exchange-only=1</td>
+<td>Result of position restoration upon restart. supervised = number of self-managed restores, exchange-only = number of positions on exchange only, without state file</td>
+</tr>
+<tr>
+<td class="td-param" style="white-space:normal;color:var(--yellow)">WARNING: Some existing exchange positions have no saved SL/TP...</td>
+<td><strong>caution.</strong> Position without status file → Automatic stop loss management not possible. Manual Close or Emergency Close Required</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- ─ 신호 ─ -->
+<h3>② Entry signal (Signal)</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th style="width:46%">log message</th><th>Meaning/Action</th></tr></thead>
+<tbody>
+<tr>
+<td class="td-param" style="white-space:normal">SIGNAL BTCUSDT LONG / trend_following / REGIME=TREND ATR%=5.21 SET=STRATEGY=trend_following,ADX_MIN25.0,VOL1.5,TRIG1.0,ATR_TRAIL2.0,RISK0.50%</td>
+<td>Entry signal detection. Check the combination of items, direction, strategy, regime, ATR%, and parameters. Then proceed with position sizing.</td>
+</tr>
+<tr>
+<td class="td-param" style="white-space:normal">BTCUSDT sizing: balance=1000.0, available=850.0, risk=5.0000(0.50%), stop_atr_mult=2.00, notional=240.0000, required_margin≈48.0000</td>
+<td>Quantity calculation details. risk=maximum loss amount of position, notional=notional amount of position, required_margin=required margin</td>
+</tr>
+<tr>
+<td class="td-param" style="white-space:normal;color:var(--text-mid)">BTCUSDT skipped: required_margin=820.0, available=850.0</td>
+<td>The order is skipped because the margin exceeds 95% of the available balance. Insufficient balance or need to adjust leverage/risk%</td>
+</tr>
+<tr>
+<td class="td-param" style="color:var(--text-mid)">BTCUSDT already in local positions</td>
+<td>Stocks you already own. Prevent duplicate entries — normal operation</td>
+</tr>
+<tr>
+<td class="td-param" style="color:var(--text-mid)">BTCUSDT already exists on exchange</td>
+<td>There is a position in the same stock on the exchange. Prevent duplicate entries — normal operation</td>
+</tr>
+<tr>
+<td class="td-param" style="color:var(--text-mid)">BTCUSDT adjusted qty below minQty</td>
+<td>The calculated quantity is less than the minimum order quantity. Need to increase balance or adjust Risk%/Leverage</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- ─ 진입 ─ -->
+<h3>③ Position opening (Open)</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th style="width:46%">log message</th><th>Meaning/Action</th></tr></thead>
+<tbody>
+<tr>
+<td class="td-param" style="white-space:normal">OPEN BTCUSDT LONG qty=0.050 entry=42000.000000 SL=41520.000000 TRAIL_TRIGGER=42480.000000 TRAIL_DIST=480.000000 TRAIL_TF=5m TRIGGER_R=1.0 ATR_MULT=2.0 RISK=0.50% STRATEGY=trend_following REGIME=TREND ATR%=5.21</td>
+<td>Order completion log.<br/>
+<strong>SL</strong>= stop loss /<strong>TRAIL_TRIGGER</strong>= Trailing activation price /<strong>TRAIL_DIST</strong>= Trailing gap</td>
+</tr>
+<tr>
+<td class="td-param" style="white-space:normal">OPEN ETHUSDT SHORT qty=0.200 ... STRATEGY=mean_reversion REGIME=QUIET ATR%=1.43</td>
+<td>Enter the MR strategy. TRAIL_TRIGGER is set as BB Mid position close target price</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- ─ 모니터 ─ -->
+<h3>④ Position monitoring (Monitor)</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th style="width:46%">log message</th><th>Meaning/Action</th></tr></thead>
+<tbody>
+<tr>
+<td class="td-param">TRAILING ON BTCUSDT LONG trigger=42480.000000</td>
+<td>Activate trailing stop. The price reached TRAIL_TRIGGER. Then start tracking the highest price</td>
+</tr>
+<tr>
+<td class="td-param">TRAIL UPDATE BTCUSDT LONG SL=42200.000000 high=42680.000000</td>
+<td>Trailing stop loss has been updated upward. high=highest price to date, SL=updated stop loss price</td>
+</tr>
+<tr>
+<td class="td-param">TRAIL UPDATE BTCUSDT SHORT SL=41800.000000 low=41600.000000</td>
+<td>SHORT Trailing. low=lowest price, SL=updated stop loss (upward direction)</td>
+</tr>
+<tr>
+<td class="td-param">RSI EXIT SIGNAL BTCUSDT LONG RSI=74.2</td>
+<td>RSI overbought → triggers 50% partial close in partial_tp mode. Afterwards, logs PARTIAL and CLOSE follow.</td>
+</tr>
+<tr>
+<td class="td-param" style="color:var(--yellow)">[POSITION UNMANAGED] BTCUSDT: stop/ATR state is missing...</td>
+<td><strong>caution.</strong> Automatic management is not possible as there is no stop loss status information for the position. Manual position close or state file recovery and restart</td>
+</tr>
+<tr>
+<td class="td-param">[POSITION SYNC] REST safety sync OK (3 open exchange positions); next in 60s</td>
+<td>Successfully synchronized position status with exchange. Performed periodically when UDS event is blank.</td>
+</tr>
+<tr>
+<td class="td-param" style="white-space:normal">[SERVER STOP] BTCUSDT LONG stop=41520.000000 orderId=12345678</td>
+<td>STOP_MARKET order registration completed on Binance. Stop loss will be executed at that price even when the bot is offline</td>
+</tr>
+<tr>
+<td class="td-param" style="white-space:normal">[SERVER STOP CANCEL] BTCUSDT orderId=12345678 TRAILING_TAKE</td>
+<td>Server stop Order cancellation completed. Removed orphaned orders since they were successfully closed locally. Display the reason for position close in the reason field</td>
+</tr>
+<tr>
+<td class="td-param" style="color:var(--yellow)">[SERVER STOP WARN] BTCUSDT cancel failed: {e}</td>
+<td><strong>Warning:</strong> Server stop cancellation failure — if the order has already been placed or the order ID has expired. Generally negligible due to low probability of local position close and duplicate close</td>
+</tr>
+<tr>
+<td class="td-param" style="color:var(--red)">[SERVER STOP ERROR] BTCUSDT: {e}</td>
+<td><strong>error.</strong> STOP_MARKET Order registration failed. The local stop monitor continues to operate, but there is no server loss when the bot is offline. API Check permission/network</td>
+</tr>
+<tr>
+<td class="td-param">MANUAL CLOSE DETECTED BTCUSDT LONG PnL=+32.5000 USDT</td>
+<td>Positions are manually closed outside the program (app/web). Automatic removal from local state</td>
+</tr>
+<tr>
+<td class="td-param">Universe added: XRPUSDT, SOLUSDT</td>
+<td>Newly added items when the 4-hour universe is updated</td>
+</tr>
+<tr>
+<td class="td-param">Universe removed: DOGEUSDT</td>
+<td>Stocks excluded from scanning due to falling trading volume rankings</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- ─ 청산 ─ -->
+<h3>⑤ Close</h3>
+<p>All exit logs are <code>reason</code> Separate causes by fields.</p>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th style="width:46%">log message</th><th>meaning</th></tr></thead>
+<tbody>
+<tr>
+<td class="td-param" style="white-space:normal">CLOSE BTCUSDT LONG reason=STOP price=41520.000000 PnL=-5.0000 USDT</td>
+<td><strong>Position Close of stop loss.</strong> The price reaches the initial stop loss (SL). In case of stop loss before trailing is activated</td>
+</tr>
+<tr>
+<td class="td-param" style="white-space:normal">CLOSE BTCUSDT LONG reason=TRAILING_TAKE price=42200.000000 PnL=+35.0000 USDT</td>
+<td><strong>Trailing stop profit.</strong> Trailing stop loss is reached by falling by trail_distance compared to the highest price. Position Close from beneficial interest</td>
+</tr>
+<tr>
+<td class="td-param" style="white-space:normal">CLOSE ETHUSDT SHORT reason=MEAN_REVERSION_TAKE price=2050.000000 PnL=+18.0000 USDT</td>
+<td><strong>MR Ikjeol.</strong> The price reaches BB Mid at the entry point. Mean Reversion Goal Achieved</td>
+</tr>
+<tr>
+<td class="td-param" style="white-space:normal">CLOSE SOLUSDT LONG reason=TIME_EXIT price=98.500000 PnL=-2.0000 USDT</td>
+<td><strong>Forced position close beyond 72 hours.</strong> Position held for more than 72 hours. Position Close regardless of profit or loss</td>
+</tr>
+<tr>
+<td class="td-param" style="white-space:normal">CLOSE XRPUSDT SHORT reason=fast_exit price=0.620000 PnL=+8.0000 USDT</td>
+<td><strong>Quick profit.</strong> In fast_exit mode, the entire amount is closed as soon as the 1R goal is reached.</td>
+</tr>
+<tr>
+<td class="td-param" style="white-space:normal">SERVER_STOP_FILLED BTCUSDT LONG PnL=-5.2000 USDT</td>
+<td><strong>Server stop concluded.</strong> While the bot was offline, Binance's STOP_MARKET order was filled, liquidating the position. Detected and recorded in the next monitor cycle after restarting the bot</td>
+</tr>
+<tr>
+<td class="td-param" style="white-space:normal">PARTIAL CLOSE BTCUSDT LONG reason=RSI_EXIT qty=0.025 price=43100.000000 PnL=+27.5000 USDT remaining=0.025</td>
+<td><strong>RSI overbought/oversold 50% closed first.</strong> Half position close with RSI signal in partial_tp mode. remaining=quantity remaining</td>
+</tr>
+<tr>
+<td class="td-param" style="white-space:normal">PARTIAL CLOSE BTCUSDT LONG reason=partial_tp qty=0.025 price=42480.000000 PnL=+12.0000 USDT remaining=0.025</td>
+<td><strong>1R goal reached 50% partial close.</strong> Half position close when 1R (stop loss) is achieved in partial_tp mode</td>
+</tr>
+<tr>
+<td class="td-param" style="color:var(--text-mid)">{symbol} close skipped: invalid qty</td>
+<td>Failed to calculate position close quantity → Skip position close. Exchange minQty or less or position quantity error</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- ─ 에러 ─ -->
+<h3>⑥ Warning &amp; Error</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th style="width:46%">log message</th><th>Meaning/Action</th></tr></thead>
+<tbody>
+<tr>
+<td class="td-param" style="color:var(--yellow)">[WS WARN] active price symbol sync failed: {e}</td>
+<td>WS subscription item update failed. Automatic retry in the next cycle. Check network on repeat</td>
+</tr>
+<tr>
+<td class="td-param" style="color:var(--yellow)">[DASHBOARD] REST fallback standby activated for stale WS price cache</td>
+<td>WS price is old → converted to REST. Automatically occurs when WS is in SILENT state. Normal operation or WS check recommended</td>
+</tr>
+<tr>
+<td class="td-param" style="color:var(--yellow)">[TRAIL INDICATOR ERROR] BTCUSDT: {e}</td>
+<td>Error calculating trailing ATR. Candle data reception may fail. The bar remains the previous ATR</td>
+</tr>
+<tr>
+<td class="td-param" style="color:var(--yellow)">[PARTIAL CLOSE ERROR] BTCUSDT: {e}</td>
+<td>50% partial close order failed. All positions are maintained. Network error or exchange error</td>
+</tr>
+<tr>
+<td class="td-param" style="color:var(--yellow)">[POSITION SYNC ERROR] {e}</td>
+<td>REST safety sync failed. Retry next cycle. Check API Key permission or network when repeating.</td>
+</tr>
+<tr>
+<td class="td-param" style="color:var(--red)">[SCAN ERROR] BTCUSDT: {e}</td>
+<td>Error while scanning the item. Skip stock, retry in next loop. Check detailed error information when repeating</td>
+</tr>
+<tr>
+<td class="td-param" style="color:var(--red)">[UNIVERSE REFRESH ERROR] keep previous symbols: {e}</td>
+<td>Universe update failure → Previous items maintained. Network or API error</td>
+</tr>
+<tr>
+<td class="td-param" style="color:var(--red)">[FATAL] {e}</td>
+<td><strong>Auto trading thread fatal error.</strong> Force ending loop. A restart is required after determining the cause through the log contents.</td>
+</tr>
+<tr>
+<td class="td-param">Auto trader stopped</td>
+<td>Normally terminated with the Stop button. Maintain existing positions (stop automatic management)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- ─ 백테스트 ─ -->
+<h3>⑦ Backtest log (Backtest)</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th style="width:46%">log message</th><th>meaning</th></tr></thead>
+<tbody>
+<tr>
+<td class="td-param">Backtest started. Downloading public Binance Futures kline data...</td>
+<td>Start backtesting. Downloading candle data</td>
+</tr>
+<tr>
+<td class="td-param">[DATA 5/30] BTCUSDT</td>
+<td>Data download progress. 5th download out of 30 items</td>
+</tr>
+<tr>
+<td class="td-param">[BACKTEST DATA ERROR] XYZUSDT: {e}</td>
+<td>Download of relevant item data failed. Skip this item. Delisting, symbol change, etc.</td>
+</tr>
+<tr>
+<td class="td-param">[TREND SWEEP 3/12] ADX25.0_VOL1.5_TRIG1.0_ATR2.0_RISK0.50</td>
+<td>TREND Regime Sweep progress. Running 3rd out of 12 combinations. Parameter combination display</td>
+</tr>
+<tr>
+<td class="td-param">Stop Backtest requested.</td>
+<td>User requests to stop backtesting. Exit after completion of current combination</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- ─ 정상 흐름 예시 ─ -->
+<h3>Example of normal entry to position close log flow</h3>
+<pre><span class="comment"># ① Signal detection</span>
+<span class="val">SIGNAL BTCUSDT LONG / trend_following / REGIME=TREND ATR%=5.21 SET=...</span>
+<span class="comment"># ② Quantity calculation</span>
+BTCUSDT sizing: balance=1000.0, available=850.0, risk=5.0000(0.50%), ...
+<span class="comment"># ③ Entry and conclusion</span>
+<span class="val">OPEN BTCUSDT LONG qty=0.050 entry=42000.000000 SL=41520.000000 TRAIL_TRIGGER=42480.000000 ...</span>
+<span class="comment"># ④ Server stop registration</span>
+[SERVER STOP] BTCUSDT LONG stop=41520.000000 orderId=12345678
+<span class="comment"># ⑤ WS subscription renewal</span>
+[WS] Active price stream symbols=3 reason=position_open
+<span class="comment"># ⑥ Activate trailing</span>
+<span class="val">TRAILING ON BTCUSDT LONG trigger=42480.000000</span>
+<span class="comment"># ⑦ Stop loss update + server stop update (repeat)</span>
+TRAIL UPDATE BTCUSDT LONG SL=42200.000000 high=42680.000000
+[SERVER STOP] BTCUSDT LONG stop=42200.000000 orderId=12345679
+TRAIL UPDATE BTCUSDT LONG SL=42400.000000 high=42880.000000
+[SERVER STOP] BTCUSDT LONG stop=42400.000000 orderId=12345680
+<span class="comment"># ⑧ Position Close + Server stop cancellation</span>
+<span class="val">CLOSE BTCUSDT LONG reason=TRAILING_TAKE price=42400.000000 PnL=+20.0000 USDT</span>
+[SERVER STOP CANCEL] BTCUSDT orderId=12345680 TRAILING_TAKE</pre>
+</section>
+<hr class="scan-rule"/>
+<!-- ══ 16. Glossary ═════════════════════════════════════════ -->
+<section class="section" id="glossary">
+<div class="section-eyebrow">reference</div>
+<h2>glossary of terms</h2>
+<p>All terms that appear in the program UI and log are organized in alphabetical order.</p>
+<!-- ─ 지표 ─ -->
+<h3>Technical Indicators</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th style="width:140px">terminology</th><th>Description and Examples</th></tr></thead>
+<tbody>
+<tr>
+<td class="td-param">ATR<br/><span style="color:var(--text-lo);font-size:10px">Average True Range</span></td>
+<td>
+<strong>Average Amplitude — The standard unit of volatility.</strong> The simple average (SMA) of the High-Low range of 14 bars. Used to determine stop loss, position size, and regime.<br/>
+<em>Example: 15-minute bar BTCUSDT ATR = 120 USDT → Average 120 USDT movement in one bar</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">ATR%<br/><span style="color:var(--text-lo);font-size:10px">ATR Percent</span></td>
+<td>
+<strong>The ratio of ATR divided by the current price.</strong> Regime classification criteria. ATR% = ATR ÷ Current price × 100<br/>
+<em>Example: ATR = 120, price = 60,000 → ATR% = 0.2% (QUIET), ATR = 2,400 → ATR% = 4% (TREND)</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">ADX<br/><span style="color:var(--text-lo);font-size:10px">Average Directional Index</span></td>
+<td>
+<strong>Trend strength indicator (0~100).</strong> Measures only the strength of the trend itself, without direction. If it is above 25, it is generally judged that there is a trend. This program uses the SMA method instead of Wilder RMA.<br/>
+<em>Example: ADX = 15 → weak trend (sideways), ADX = 35 → strong trend in progress</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">EMA<br/><span style="color:var(--text-lo);font-size:10px">Exponential Moving Average</span></td>
+<td>
+<strong>Exponential Moving Average — Higher weighting on recent bars.</strong> If EMA20 (short-term) is above EMA60 (long-term), it is judged to be an upward trend, and if it is below, it is a downward trend.<br/>
+<em>Example: EMA20 = 42,500 / EMA60 = 41,800 → EMA20 &gt; EMA60 → LONG Allow directions</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">RSI<br/><span style="color:var(--text-lo);font-size:10px">Relative Strength Index</span></td>
+<td>
+<strong>Overbought/oversold indicator (0~100).</strong> Wilder RSI 14-period calculation. Below 30 = oversold, above 70 = overbought. Used for MR entry filter and partial_tp secondary exit.<br/>
+<em>Example: RSI = 22, RSI Entry = 30 → RSI ≤ 30 met → MR LONG one entry condition passed</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">BB<br/><span style="color:var(--text-lo);font-size:10px">Bollinger Bands</span></td>
+<td>
+<strong>Moving average ± standard deviation band.</strong> SMA20 ± BB Sigma × σ (standard deviation). MR entry signal when leaving the top/bottom. The middle band (SMA20) is the MR profit target.<br/>
+<em>Example: SMA20 = 41,000 / σ = 800 / Sigma = 2.0 → Upper = 42,600, Lower = 39,400, Mid = 41,000</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Donchian Channel</td>
+<td>
+<strong>The highest/lowest price channel of recent N peak.</strong> Based on 20 bags. The closing price broke through the upper channel → LONG, and broke through the lower channel → SHORT. Conditions for entry into TF strategy.<br/>
+<em>Example: Highest price of the last 20 bars = 43,100, current bar closing price = 43,250 → Break through the top of Donchian → Condition met</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">CI<br/><span style="color:var(--text-lo);font-size:10px">Choppiness Index</span></td>
+<td>
+<strong>Sideways/trend indicator (1~100).</strong> Higher values ​​indicate choppiness, lower values ​​indicate trend. If it is above 61.8, it is judged as a sideways trend and TF entry is blocked. Applies only when CI Filter is ON.<br/>
+<em>Example: CI = 68 → sideways section → If CI Filter is ON, TF entry is skipped</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Volume MA</td>
+<td>
+<strong>Volume moving average (20-week SMA).</strong> Among the TF entry conditions, a rapid increase in trading volume filter. To enter, the current bar trading volume must be &gt; Volume MA × Vol Mul.<br/>
+<em>Example: Volume MA = 500 BTC / Vol Mult = 1.5 → 750 The trading volume must be over BTC to meet the condition.</em>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- ─ 파라미터 ─ -->
+<h3>Setting parameters (Parameters)</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th style="width:140px">terminology</th><th>Description and Examples</th></tr></thead>
+<tbody>
+<tr>
+<td class="td-param">Decision TF</td>
+<td>
+<strong>Candlestick timeframe for judging entry signals.</strong> Only closed candles are used for signals. The shorter the signal frequency ↑ the noise ↑.<br/>
+<em>Example: 15m → Check signal with completion bar every 15 minutes</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Trailing TF</td>
+<td>
+<strong>Timeframe for calculating Trailing Stop ATR.</strong> Trailing will respond quickly if set shorter than Decision TF.<br/>
+<em>Example: Decision TF = 15m / Execute TF = 5m / Trailing TF = 5m → Stop loss update with 5-minute bar ATR</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">ATR Mult</td>
+<td>
+<strong>ATR multiple — determines stop loss.</strong> Stop Loss = Entry ATR × ATR Mult. If it is low, the stop loss will be narrow (frequent stop loss), if it is high, the stop loss will be wide (large losses at once).<br/>
+<em>Example: ATR = 120, ATR Mult = 2.0 → Stop loss = 240 USDT (entry price ± 240)</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Trigger R</td>
+<td>
+<strong>(TF) Trailing activation distance multiplier.</strong> Trailing begins only when the price moves to the advantage of Trigger R When it is low, fast trailing is active.<br/>
+<em>Example: Stop Loss = 240, Trigger R = 1.5 → Start trailing when profits exceed 360 USDT</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">BB Sigma</td>
+<td>
+<strong>(MR) Bollinger Band standard deviation multiple.</strong> The higher it is, the wider the band width is, reducing the frequency of entry. Default 2.0.<br/>
+<em>Example: Sigma = 2.0 → SMA20 ± 2σ / Sigma = 1.5 → Narrower band, higher entry opportunities.</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Vol Mult<br/>/ RSI Entry</td>
+<td>
+<strong>Dual parameters with different meaning depending on the strategy.</strong><br/>• TF: Vol Mult — Volume surge multiplier (Volume &gt; MA × Vol Mult)<br/>• MR: RSI Entry — Oversold/Overbought baseline (LONG: RSI ≤ this value)<br/>
+<em>Example: TF Vol Mult = 1.5 / MR RSI Entry = 30</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">ADX Min<br/>/ ADX Max</td>
+<td>
+<strong>Dual parameters with different meaning depending on the strategy.</strong><br/>• TF ADX Min: Lower limit of trend strength. ADX &lt; If this value does not enter<br/>• MR ADX Max: Upper limit of trend strength. ADX &gt; Do not enter at this value (trend market blocking)<br/>
+<em>Example: TF ADX Min = 25 / MR ADX Max = 20</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Risk %</td>
+<td>
+<strong>Maximum allowable loss percentage per position.</strong> Calculate the quantity so that only Risk% of the balance is lost when one position is stopped.<br/>
+<em>Example: Balance 1,000 USDT / Risk% = 0.5% → Maximum loss for one position 5 USDT</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Max Position %</td>
+<td>
+<strong>1 position notional upper limit ratio.</strong> Balance × Max Position% × Leverage is the maximum order possible. Use a smaller value compared to the risk standard quantity.<br/>
+<em>Example: Balance 1,000 / Max Position% = 15% / Leverage 5 → Notional upper limit = 750 USDT</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Leverage</td>
+<td>
+<strong>Futures leverage multiple.</strong> Position size multiple over margin. Both profits and losses are multiplied by multiples. Automatically set to the exchange upon entry.<br/>
+<em>Example: 5x leverage / margin 100 USDT → Notional 500 USDT positions available</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Top N</td>
+<td>
+<strong>The top N stocks with 24-hour trading volume are selected for scanning.</strong> Automatically renews every 4 hours. The more, the greater the opportunity·API load increases.<br/>
+<em>Example: Top N = 30 → Scan entry signals only for USDT futures items ranked 1st to 30th by trading volume</em>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- ─ 전략/레짐 ─ -->
+<h3>Strategy &amp; Regime</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th style="width:140px">terminology</th><th>Description and Examples</th></tr></thead>
+<tbody>
+<tr>
+<td class="td-param">Regime</td>
+<td>
+<strong>Market status classification.</strong> Classified into 4 levels QUIET / NORMAL / TREND / PANIC by ATR%. Strategies and parameters are automatically switched depending on the regime.<br/>
+<em>Example: ATR% = 5.2% → TREND regime → Apply TF strategy</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Trend Following (TF)</td>
+<td>
+<strong>Trend following strategy.</strong> A strategy to follow the trend by entering the breakout point where the up/down trend begins. Used in the NORMAL·TREND·PANIC regime.<br/>
+<em>Key point: Breakout entry → Follow the trend until the end with a trailing stop</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Mean Reversion (MR)</td>
+<td>
+<strong>Mean reversion strategy.</strong> A strategy that enters when the price deviates significantly from the average (BB middle band) and hopes to return to the average. Used in the QUIET regime.<br/>
+<em>Key point: Breakout below BB + Oversold (RSI) → Entry into LONG → Profit when BB Mid returns</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Closed Candle</td>
+<td>
+<strong>Completed rods — excluding rods that are still in progress.</strong> When judging signals in live trading, only the previous completed bar is used, excluding the currently in progress bar (incomplete).<br/>
+<em>Reason: The price of the ongoing bar keeps changing, so the signal changes frequently → Prevents false signals</em>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- ─ 청산 ─ -->
+<h3>Position Close and Risk (Exit &amp; Risk)</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th style="width:140px">terminology</th><th>Description and Examples</th></tr></thead>
+<tbody>
+<tr>
+<td class="td-param">Stop Loss</td>
+<td>
+<strong>Stop loss.</strong> Calculated upon entry. Entry price ± ATR × ATR Mult. Automatic position close when the price reaches this point.<br/>
+<em>Example: LONG entry price 42,000 / stop loss 240 → stop loss = 41,760</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Trailing Stop</td>
+<td>
+<strong>Moving Stop Loss — Follow the stop loss price at the profit zone.</strong> Activated after reaching Trigger R. Highest price (LONG) - Stop loss is updated with stop loss. Follow the trend further while protecting your profits.<br/>
+<em>Example: Highest price 43,200 / Stop loss 240 → Trailing stop = 42,960 (Stop loss updated)</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">partial_tp</td>
+<td>
+<strong>Partial profit mode.</strong> When 1R (profit equivalent to stop loss) is achieved, 50% of the position is closed first and the remaining 50% continues trailing.<br/>
+<em>Example: Stop loss 240 → Profit 240 USDT Position Close of half, trailing the rest</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">fast_exit</td>
+<td>
+<strong>Fast full-capacity mode.</strong> Close the entire amount as soon as the 1R goal is achieved. Confirm profit without following the trend further.<br/>
+<em>Mainly used in the PANIC (sudden change) regime — Prioritizes quick profit confirmation over large trends</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">BB Mid (Exit)</td>
+<td>
+<strong>MR-only wing mode.</strong> Set the target price as the mid-BB band (SMA20) at the time of entry. When the price reaches that level, the entire amount is profited. Even if the actual BB Mid moves while held, the target price is fixed.<br/>
+<em>Example: Upon entry, BB Mid = 41,000 → When the price reaches 41,000, all LONG is closed.</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Time Exit</td>
+<td>
+<strong>Forced position close over time.</strong> After 72 hours from opening a position, it is closed at the market price regardless of strategy or profit.<br/>
+<em>Purpose: To prevent situations where capital is tied up due to long-term failure of MR</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Emergency Close</td>
+<td>
+<strong>Emergency full position close button.</strong> Immediate position close of all futures positions on the exchange at market price (Reduce-only). For manual intervention in situations of sudden drops or surges.<br/>
+<em>Caution: Slippage may occur. Additional losses are possible when profits and losses have already occurred.</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Reduce-only</td>
+<td>
+<strong>Position Close-only order flag.</strong> Orders with this flag set are executed only in the direction of reducing the position, not increasing it. Prevents accidental opening of opposing positions.<br/>
+<em>Emergency Close, next-day order, automatically applied to server STOP_MARKET</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">STOP_MARKET<br/><span style="color:var(--text-lo);font-size:10px">Server Stop</span></td>
+<td>
+<strong>Stop loss order registered on Binance servers.</strong> When the specified price is reached, the exchange automatically closes at the market price. <code>workingType=MARK_PRICE</code> Use to prevent unreasonable closing due to Last Price spike. <code>reduceOnly=true</code> Therefore, only the remaining position is closed.<br/>
+<em>Double safety net with stop loss running even when the bot is offline. Automatically canceled upon local position close</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Notional</td>
+<td>
+<strong>Position nominal amount.</strong> Quantity × current price. Actual position size, not margin.<br/>
+<em>Example: 0.05 BTC</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Mark Price</td>
+<td>
+<strong>Position Close standard price.</strong> Fair prices provided by Binance. It may be different from the general trade price (Last Price). This program determines stop loss based on Mark Price.<br/>
+<em>Reason: Last Price has temporary spikes, preventing unreasonable position close with Mark Price.</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Position Close</td>
+<td>
+<strong>Forced position close (roll).)</strong> If the margin falls below the maintenance margin, the exchange is forced to close the position. This program's stop loss is preemptively closed before forced position close occurs.<br/>
+<em>Prevention: Lower leverage and limit Max Position% to reduce position close risk</em>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- ─ 성과 지표 ─ -->
+<h3>Backtest Performance Metrics</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th style="width:140px">terminology</th><th>Description and Examples</th></tr></thead>
+<tbody>
+<tr>
+<td class="td-param">PF<br/><span style="color:var(--text-lo);font-size:10px">Profit Factor</span></td>
+<td>
+<strong>Profitability ratio = total profit ÷ total loss.</strong> 1.0 = break even, less than 1.0 = loss, 1.3 or more is excellent.<br/>
+<em>Example: Total profit 1,300 USDT / Total loss 1,000 USDT → PF = 1.3</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">MDD<br/><span style="color:var(--text-lo);font-size:10px">Max Drawdown</span></td>
+<td>
+<strong>Maximum drop — USDT Absolute value and % of high point displayed together.</strong> The lower the better. Be careful when exceeding 20%.<br/>
+<em>Example: High balance 1,200 USDT → Low balance 900 USDT → MDD =<strong>-300.00 (25.00%)</strong></em><br/>
+<span style="color:var(--text-lo);font-size:11px;">% calculation criteria: <strong>Not the entire high point, but the previous high point (running peak) at the time of occurrence of MDD</strong> Contrast.<br/>For example, even if a higher high was formed after MDD, it does not affect the % calculation — because the “actual drop rate at the time” is meaningful.</span>
+</td>
+</tr>
+<tr>
+<td class="td-param">Win Rate</td>
+<td>
+<strong>Profit Trade Ratio.</strong> The percentage of total trades that ended in profit. It is meaningful only when viewed together with PF. Even if the win rate is low, if the PF is high, the structure is large profit and small loss.<br/>
+<em>Example: Win Rate 40% + PF 2.0 → Structure to win by quality (trend following model)</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Net PnL</td>
+<td>
+<strong>Net Profit and Loss — Final profit or loss including fees.</strong> A positive number is a valid strategy.<br/>
+<em>Example: Total trading profit +800 USDT / Total loss -600 USDT / Fee -50 USDT → Net PnL = +150 USDT</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Score</td>
+<td>
+<strong>Sweep ranking overall score.</strong> Normalized PF × 0.45 + Net PnL × 0.30 + Trades × 0.25. Criteria for selecting the top 10 within the regime.<br/>
+<em>If the number of trades is too small, the score may be low even if the PF is high.</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">INSUFFICIENT</td>
+<td>
+<strong>Insufficient number of trades.</strong> As a result of the backtest, if the number of trades is less than 10, the statistical reliability is low and this indicator is warned.<br/>
+<em>Solution: Increase period, increase Top N, or relax parameters</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Cartesian Product</td>
+<td>
+<strong>Product of all combinations.</strong> If you enter 3 values ​​for parameter A and 2 values ​​for parameter B, all 3 × 2 = 6 combinations will be tested.<br/>
+<em>Example: ADX [20,25,30] × ATR Mult [1.5,2.0] = 6 combination sweeps</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Out-of-Sample</td>
+<td>
+<strong>Validation period not used for optimization.</strong> Re-verify the parameters found in sweep through validation in another period (OOS) to check for overfitting.<br/>
+<em>Example: Sweep period 2025.01~03 → Validation OOS with validation period 2025.04~06</em>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- ─ 인프라 ─ -->
+<h3>Infrastructure and API (Infrastructure)</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th style="width:140px">terminology</th><th>Description and Examples</th></tr></thead>
+<tbody>
+<tr>
+<td class="td-param">WebSocket (WS)</td>
+<td>
+<strong>Real-time two-way connection protocol.</strong> Like REST, the server pushes data without making a request every time. Used to receive real-time prices.<br/>
+<em>Advantages: Compared to REST, API significantly reduces the number of calls and reduces latency.</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">REST API</td>
+<td>
+<strong>Request-response method HTTP API.</strong> Data is received only when requested by the client. Used for order execution, balance lookup, and candle data download.<br/>
+<em>When WS is broken, REST automatically acts as a price fallback</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">UDS<br/><span style="color:var(--text-lo);font-size:10px">User Data Stream</span></td>
+<td>
+<strong>WebSocket dedicated to account events.</strong> Receive account-related events in real time, such as closing, position change, and balance change. A Listen Key is required and automatically renews every 30 minutes (keepalive).<br/>
+<em>Advantage: REST position status can be updated immediately upon execution without polling</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Listen Key</td>
+<td>
+<strong>UDS authentication token.</strong> One-time key required when subscribing to User Data Stream. Valid for 60 minutes, renewed with keepalive requests every 30 minutes.<br/>
+<em>When it expires, the UDS connection is disconnected, so the program automatically maintains keepalive</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">bookTicker</td>
+<td>
+<strong>Real-time priority quote stream.</strong> Immediately sent whenever the highest priority buy/sell price changes. Pricing WebSocket's subscription channel.<br/>
+<em>This program only subscribes to the bookTicker of the held position items (active-position only)</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">REST Fallback/min</td>
+<td>
+<strong>Auxiliary means of querying prices with REST instead of WS.</strong> Automatically switches when WS is connected but no data comes. This can be checked with the REST Fallback counter on the API monitor.<br/>
+<em>0 in normal WS state, increases in WS SILENT state</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Testnet</td>
+<td>
+<strong>Binance Test Environment.</strong> A simulated trading environment where no real funds are exchanged. Select API in the settings window, and the testnet API key needs to be issued separately from the live trading.<br/>
+<em>It is recommended that you first verify it on Testnet before switching to live tradings.</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">USDT-M Futures</td>
+<td>
+<strong>USDT based perpetual futures.</strong> Binance USDⓈ-M perpetual futures market. Both margin and profit/loss are settled as USDT. What this program deals with.<br/>
+<em>Different from Coin-M (COIN-M) futures — this program does not support COIN-M</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">state/ folder</td>
+<td>
+<strong>Position state persistence storage.</strong> Saved with atomic write and automatically restored upon restart.<br/>
+            • <code>open_positions.json</code>— Position information such as entry price, stop loss price, strategy, etc. <code>server_stop_order_id</code>·<code>server_stop_price</code>·<code>server_stop_status</code> Fields are also saved and the server stop state is restored after restart.<br/>
+            • <code>reentry_cooldowns.json</code>— Re-entry blocking cooldown after a position closes. The cooldown is maintained even after restarting, preventing immediate re-entry into the same symbol immediately after a position closes. When restoring <code>[REENTRY] Cooldown Restore: ['BTCUSDT'] (up to N seconds until expiration)</code> log output<br/>
+<em>If the file is damaged, position and cooldown cannot be restored — regular backups are recommended.</em>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="scan-rule"/>
+<section class="section" id="architecture">
+<div class="section-eyebrow">internal structure</div>
+<h2>overall architecture</h2>
+<div class="callout info" data-manual-update="sweep-validation-flow">
+<strong>Separate Sweep / Validation roles:</strong> Sweep is an independent optimization for each regime, and Validation plays the selected regime best settings in an adaptive manner according to the Top N and time axis regime transitions.</div>
+<p>The program operates divided into GUI, data collection, cache, backtest engine, live trading engine, and order execution layer. The core goal is to keep the stock selection, indicator calculation, entry/position close logic of real trading and backtesting as the same as possible, while improving the repeat execution speed with cache.</p>
+<h3>architecture diagram</h3>
+<pre>PySide6 GUI
+  │
+  ├─ Trading Tab
+  │    ├─ AutoTradeThread
+  │    ├─ Price WebSocket
+  │    ├─ User Data Stream
+  │    └─ Order / Position Manager
+  │
+  ├─ Backtest Sweep
+  │    └─ BacktestThread
+  │
+  ├─ Backtest Validation
+  │    └─ BacktestThread
+  │
+  └─ Walk-forward
+       └─ WalkForwardThread
+
+Binance REST / WebSocket
+  │
+  ├─ Public Market Data
+  │    └─ Candle Cache
+  │         └─ Historical Build
+  │              └─ Indicator Cache
+  │                   └─ market_data Memory Cache
+  │                        └─ Backtest / Validation / Walk-forward
+  │
+  └─ Private Account Data
+       ├─ UserDataStream
+       ├─ Position State Store
+       └─ Order Engine
+</pre>
+<h3>main components</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>component</th><th>role</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td class="td-param">GUI</td><td>Trading, sweep, validation, walk-forward settings and result display</td><td>Based on PySide6</td></tr>
+<tr><td class="td-param">AutoTradeThread</td><td>Real-time entry scanning, position management, and position close processing</td><td>Live trading engine</td></tr>
+<tr><td class="td-param">BacktestThread</td><td>Run sweep and validation backtests</td><td>Use the same strategy conditions as actual trading logic</td></tr>
+<tr><td class="td-param">WalkForwardThread</td><td>Repeat IS optimization and OOS verification</td><td>For verification of over-optimization</td></tr>
+<tr><td class="td-param">Candle Cache</td><td>Store and reuse candle data locally</td><td>Incremental updates after initial deployment</td></tr>
+<tr><td class="td-param">Historical Build</td><td>Create internal market_data structure by reading cache candles</td><td>OHLCV DataFrame creation steps</td></tr>
+<tr><td class="td-param">Indicator Cache</td><td>Reuse calculation results such as EMA, ATR, ADX, RSI, CI, etc.</td><td>Improved speed of iterative backtesting</td></tr>
+<tr><td class="td-param">Memory Cache</td><td>Store market_data with the same data conditions in memory</td><td>Reuse even when changing strategy parameters</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout info">
+<strong>Core principles:</strong> Even if the strategy parameters change, the candle data itself does not change. Therefore, Historical Build can be reused even if the ADX, ATR Mult, Volume Mult, Trigger R, Risk %, Exit Mode, and Regime settings change.</div>
+</section>
+<hr class="scan-rule"/>
+<section class="section" id="data-flow">
+<div class="section-eyebrow">data flow</div>
+<h2>data flow</h2>
+<div class="callout info" data-manual-update="sweep-validation-flow">
+<strong>Separate Sweep / Validation roles:</strong> Sweep is an independent optimization for each regime, and Validation plays the selected regime best settings in an adaptive manner according to the Top N and time axis regime transitions.</div>
+<p>Data comes from REST and WebSocket, passes through cache and memory structures, and is then delivered to the strategy engine. Real trading and backtesting differ only in the timing of execution, and are designed to use the same indicators and conditions as much as possible.</p>
+<h3>Live trading data flow</h3>
+<pre>Price WebSocket
+      │
+      ▼
+Global Price Cache
+      │
+      ▼
+Position Monitor / Trailing Stop
+      │
+      ▼
+Order Engine
+      │
+      ▼
+Binance Futures
+
+User Data Stream
+      │
+      ▼
+Balance / Position / Order Event
+      │
+      ▼
+Dashboard / Position State Store
+</pre>
+<h3>Backtest data flow</h3>
+<pre>Binance REST or Local Candle Cache
+      │
+      ▼
+OHLCV DataFrame
+      │
+      ▼
+Historical Build
+      │
+      ▼
+Indicator Cache
+      │
+      ▼
+market_data
+      │
+      ▼
+Dynamic Top N Universe
+      │
+      ▼
+Strategy Signal
+      │
+      ▼
+Virtual Position/Exit Simulation
+      │
+      ▼
+PnL / MDD / PF / Trade Log</pre>
+<h3>Where data is used</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>data</th><th>Where to use</th><th>explanation</th></tr></thead>
+<tbody>
+<tr><td class="td-param">OHLCV</td><td>Backtest / Validation / Walk-forward</td><td>Used for candle-based indicator calculations and entry/exit simulations</td></tr>
+<tr><td class="td-param">quote_volume</td><td>Dynamic Top N</td><td>Calculate past 24-hour trading volume ranking every 4 hours</td></tr>
+<tr><td class="td-param">WebSocket Price</td><td>Trading</td><td>Real-time trailing stop, current price display, position monitoring</td></tr>
+<tr><td class="td-param">User Data Event</td><td>Trading / Dashboard</td><td>Real-time reflection of trades, position changes, and balance changes</td></tr>
+<tr><td class="td-param">Trade CSV</td><td>Analysis/Verification</td><td>Analysis of live trading results and use as future AI analysis data</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="scan-rule"/>
+<section class="section" id="cache-structure">
+<div class="section-eyebrow">cache structure</div>
+<h2>cache structure</h2>
+<p>Cathy is <strong>Disk files (retained across restarts)</strong> class <strong>Memory during execution (maintained for one backtest)</strong> It consists of: Each layer divides roles to minimize API calls and disk I/O.</p>
+<h3>Cache hierarchy</h3>
+<pre>── Disk (remains after restart) ──────────────────────────────
+
+1. manifest.json candle_cache/manifest.json
+   first/last open_time index by symbol (65KB level)
+   Used to immediately determine cache freshness without calling API
+
+2. Candle Cache (parquet) candle_cache/{SYMBOL}/{interval}.parquet
+   Actual OHLCV candle data (100~200KB per symbol)
+   CacheUpdateThread only incrementally adds new candles every 5 minutes
+
+── Memory (maintained while running one backtest) ──────────────────────────
+
+3. manifest_cache Load entire manifest.json when backtest starts
+   O(1) freshness check for each symbol → Determine whether to skip API
+   Only memory is updated during download, saved once to disk when pass ends
+
+4. market_data {symbol: {entry/execute/trailing: DataFrame}}
+   Keep parquet read results in memory
+   Reuse when parameter combination changes within the same execution (when TF and period are the same)
+
+5. Indicator Cache {symbol: DataFrame with EMA/ADX/ATR/RSI/CI}
+   _precompute_indicators() result
+   Shared by all parameter combinations within the same run</pre>
+<h3>market_data reuse conditions</h3>
+<p>When changing parameter combinations within the same backtest run, whether or not OHLCV data (market_data) can be reused is determined according to the conditions below.</p>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Changed Items</th><th>market_data reuse</th><th>explanation</th></tr></thead>
+<tbody>
+<tr><td class="td-param">ADX</td><td style="color:var(--green)">Shared</td><td>Only the strategy conditions change and the OHLCV data is the same</td></tr>
+<tr><td class="td-param">ATR Mult</td><td style="color:var(--green)">Shared</td><td>Only the stop loss calculation value has changed.</td></tr>
+<tr><td class="td-param">Volume Mult</td><td style="color:var(--green)">Shared</td><td>Only the entry filter threshold has changed.</td></tr>
+<tr><td class="td-param">Trigger R</td><td style="color:var(--green)">Shared</td><td>Only the criteria for trailing activation have changed.</td></tr>
+<tr><td class="td-param">Risk %</td><td style="color:var(--green)">Shared</td><td>Only the position quantity calculation has changed.</td></tr>
+<tr><td class="td-param">Exit Mode</td><td style="color:var(--green)">Shared</td><td>Only the Exit logic has changed.</td></tr>
+<tr><td class="td-param">Regime ON/OFF</td><td style="color:var(--green)">Shared</td><td>Only changes whether signal is used or not</td></tr>
+<tr><td class="td-param">Top N</td><td style="color:var(--green)">Shared</td><td>Dynamic Top N list is recalculated but OHLCV is the same</td></tr>
+<tr><td class="td-param">Market Universe</td><td style="color:var(--yellow)">rebuild</td><td>CRYPTO/TRADFI/ALL Universe has changed</td></tr>
+<tr><td class="td-param">Decision TF</td><td style="color:var(--yellow)">rebuild</td><td>The entry judgment candle itself changes.</td></tr>
+<tr><td class="td-param">Execute TF</td><td style="color:var(--yellow)">rebuild</td><td>Actual entry timing candle is different</td></tr>
+<tr><td class="td-param">Trailing TF</td><td style="color:var(--yellow)">rebuild</td><td>ATR Trailing calculation candle has changed</td></tr>
+<tr><td class="td-param">period</td><td style="color:var(--yellow)">rebuild</td><td>Required candle range varies</td></tr>
+<tr><td class="td-param">Run a new backtest</td><td style="color:var(--yellow)">rebuild</td><td>Memory cache is not shared between executions. However, candle files (parquet) are reused.</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout info">
+<strong>reference:</strong> When you run a new backtest, market_data is always constructed from scratch. However, if the Candle Cache (parquet) is already built and the manifest confirms freshness, it is completed quickly by just reading SSD without calling API.</div>
+</section>
+<hr class="scan-rule"/>
+<section class="section" id="dynamic-topn">
+<div class="section-eyebrow">Stock selection</div>
+<h2>Dynamic Top N Algorithm</h2>
+<p>Dynamic Top N is a function to reduce the difference in stock selection between actual trading and backtesting. Rather than using a fixed Top N list for the entire period, the Top N is re-selected every 4 hours based on trading volume over the past 24 hours.</p>
+<h3>basic concepts</h3>
+<pre>Every 4 hours:
+  1. Sum of quote_volume for the previous 24 hours for each item
+  2. Sort by trading volume in descending order
+  3. Designate the top N as the active Universe for that 4-hour period.
+  4. Continue to manage existing positions
+  5. New entries are limited to stocks included in the Top N at the time.</pre>
+<h3>Why Prepare Full Universe Data?</h3>
+<p>In long-term backtesting, it is impossible to know in advance which stock will enter the Top N due to a surge in trading volume at a specific point in time. Therefore, to maintain the accuracy of Dynamic Top N, the Top N for each 4-hour bucket must be calculated based on the volume data of the entire universe.</p>
+<h3>2-pass download and ever-active</h3>
+<p>Only 4h candles are used to calculate trading volume rankings, and strategy TFs (15m/5m, etc.) are downloaded only for symbols that have entered Top N at least once (ever-active). Since the 4h candle is built in advance by the Cache Manager in the background, when running Sweep, Pass 1 mostly performs only cache reads. This drastically reduces the strategic TF download range from full Universe (~500 units) to ever-active (~100 units).</p>
+<pre>Pass 1: Entire Universe (~500 pieces) × 4h candles
+        → 4h cache is pre-built in the background at startup
+        → When running Sweep, only parquet is read in the manifest fresh section without API.
+        → Dynamic Top N calculation based on 4h vol_data
+        → ever_active = Set of symbols included in Top N in any one bucket
+
+Pass 2: ever_active (~100) × Decision / Execute / Trailing TF
+        → Configure market_data to be used for actual strategy simulation
+
+※ If ever_active is empty (Pass 1 failure, etc.), "[WARN] Dynamic TopN empty; fallback to static TopN"
+  Automatically switches to Static Top N with logs.</pre>
+<div class="callout info">
+<strong>Behavior of the section before the first bucket:</strong> Since there is no trading volume data in the section immediately after the start of the backtest and before the first 4h bucket is created, entry of all stocks is blocked. It is a conservative design to maintain the accuracy of Dynamic Top N, and even if signals in this section occur, they do not lead to live trading.</div>
+<div class="callout info">
+<strong>Why calculate trading volume with 4h candles?</strong> Dynamic Top N updates Universe with 4h buckets. Since the close_time of the 4h candle exactly matches the 4h bucket boundary, there is no 24h rolling window aggregation error. 1d candles close at midnight at UTC, so there is a ±8h discrepancy with the bucket, and 15m candles have no real benefit as the data amount increases by 16 times.</div>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>method</th><th>merit</th><th>disadvantage</th><th>accuracy</th></tr></thead>
+<tbody>
+<tr><td class="td-param">Static Top N</td><td>speed</td><td>Lack of reflection of changes in trading volume within the period</td><td>May differ from live trading</td></tr>
+<tr><td class="td-param">Dynamic Top N</td><td>Similar to the update method for real-time trade items</td><td>Increased data preparation volume over long periods of time</td><td>height</td></tr>
+</tbody>
+</table>
+</div>
+<h3>Behavior when changing Top N</h3>
+<p>If you change the Top N value from 50 to 100, the OHLCV data will be reused, and only the active stock list for each 4-hour bucket will be recalculated. Therefore, Historical Build can be reused if the Market, Period, and Timeframe are the same.</p>
+<div class="callout info">
+<strong>core:</strong> Top N is a filter that determines the universe you can enter, not the data loading range. Dynamic Top N calculates the Top N at each point in time based on the entire universe data.</div>
+</section>
+<hr class="scan-rule"/>
+<section class="section" id="backtest-engine">
+<div class="section-eyebrow">backtest engine</div>
+<h2>How the backtest engine works</h2>
+<div class="callout info" data-manual-update="sweep-validation-flow">
+<strong>Separate Sweep / Validation roles:</strong> Sweep is an independent optimization for each regime, and Validation plays the selected regime best settings in an adaptive manner according to the Top N and time axis regime transitions.</div>
+<p>The backtest engine operates in the following order: data preparation, indicator calculation, Dynamic Top N generation, signal search, virtual execution, position management, and result aggregation.</p>
+<h3>execution order</h3>
+<ul class="steps">
+<li><div class="step-num">1</div><div class="step-body"><strong>Set period</strong><br/>Determine the test period based on Recent Days or Date Range. An additional warm-up section ahead is secured to stabilize the surface.</div></li>
+<li><div class="step-num">2</div><div class="step-body"><strong>manifest preload</strong><br/>Load manifest.json into memory. Afterwards, the freshness check for each symbol operates in O(1) and immediately decides whether to skip the API call.</div></li>
+<li><div class="step-num">3</div><div class="step-body"><strong>Pass 1 — 4h volume cache load</strong><br/>Read the entire Universe (~500) × 4h candles. The 4h candle is pre-updated in the background at startup, and if the manifest is fresh, only the parquet is read without the API call. Only the missing sections are downloaded and the results are collected as vol_data.</div></li>
+<li><div class="step-num">4</div><div class="step-body"><strong>Dynamic Top N generation / ever-active calculation</strong><br/>Based on vol_data, we build a Top N list for each 4h bucket and derive ever-active (a set of symbols included in Top N at least once during the entire period).</div></li>
+<li><div class="step-num">5</div><div class="step-body"><strong>Pass 2 — Download Strategy TF</strong><br/>Only ever-active symbols (~100) read Decision / Execute / Trailing TF candles. Also, when the manifest is fresh, API is 0 times. Collect the results as market_data.</div></li>
+<li><div class="step-num">6</div><div class="step-body"><strong>Indicator calculation</strong><br/>Calculate EMA, ADX, ATR, RSI, CI, etc. once per symbol. <strong>Sweep</strong> passes only OHLCV through the process boundary and calculates it independently when initializing each worker process (reduces pickle transmission). <strong>Walk-forward</strong> is calculated once in the parent process and then reused by the entire window.</div></li>
+<li><div class="step-num">7</div><div class="step-body"><strong>signal search</strong><br/>Create entry candidates by checking the conditions: Regime, Strategy, ADX, Volume/RSI, Donchian/BB.</div></li>
+<li><div class="step-num">8</div><div class="step-body"><strong>Virtual execution and position management</strong><br/>Simulate positions by reflecting Risk %, Max Position %, Max Long/Short, Leverage, commission, and slippage.</div></li>
+<li><div class="step-num">9</div><div class="step-body"><strong>Results Aggregation</strong><br/>Calculate Net PnL, PF, Win Rate, MDD, Trades, Daily PnL, and performance by regime.</div></li>
+</ul>
+<h3>Sweep / Validation / Walk-forward difference</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>mode</th><th>purpose</th><th>data download</th><th>Parameter execution</th></tr></thead>
+<tbody>
+<tr><td class="td-param">Sweep</td><td>Search for optimal parameters by regime</td><td>2-pass (4h all + 3TF ever-active)</td><td>All combination grid search, compare results in table</td></tr>
+<tr><td class="td-param">Validation</td><td>Detailed verification of single parameter combinations</td><td>Same 2-pass</td><td>Run once, output detailed results for each regime</td></tr>
+<tr><td class="td-param">Walk-forward</td><td>IS/OOS similarity verification of single validation setting × N window</td><td>Same 2-pass (once for the entire period)</td><td>When running, fix the validation settings and apply the same to IS·OOS of each window. Data is reused by all windows</td></tr>
+</tbody>
+</table>
+</div>
+<h3>fastening model</h3>
+<p>Backtesting creates virtual positions without placing live orders. We calculate results close to live trading by reflecting fees and slippage.</p>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Metric</th><th>reflection method</th></tr></thead>
+<tbody>
+<tr><td class="td-param">charge</td><td>Fee rates applied to entry and exit respectively</td></tr>
+<tr><td class="td-param">Sleepy</td><td>Conservative reflection of entry/exit prices in bps units</td></tr>
+<tr><td class="td-param">leverage</td><td>Reflected in notional calculation and Max Position limit</td></tr>
+<tr><td class="td-param">Risk %</td><td>Calculate position quantity based on stop loss</td></tr>
+<tr><td class="td-param">Simultaneous position limits</td><td>Max Long / Max Short number limit applied</td></tr>
+<tr><td class="td-param">Simultaneous SL/TP touch within the same rod</td><td>When the high price touches TP and the low price touches SL at the same time on the same candle. <strong>SL priority processing</strong>. Since the tightening order within the rod cannot be known with just OHLC, a conservative assumption is applied. Results may be slightly lower compared to live trading</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="scan-rule"/>
+<section class="section" id="performance">
+<div class="section-eyebrow">Performance Optimization</div>
+<h2>Performance Optimization</h2>
+<p>Backtest speed is <strong>Download API → Read SSD (parquet) → Calculate indicator → Execute strategy combination</strong> They are divided in order. It is a structure that minimizes each step with cache and skip logic.</p>
+<h3>Speed ​​by execution situation</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>situation</th><th>main task</th><th>speed characteristics</th></tr></thead>
+<tbody>
+<tr><td class="td-param">First run (no cache)</td><td>Download full Universe candle API + save parquet</td><td>Takes longest (moisture)</td></tr>
+<tr><td class="td-param">Backtest after building the cache</td><td>Check manifest → API 0 times → Read parquet → Calculate indicator</td><td>SSD read only (~10 seconds)</td></tr>
+<tr><td class="td-param">Change parameters within the same run</td><td>Reuse market_data + Indicator Cache, re-evaluate only strategy conditions</td><td>Fastest (in seconds)</td></tr>
+<tr><td class="td-param">TF/Period/Market Change</td><td>parquet reread + market_data reconstruction</td><td>Read SSD (~10 seconds)</td></tr>
+<tr><td class="td-param">Backtest after restarting the program</td><td>Check manifest → API 0 times → Read parquet (if there is cache)</td><td>SSD read only</td></tr>
+</tbody>
+</table>
+</div>
+<h3>List of optimization techniques</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>techniques</th><th>effect</th></tr></thead>
+<tbody>
+<tr><td class="td-param">CacheUpdateThread every 5 minutes</td><td>Cache is always kept fresh before running backtests</td></tr>
+<tr><td class="td-param">manifest preload</td><td>Load manifest once when starting backtest → O(1) freshness check for each symbol</td></tr>
+<tr><td class="td-param">Manifest-based API skip</td><td>When refreshing the cache, API is called 0 times, and only parquet is read (Pass 1 × 500 times saved)</td></tr>
+<tr><td class="td-param">2-pass download</td><td>The entire universe is only once for 4h, and the strategy TF is ever-active (~100)</td></tr>
+<tr><td class="td-param">manifest batch save</td><td>Save by symbol → Batch save up to 2 times when pass ends</td></tr>
+<tr><td class="td-param">Temporary file organization episode 1</td><td>Clean up the .tmp file only once at the start of the backtest (prevent repeated calls)</td></tr>
+<tr><td class="td-param">Indicator Cache</td><td>Calculate EMA/ATR/ADX/RSI/CI once per symbol, shared by all parameter combinations</td></tr>
+<tr><td class="td-param">Sweep worker-side metric calculation</td><td>Only OHLCV sends process boundaries → Each worker calculates independently when initialized. Reduces pickle transmission by not copying a large DataFrame containing indicator columns N times.</td></tr>
+<tr><td class="td-param">Dynamic Top N Recalculation Separation</td><td>When Top N changes, OHLCV is reused and only the active Universe is recalculated.</td></tr>
+</tbody>
+</table>
+</div>
+<h3>Key log interpretation</h3>
+<pre>[Pass 1/2] Download 4h Candles for Volume Ranking: N Symbols
+  → Start reading the entire Universe × 4h candle
+  zXQPH0000QXZ 0 times if → manifest fresh, only read parquet
+
+[Pass 2/2] Download ever-active N symbol strategy TF
+  Read only the symbols in the TopN → at least once Strategy TF
+
+VOL N/M     → {sym} Pass 1 Status
+STRAT N/M {sym}   → Pass 2 Progress Status
+
+[WF-VOL N/M]/[WF-STRAT N/M]
+  → Walk-forward 2-pass progress status</pre>
+<div class="callout green">
+<strong>Recommended usage:</strong> You can maximize the reuse of Indicator Cache and market_data by setting the backtest period and Timeframe first, then replacing only the ADX/Volume/Trigger/Risk values with iterative validation. Changing the TF or duration will require a parquet reread, but the API call will not occur (when the cache is fresh).</div>
+</section>
+</main>
+<script>
+// Active menu highlight
+// Keep sidebar state consistent with actual reading order, including nested anchors.
+const links = Array.from(document.querySelectorAll('#sidebar a'));
+const targets = links
+  .map(link => {
+    const href = link.getAttribute('href');
+    return { link, href, el: href ? document.querySelector(href) : null };
+  })
+  .filter(item => item.el);
+
+function setActiveLink() {
+  const probeY = window.scrollY + Math.max(96, window.innerHeight * 0.24);
+  let current = targets[0];
+
+  for (const item of targets) {
+    const top = item.el.getBoundingClientRect().top + window.scrollY;
+    if (top <= probeY) {
+      current = item;
+    } else {
+      break;
+    }
+  }
+
+  links.forEach(link => link.classList.remove('active'));
+  if (current) current.link.classList.add('active');
+}
+
+window.addEventListener('scroll', setActiveLink, { passive: true });
+window.addEventListener('resize', setActiveLink);
+window.addEventListener('load', setActiveLink);
+setActiveLink();
+</script>
+</body>
+</html>

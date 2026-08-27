@@ -1,0 +1,2458 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Binance Auto Trader v34.9 — 사용자 매뉴얼</title>
+<link href="https://www.jumpdavidlab.com/manual/ko/" rel="canonical"/>
+<link href="https://www.jumpdavidlab.com/manual/en/" hreflang="en" rel="alternate"/>
+<link href="https://www.jumpdavidlab.com/manual/ko/" hreflang="ko" rel="alternate"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --base:     #0B0F17;
+  --surface:  #131929;
+  --surface2: #1A2438;
+  --border:   #1F2D4A;
+  --border2:  #2A3F60;
+  --accent:   #3B82F6;
+  --accent2:  #60A5FA;
+  --tf:       #3B82F6;
+  --mr:       #A78BFA;
+  --green:    #10B981;
+  --red:      #EF4444;
+  --yellow:   #F59E0B;
+  --text:     #CBD5E1;
+  --text-hi:  #E2E8F0;
+  --text-lo:  #64748B;
+  --text-mid: #94A3B8;
+  --mono:     ui-monospace, 'Cascadia Code', 'SF Mono', 'Consolas', monospace;
+  --sans:     system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  --sidebar-w: 220px;
+  --content-max: 860px;
+}
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(145deg, #17233a 0%, #111827 58%, #0b0f17 100%);
+  border: 1px solid var(--border2);
+  border-radius: 18px;
+  padding: 34px;
+  margin-bottom: 44px;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  width: 240px; height: 240px;
+  right: -80px; top: -110px;
+  border-radius: 50%;
+  background: rgba(59,130,246,.20);
+  filter: blur(18px);
+}
+.hero-kicker { font: 700 10px/1 var(--mono); color: #93c5fd; letter-spacing: .16em; }
+.hero h1 { color: #f8fafc; font-size: 32px; line-height: 1.25; margin: 12px 0 10px; }
+.hero p { max-width: 650px; color: var(--text-mid); font-size: 14px; }
+.hero-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.hero-meta span { font: 700 10px/1 var(--mono); color: var(--text); border: 1px solid var(--border2); background: rgba(11,15,23,.55); border-radius: 999px; padding: 7px 10px; }
+
+.route-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 14px 0 24px; }
+.route-card { display: block; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px; text-decoration: none; color: var(--text); }
+.route-card:hover { border-color: var(--accent); transform: translateY(-1px); }
+.route-card b { display: block; color: var(--text-hi); font-size: 12px; margin-bottom: 4px; }
+.route-card span { color: var(--text-lo); font-size: 11px; }
+.checklist { list-style: none; margin: 10px 0 18px; }
+.checklist li { position: relative; padding: 6px 0 6px 26px; border-bottom: 1px solid var(--border); }
+.checklist li::before { content: '✓'; position: absolute; left: 4px; color: var(--green); font-weight: 800; }
+.kbd { font: 700 10px/1 var(--mono); color: var(--text-hi); background: var(--surface2); border: 1px solid var(--border2); border-bottom-width: 2px; border-radius: 5px; padding: 3px 6px; }
+
+html { font-size: 14px; scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--base);
+  color: var(--text);
+  line-height: 1.7;
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ── Sidebar ─────────────────────────────────────────── */
+#sidebar {
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  width: var(--sidebar-w);
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  padding: 24px 0 40px;
+  z-index: 100;
+}
+
+.sb-logo {
+  padding: 0 16px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 12px;
+}
+.sb-logo .prog { font-family: var(--mono); font-size: 11px; color: var(--accent2); letter-spacing: .08em; }
+.sb-logo .ver  { font-family: var(--mono); font-size: 10px; color: var(--text-lo); margin-top: 2px; }
+
+.sb-section { padding: 4px 16px; margin-top: 14px; }
+.sb-section-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--text-lo);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+#sidebar a {
+  display: block;
+  padding: 4px 16px 4px 20px;
+  font-size: 12.5px;
+  color: var(--text-mid);
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  transition: color .15s, border-color .15s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#sidebar a:hover { color: var(--text-hi); border-left-color: var(--border2); }
+#sidebar a.active { color: var(--accent2); border-left-color: var(--accent); }
+
+/* ── Main ────────────────────────────────────────────── */
+#main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  padding: 48px 48px 80px;
+  max-width: calc(var(--sidebar-w) + var(--content-max) + 96px);
+}
+
+/* ── Section headers ────────────────────────────────── */
+.section { margin-bottom: 56px; scroll-margin-top: 32px; }
+[id] { scroll-margin-top: 32px; }
+
+.section-eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--accent);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.section-eyebrow::before { content: '› '; }
+
+h2 {
+  font-family: var(--sans);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-hi);
+  text-wrap: balance;
+  margin-bottom: 10px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-hi);
+  margin: 28px 0 10px;
+  text-wrap: balance;
+}
+
+h4 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-mid);
+  margin: 20px 0 8px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+p { margin-bottom: 10px; }
+p + p { margin-top: 0; }
+
+/* ── Tables ─────────────────────────────────────────── */
+.tbl-wrap { overflow-x: auto; margin: 12px 0 20px; border-radius: 8px; border: 1px solid var(--border); }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+thead th {
+  background: var(--surface2);
+  color: var(--text-mid);
+  font-weight: 700;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 9px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+tbody tr { border-bottom: 1px solid var(--border); }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: rgba(59,130,246,.04); }
+
+td {
+  padding: 9px 14px;
+  vertical-align: top;
+  color: var(--text);
+  line-height: 1.55;
+}
+
+td:first-child { white-space: nowrap; }
+
+.td-param {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--accent2);
+  white-space: nowrap;
+}
+
+.td-default {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--text-mid);
+  white-space: nowrap;
+}
+
+/* ── Code & formula ─────────────────────────────────── */
+pre, code {
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+code {
+  background: var(--surface2);
+  color: var(--accent2);
+  padding: 1px 5px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+pre {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 20px;
+  overflow-x: auto;
+  color: var(--text);
+  line-height: 1.75;
+  margin: 12px 0 20px;
+}
+
+pre .comment { color: var(--text-lo); }
+pre .val     { color: var(--green); }
+pre .label   { color: var(--yellow); }
+
+/* ── Badges ──────────────────────────────────────────── */
+.badge {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+  letter-spacing: .04em;
+  vertical-align: middle;
+}
+.badge-tf     { background: rgba(59,130,246,.18); color: #93C5FD; border: 1px solid rgba(59,130,246,.3); }
+.badge-mr     { background: rgba(167,139,250,.18); color: #C4B5FD; border: 1px solid rgba(167,139,250,.3); }
+.badge-quiet  { background: rgba(167,139,250,.14); color: #C4B5FD; }
+.badge-normal { background: rgba(59,130,246,.14); color: #93C5FD; }
+.badge-trend  { background: rgba(16,185,129,.14); color: #6EE7B7; }
+.badge-panic  { background: rgba(239,68,68,.14); color: #FCA5A5; }
+
+/* ── Callout boxes ───────────────────────────────────── */
+.callout {
+  border-left: 3px solid var(--border2);
+  background: var(--surface);
+  border-radius: 0 8px 8px 0;
+  padding: 12px 16px;
+  margin: 14px 0;
+  font-size: 12.5px;
+  color: var(--text-mid);
+}
+.callout.warn  { border-left-color: var(--yellow); background: rgba(245,158,11,.06); color: var(--text); }
+.callout.danger{ border-left-color: var(--red);    background: rgba(239,68,68,.06);  color: var(--text); }
+.callout.info  { border-left-color: var(--accent); background: rgba(59,130,246,.06); color: var(--text); }
+.callout.green { border-left-color: var(--green);  background: rgba(16,185,129,.06); color: var(--text); }
+
+.callout strong { color: var(--text-hi); }
+
+/* ── Formula block ───────────────────────────────────── */
+.formula {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 12px 0;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  line-height: 2;
+  color: var(--text);
+}
+.formula .lhs { color: var(--yellow); display: inline-block; min-width: 180px; }
+.formula .op  { color: var(--text-lo); }
+.formula .rhs { color: var(--green); }
+
+/* ── Step list ───────────────────────────────────────── */
+.steps { list-style: none; margin: 12px 0 20px; display: flex; flex-direction: column; gap: 8px; }
+.steps li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+.step-num {
+  flex-shrink: 0;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(59,130,246,.12);
+  border: 1px solid rgba(59,130,246,.25);
+  border-radius: 4px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.step-body { font-size: 12.5px; }
+.step-body strong { color: var(--text-hi); }
+
+/* ── Scanline divider ────────────────────────────────── */
+.scan-rule {
+  margin: 48px 0;
+  border: none;
+  height: 1px;
+  background: repeating-linear-gradient(90deg, var(--border) 0, var(--border) 6px, transparent 6px, transparent 12px);
+  opacity: .6;
+}
+
+/* ── Regime grid ─────────────────────────────────────── */
+.regime-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin: 14px 0 20px;
+}
+.regime-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+}
+.regime-card .r-name { font-family: var(--mono); font-size: 11px; font-weight: 700; margin-bottom: 4px; }
+.regime-card .r-atr  { font-size: 11px; color: var(--text-lo); margin-bottom: 6px; font-family: var(--mono); }
+.regime-card .r-strat{ font-size: 11.5px; margin-bottom: 4px; }
+.regime-card .r-exit { font-size: 11px; color: var(--text-mid); }
+.regime-card.rc-quiet  { border-top: 3px solid var(--mr); }
+.regime-card.rc-normal { border-top: 3px solid var(--tf); }
+.regime-card.rc-trend  { border-top: 3px solid var(--green); }
+.regime-card.rc-panic  { border-top: 3px solid var(--red); }
+
+/* ── Scrollbar ───────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--surface); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+/* ── Small text ──────────────────────────────────────── */
+.note { font-size: 11.5px; color: var(--text-lo); margin-top: 6px; }
+
+@media (max-width: 768px) {
+  :root { --sidebar-w: 0px; }
+  #sidebar { display: none; }
+  #main { margin-left: 0; padding: 24px 16px 60px; }
+  .regime-grid { grid-template-columns: 1fr 1fr; }
+  .route-grid { grid-template-columns: 1fr; }
+  .hero { padding: 24px 20px; border-radius: 12px; }
+  .hero h1 { font-size: 25px; }
+}
+</style>
+</head>
+<body>
+<!-- Sidebar -->
+<nav id="sidebar"><div class="sb-logo">
+<div class="prog">BINANCE AUTO TRADER</div>
+<div class="ver">v34.9 · 사용자 매뉴얼</div>
+</div><div class="sb-section"><div class="sb-section-label">홈페이지</div><a href="../../ko/">← 홈페이지</a><a href="../en/" lang="en">English Manual</a></div><div class="sb-section"><div class="sb-section-label">10분 시작</div><a href="#overview">먼저 읽기</a><a href="#install">가입 · API 설정</a><a href="#quickstart">첫 실행 순서</a></div><div class="sb-section"><div class="sb-section-label">화면 사용법</div><a href="#trading">Trading 설정</a><a href="#workspace-panels">화면 패널</a><a href="#trade-history">Trade History</a><a href="#cache-manager">Cache Manager</a></div><div class="sb-section"><div class="sb-section-label">검증 후 운용</div><a href="#sweep">1. Sweep</a><a href="#validation">2. Validation</a><a href="#walkforward">3. Walk-forward</a><a href="#live-checklist">4. 실거래 체크</a></div><div class="sb-section"><div class="sb-section-label">전략 이해</div><a href="#three-tf-engine">3-TF Entry Engine</a><a href="#regime">시장 Regime</a><a href="#tf">Trend Following</a><a href="#mr">Mean Reversion</a><a href="#exit">청산 우선순위</a><a href="#sizing">포지션 사이징</a></div><div class="sb-section"><div class="sb-section-label">문제 해결</div><a href="#troubleshoot">자주 묻는 질문</a><a href="#logs">로그 해석</a><a href="#glossary">용어 사전</a></div><div class="sb-section"><div class="sb-section-label">고급 참고</div><a href="#monitor">API 모니터</a><a href="#websocket">통신 구조</a><a href="#architecture">전체 아키텍처</a><a href="#data-flow">데이터 흐름</a><a href="#cache-structure">캐시 구조</a><a href="#dynamic-topn">Dynamic Top N</a><a href="#backtest-engine">백테스트 엔진</a><a href="#performance">성능 최적화</a></div></nav>
+<!-- Main Content -->
+<main id="main">
+<header class="hero">
+<div class="hero-kicker">OFFLINE USER GUIDE · v34.9</div>
+<h1>Binance Auto Trader<br/>사용자 매뉴얼</h1>
+<p>처음 설치한 사용자도 API 연결부터 백테스트, 실거래 시작까지 순서대로 따라 할 수 있도록 구성했습니다. 필요한 내용은 모두 이 HTML 파일 안에 있으며 인터넷 연결 없이도 열립니다.</p>
+<div class="hero-meta"><span>WINDOWS · macOS · LINUX</span><span>BINANCE USDⓈ-M FUTURES</span><span>GUI API SETUP</span></div>
+</header>
+<!-- ══ 1. Overview ══════════════════════════════════════════ -->
+<section class="section" id="overview">
+<div class="section-eyebrow">먼저 읽기</div>
+<h2>처음이라면 이 순서만 따라 하세요</h2>
+<p>Binance Auto Trader는 바이낸스 USDⓈ-M 선물 시장에서 시장 상태를 분류하고, <span class="badge badge-tf">Trend Following</span>과 <span class="badge badge-mr">Mean Reversion</span> 전략을 자동으로 실행합니다. 프로그램을 켠 직후 실거래부터 시작하지 말고 아래 순서를 지키는 것이 중요합니다.</p>
+<div class="route-grid">
+  <a class="route-card" href="#install"><b>1 · 계정 연결</b><span>바이낸스 가입 → API 발급 → GUI 입력</span></a>
+  <a class="route-card" href="#sweep"><b>2 · 전략 검증</b><span>Sweep → Validation → Walk-forward</span></a>
+  <a class="route-card" href="#live-checklist"><b>3 · 소액 실거래</b><span>체크리스트 확인 후 보수적으로 시작</span></a>
+</div>
+<div class="callout danger"><strong>투자 위험 안내:</strong> 이 프로그램은 수익을 보장하지 않습니다. 선물 거래는 원금 전액 손실 및 강제청산 위험이 있습니다. 백테스트 결과는 미래 성과를 보장하지 않으며, 최종 거래 책임은 사용자에게 있습니다.</div>
+<h3>이 매뉴얼을 읽는 가장 빠른 방법</h3>
+<ul class="checklist">
+<li>처음 사용자: 가입 · API 설정 → 첫 실행 순서 → 백테스트 3단계 → 실거래 체크</li>
+<li>운영 중인 사용자: Trading 설정 → 화면 패널 → Trade History → 문제 해결</li>
+<li>전략을 조정하는 사용자: Regime → TF/MR → 포지션 사이징 → 백테스트 엔진</li>
+</ul>
+<div class="callout info"><strong>보안 원칙:</strong> API Secret은 비밀번호와 같습니다. 누구에게도 보내지 말고, 화면 캡처나 로그에 노출하지 마세요. 자동매매에는 출금 권한이 필요하지 않습니다.</div>
+</section>
+<hr class="scan-rule"/>
+<!-- ══ 2. Install ════════════════════════════════════════════ -->
+<section class="section" id="install">
+<div class="section-eyebrow">계정 연결</div>
+<h2>바이낸스 가입 및 API 설정</h2>
+<h3>1. 바이낸스 계정 준비</h3>
+<p>프로그램 상단의 <span class="kbd">바이낸스 가입</span> 버튼을 누르면 가입 페이지를 열 수 있습니다. 계정 생성, 본인 인증, USDⓈ-M Futures 활성화를 순서대로 완료하세요. 이미 계정이 있다면 이 단계는 건너뜁니다.</p>
+<div class="callout warn"><strong>선물 거래 가능 여부:</strong> 국가·지역 및 계정 상태에 따라 일부 상품의 거래가 제한될 수 있습니다. 거래가 허용되지 않는 종목은 Excluded Symbols에 추가하세요.</div>
+<h3>2. Binance에서 API Key 생성</h3>
+<ol class="steps">
+<li><div class="step-num">1</div><div class="step-body"><strong>API Management 열기</strong><br/>바이낸스 계정의 API 관리 화면으로 이동합니다.</div></li>
+<li><div class="step-num">2</div><div class="step-body"><strong>새 API 생성</strong><br/>알아보기 쉬운 이름을 지정하고 보안 인증을 완료합니다.</div></li>
+<li><div class="step-num">3</div><div class="step-body"><strong>Key와 Secret 보관</strong><br/>Secret은 생성 직후 한 번만 표시될 수 있으므로 안전한 곳에 보관합니다.</div></li>
+<li><div class="step-num">4</div><div class="step-body"><strong>권한 설정</strong><br/>읽기와 Futures 거래 권한만 활성화하고 출금 권한은 활성화하지 않습니다.</div></li>
+</ol>
+<h3>API 권한 체크</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>권한</th><th>필요 여부</th><th>비고</th></tr></thead>
+<tbody>
+<tr><td>Enable Futures</td><td style="color:var(--green)">필수</td><td>Binance API 관리 페이지에서 체크</td></tr>
+<tr><td>Enable Reading</td><td style="color:var(--green)">필수</td><td>잔고·포지션 조회</td></tr>
+<tr><td>Enable Spot &amp; Margin Trading</td><td style="color:var(--text-lo)">불필요</td><td>선물 전용이므로 비활성화 권장</td></tr>
+<tr><td>Enable Withdrawals</td><td style="color:var(--red)">금지</td><td>자동매매에 필요 없음</td></tr>
+<tr><td>IP 제한</td><td>강력 권장</td><td>24시간 운용 PC의 고정 IP가 있을 때 허용 목록 등록</td></tr>
+</tbody>
+</table>
+</div>
+<h3>3. 프로그램에 API 입력</h3>
+<ol class="steps">
+<li><div class="step-num">1</div><div class="step-body">프로그램 상단에서 <span class="kbd">API 설정</span> 버튼을 누릅니다.</div></li>
+<li><div class="step-num">2</div><div class="step-body"><strong>API Key</strong>와 <strong>Secret Key</strong>를 붙여넣습니다. Secret은 화면에서 마스킹됩니다.</div></li>
+<li><div class="step-num">3</div><div class="step-body">처음 연습할 때는 <strong>Testnet</strong>을 선택하고 테스트넷 전용 Key를 입력합니다. 실거래 Key와 테스트넷 Key는 서로 다릅니다.</div></li>
+<li><div class="step-num">4</div><div class="step-body">저장 후 연결 상태와 Account Dashboard의 잔고 표시를 확인합니다.</div></li>
+</ol>
+<div class="callout green"><strong>현재 버전: v34.9.</strong> 사용자가 <code>.env</code> 파일을 직접 만들거나 편집할 필요가 없습니다. API 정보와 Testnet 선택은 API 설정 창에서 저장합니다.</div>
+<div class="callout danger"><strong>API 오류가 날 때:</strong> 앞뒤 공백, 잘못된 Secret, Futures 권한, IP 제한, Testnet/실거래 Key 혼용을 차례로 확인하세요.</div>
+</section>
+<hr class="scan-rule"/>
+<!-- ══ 3. Quick Start ════════════════════════════════════════ -->
+<section class="section" id="quickstart">
+<div class="section-eyebrow">10분 시작</div>
+<h2>첫 실행 순서</h2>
+<ul class="steps">
+<li><div class="step-num">1</div><div class="step-body"><strong>프로그램 실행</strong><br/>
+배포 실행 파일 또는 최신 Python 파일을 실행합니다. 창 제목이 현재 배포 버전인지 확인하세요.</div></li>
+<li><div class="step-num">2</div><div class="step-body"><strong>API 연결 확인</strong><br/>
+<span class="kbd">API 설정</span>에서 Key를 저장하고 Account Dashboard에 잔고가 표시되는지 확인합니다.</div></li>
+<li><div class="step-num">3</div><div class="step-body"><strong>Market과 제외 종목 설정</strong><br/>
+CRYPTO / TRADFI / ALL 중 대상을 고르고, 거래 제한 또는 원하지 않는 종목을 Excluded Symbols에 한 줄씩 입력합니다.</div></li>
+<li><div class="step-num">4</div><div class="step-body"><strong>Cache Manager 확인</strong><br/>
+최초 캔들 다운로드는 백그라운드에서 계속됩니다. 최근 데이터가 준비되면 Trading은 시작할 수 있지만 장기 백테스트는 필요한 기간의 캐시가 준비된 뒤 실행하는 편이 좋습니다.</div></li>
+<li><div class="step-num">5</div><div class="step-body"><strong>백테스트 3단계 실행</strong><br/>
+Sweep으로 후보를 찾고 Validation과 Walk-forward로 과최적화 여부를 확인합니다.</div></li>
+<li><div class="step-num">6</div><div class="step-body"><strong>추천 설정 적용 후 다시 확인</strong><br/>
+Apply Best Settings를 누른 뒤 Market, Top N, Timeframe, 레짐별 파라미터가 Trading 탭에 의도대로 반영됐는지 직접 확인합니다.</div></li>
+<li><div class="step-num">7</div><div class="step-body"><strong>Testnet 또는 소액으로 시작</strong><br/>
+<span class="kbd">Start Auto Trade</span>를 누르고 Log, Current Top N, Open Positions, Trade History를 함께 확인합니다.</div></li>
+</ul>
+<h3>권장 시작값 (보수적)</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>파라미터</th><th>권장값</th><th>이유</th></tr></thead>
+<tbody>
+<tr><td class="td-param">Decision TF</td><td class="td-default">15m</td><td>방향/추세 판단용. EMA, ADX, Volume, Regime, RSI Exhaustion을 판단</td></tr>
+<tr><td class="td-param">Execute TF</td><td class="td-default">5m</td><td>실제 진입 타이밍용. Decision 방향과 같은 Donchian 돌파가 나올 때만 주문</td></tr>
+<tr><td class="td-param">Trailing TF</td><td class="td-default">5m</td><td>Decision/Execute TF보다 짧거나 같게 설정하면 트레일링이 빠르게 반응</td></tr>
+<tr><td class="td-param">Leverage</td><td class="td-default">3 ~ 5</td><td>5배 초과 시 변동성에 의한 강제청산 위험 급증</td></tr>
+<tr><td class="td-param">Risk %</td><td class="td-default">0.25 ~ 0.5</td><td>잔고의 0.25~0.5%만 한 포지션 손절로 소진. 처음엔 0.25 권장</td></tr>
+<tr><td class="td-param">Max Position %</td><td class="td-default">10 ~ 15</td><td>포지션 1개 노셔널 상한. 너무 크면 잔고 편중 위험</td></tr>
+<tr><td class="td-param">ATR Mult</td><td class="td-default">1.5 ~ 2.0</td><td>낮으면 손절이 너무 좁아 잦은 손절 발생</td></tr><tr><td class="td-param">EMA Gap %</td><td>EMA20과 EMA60의 이격률(%). LONG은 EMA Gap 이상, SHORT는 -EMA Gap 이하일 때만 Trend Following 진입 허용. 0은 필터 비활성화.</td><td>Mean Reversion에서는 사용하지 않음.</td></tr>
+<tr><td class="td-param">Trigger R</td><td class="td-default">1.0 ~ 1.5</td><td>1R 수익 달성 후 트레일링 활성화 — 수익권 진입 전 손절 최소화</td></tr>
+<tr><td class="td-param">Regime 활성</td><td class="td-default">NORMAL + TREND</td><td>초기 운용 기준. 최종값은 사용자가 수행한 백테스트 결과로 결정</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout warn"><strong>권장값은 출발점일 뿐입니다.</strong> 시장·기간·수수료·슬리피지 조건에 따라 성과가 달라집니다. 그대로 실거래에 사용하지 말고 반드시 동일 조건으로 검증하세요.</div>
+</section>
+<hr class="scan-rule"/>
+<!-- ══ 4. Trading Tab ════════════════════════════════════════ -->
+<hr class="scan-rule"/>
+<section class="section" id="cache-manager">
+<div class="section-eyebrow">캐시 시스템</div>
+<h2>Cache Manager</h2>
+<p>프로그램은 Parquet 기반 캔들 캐시를 사용합니다. 최초 실행 시 필요한 캔들을 백그라운드에서 구축하며, 이후에는 새로 마감된 캔들만 증분 업데이트합니다.</p>
+<h3>동작 방식</h3>
+<ul class="steps">
+<li><div class="step-num">1</div><div class="step-body"><strong>manifest 확인</strong><br/>프로그램 시작 시 manifest.json을 읽어 심볼별 캐시 상태를 즉시 확인합니다. manifest는 각 심볼의 첫 캔들·마지막 캔들 시각만 저장하는 경량 인덱스(65KB 수준)입니다.</div></li>
+<li><div class="step-num">2</div><div class="step-body"><strong>Trading 우선</strong><br/>최근 데이터 확보 후 자동매매는 즉시 시작할 수 있으며, 나머지 히스토리는 백그라운드에서 계속 구축됩니다.</div></li>
+<li><div class="step-num">3</div><div class="step-body"><strong>주기적 증분 업데이트</strong><br/>선택된 Decision / Execute / Trailing TF와 Dynamic TopN 볼륨 랭킹용 4h 캔들을 주기적으로 추가합니다. 업데이트가 끝난 뒤 다음 마감봉 시간까지 대기하므로, 긴 다운로드 중에 다음 업데이트가 중복 큐잉되지 않습니다.</div></li>
+<li><div class="step-num">4</div><div class="step-body"><strong>백테스트 API Skip</strong><br/>백테스트 실행 시 manifest를 메모리에 로드하여 심볼별로 O(1) 신선도 체크를 수행합니다. 캐시가 신선하면 API 호출 없이 parquet 파일만 읽어 반환합니다. 캐시 구축 완료 후 반복 백테스트에서 API 호출이 0회로 줄어듭니다.</div></li>
+<li><div class="step-num">5</div><div class="step-body"><strong>안전 저장</strong><br/>Atomic Write(.tmp→rename)를 사용하여 종료 중에도 기존 캐시를 보호합니다. manifest는 백테스트 Pass 종료 시 최대 2회 일괄 저장합니다.</div></li>
+</ul>
+<div class="tbl-wrap"><table>
+<thead><tr><th>항목</th><th>설명</th></tr></thead>
+<tbody>
+<tr><td class="td-param">Status</td><td><strong>Initial Build</strong>: 캐시 없음, 365일치 최초 다운로드 중<br/><strong>Updating</strong>: 기존 캐시 있음, 새 캔들 증분 추가 중<br/><strong>Ready</strong>: 구축 완료<br/><strong>Error</strong>: 네트워크 오류 등</td></tr>
+<tr><td class="td-param">Progress</td><td>처리된 (심볼 × 인터벌) 수 / 전체. 예: 490 / 1058 (46%)</td></tr>
+<tr><td class="td-param">Cache Hit</td><td>manifest가 커버하여 API 호출 없이 로컬 파일에서 직접 읽은 수</td></tr>
+<tr><td class="td-param">API Download</td><td>manifest 미커버로 실제 API를 호출하여 다운로드한 수</td></tr>
+<tr><td class="td-param">Errors</td><td>다운로드 실패 심볼 수. 오류 발생 시에만 표시. 해당 심볼은 건너뛰고 계속 진행</td></tr>
+<tr><td class="td-param">Mode</td><td><strong>365-day initial download</strong>: 최초 구축<br/><strong>background append</strong>: 주기적 증분 업데이트<br/><strong>4h volume cache</strong>: Dynamic TopN 볼륨 랭킹용 4시간봉 사전 업데이트</td></tr>
+<tr><td class="td-param">Next Update</td><td>다음 자동 증분 업데이트 예정 시각. 업데이트가 끝난 뒤 각 인터벌의 다음 마감봉 시간까지 대기합니다.</td></tr>
+<tr><td class="td-param">Cache Size</td><td>로컬 캐시 디렉터리 전체 크기</td></tr>
+<tr><td class="td-param">Last Sync</td><td>마지막 증분 업데이트 완료 시각</td></tr>
+</tbody></table></div>
+<div class="callout info">
+<strong>API 키 불필요:</strong> 캔들 캐시 구축은 Binance 공개 엔드포인트(<code>/fapi/v1/klines</code>)를 사용합니다. API 키가 설정되지 않아도 인터넷 연결만 있으면 캐시가 정상적으로 구축됩니다.
+  </div>
+<div class="callout green">
+<strong>Dynamic TopN 4h 캐시 사전 구축:</strong> Cache Manager는 이제 Decision / Execute / Trailing TF뿐 아니라 Dynamic TopN 볼륨 랭킹에 필요한 <code>4h</code> 캔들도 백그라운드에서 미리 구축·증분 업데이트합니다. Sweep 실행 시 Pass 1은 대부분 API 다운로드가 아니라 로컬 parquet/manifest 읽기로 처리되며, 부족한 구간만 보충 다운로드합니다.
+  </div>
+<div class="callout info">
+<strong>상세 구조:</strong> manifest, Candle Cache, market_data, Indicator Cache의 전체 관계는
+    <a href="#cache-structure" style="color:var(--accent2);">캐시 구조 섹션</a>에서 자세히 설명합니다.
+  </div>
+</section>
+<section class="section" id="trading">
+<div class="section-eyebrow">탭 가이드</div><div class="callout green">
+<strong>최근 UI 변경</strong><br/>
+<ul>
+<li>Top N 패널 추가(현재 Top N 심볼 표시)</li>
+<li>현재 보유 중인 Top N 종목은 파란색 굵은 글씨로 강조</li>
+<li>Excluded Symbols 패널 추가(한 줄에 한 종목 입력)</li>
+<li>Excluded Symbols는 실거래, 백테스트, Validation, Walk-forward에 동일 적용</li>
+<li>Log / Top N / Cache Manager 레이아웃 개선</li>
+<li>Trade History의 OPEN 상태는 날짜와 시간을 모두 표시</li>
+</ul>
+</div>
+<h2>Trading 탭</h2>
+<p>라이브 자동매매의 모든 설정이 이 탭에 집중됩니다. 자동매매 실행 중에는 설정 필드가 비활성화됩니다.</p>
+<h3>기본 설정</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>파라미터</th><th>기본값</th><th>범위</th><th>설명</th></tr></thead>
+<tbody>
+<tr>
+<td class="td-param">Top N Symbols</td><td class="td-default">30</td><td>10~50</td>
+<td>24h 거래대금 상위 N개 종목을 스캔 대상으로 선정. 클수록 진입 기회 증가·API 부하 증가. 심볼 유니버스는 4시간마다 자동 갱신.</td>
+</tr>
+<tr>
+<td class="td-param">Market Universe</td><td class="td-default">CRYPTO</td><td>CRYPTO / TRADFI / ALL</td>
+<td><strong>CRYPTO:</strong> 코인 선물 Top N<br/><strong>TRADFI:</strong> 금·주식·ETF 등 TRADFI 선물 Top N<br/><strong>ALL:</strong> 두 시장을 합친 거래대금 Top N</td>
+</tr>
+<tr>
+<td class="td-param">Decision TF</td><td class="td-default">15m</td><td>1m~4h</td>
+<td>진입 신호 판단용 캔들 타임프레임. 짧을수록 신호 빈도 높고 노이즈 많음. 완성된 봉(closed candle)만 신호 판단에 사용.</td>
+</tr>
+<tr>
+<td class="td-param">Trailing TF</td><td class="td-default">5m</td><td>1m~15m</td>
+<td>트레일링 스탑 ATR 계산용 타임프레임. Decision TF보다 짧게 설정해야 트레일링이 더 빠르게 반응.</td>
+</tr>
+<tr>
+<td class="td-param">Leverage</td><td class="td-default">5</td><td>1~20</td>
+<td>선물 레버리지 배수. 진입 시 거래소에 자동 설정. 수익·손실 모두 배수로 증폭. 5배 이하 강력 권장.</td>
+</tr>
+<tr>
+<td class="td-param">Risk %</td><td class="td-default">1.0</td><td>0.1~5.0</td>
+<td>포지션 1개에서 손절 발동 시 잃는 최대 금액 = 총잔고 × Risk%. 레짐별 Risk%를 지정하지 않으면 이 값이 기본 폴백으로 사용됨.</td>
+</tr>
+<tr>
+<td class="td-param">Max Long Pos.</td><td class="td-default">5</td><td>1~20</td>
+<td>동시 보유 LONG 포지션 최대 수. 한도 도달 시 신규 LONG 진입 건너뜀.</td>
+</tr>
+<tr>
+<td class="td-param">Max Short Pos.</td><td class="td-default">5</td><td>1~20</td>
+<td>동시 보유 SHORT 포지션 최대 수. LONG과 독립 관리.</td>
+</tr>
+<tr>
+<td class="td-param">Max Position %</td><td class="td-default">20</td><td>5~100</td>
+<td>포지션 1개 노셔널 상한 = 총잔고 × Max Position% × 레버리지. Risk 기준 수량과 이 상한 중 더 작은 값 사용.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="three-tf-engine">3-TF Entry Engine</h3>
+<p>Trend Following 전략은 판단과 실행을 분리한 3단계 타임프레임 구조를 사용합니다. Decision TF는 방향을 허가하고, Execute TF는 실제 진입 타이밍을 확인하며, Trailing TF는 진입 이후 청산을 관리합니다.</p>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>구분</th><th>역할</th><th>사용 지표</th><th>예시</th></tr></thead>
+<tbody>
+<tr><td class="td-param">Decision TF</td><td>거래 방향과 진입 허가 판단</td><td>EMA, ADX, Volume, Regime, RSI Exhaustion</td><td>15m에서 LONG/SHORT 방향 결정</td></tr>
+<tr><td class="td-param">Execute TF</td><td>실제 주문 타이밍 확인</td><td>Donchian High/Low 돌파</td><td>5m에서 같은 방향 돌파가 나오면 진입</td></tr>
+<tr><td class="td-param">Trailing TF</td><td>진입 후 청산·트레일링 관리</td><td>ATR Trailing, Exit Mode</td><td>5m ATR 기준으로 Stop 갱신</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout info"><strong>중요:</strong> Mean Reversion 전략은 Decision TF에서 신호 발생 시 즉시 진입하며 Execute TF를 사용하지 않습니다. Trend Following만 Decision→Execute→Trailing의 3단계 구조를 사용합니다.</div>
+<div class="callout warn"><strong>진입 지연 방지:</strong> Decision TF가 방향을 허가해도 Execute TF에서 같은 방향 돌파가 확인되지 않으면 주문하지 않습니다. 이 구조는 15분봉의 안정성과 5분봉의 빠른 타이밍을 함께 사용하기 위한 설계입니다.</div>
+<h3>Regime Settings</h3>
+<p>각 레짐(QUIET · NORMAL · TREND · PANIC)마다 전략과 파라미터를 독립적으로 설정합니다. 체크박스 OFF 시 해당 레짐에서 신규 진입 없음.</p>
+<div class="callout info"><strong>듀얼 파라미터 필드:</strong> Vol/RSI, Trig/BB, ADX 필드는 선택된 Strategy에 따라 의미가 바뀝니다. UI 레이블이 Strategy에 맞게 자동 전환됩니다.</div>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>파라미터</th><th><span class="badge badge-tf">Trend Following</span></th><th><span class="badge badge-mr">Mean Reversion</span></th></tr></thead>
+<tbody>
+<tr>
+<td class="td-param">Strategy</td>
+<td>trend_following (돌파 추세추종)</td>
+<td>mean_reversion (평균복귀)</td>
+</tr>
+<tr>
+<td class="td-param">ADX<br/><span style="color:var(--text-lo);font-size:10.5px">ADX Min / ADX Max</span></td>
+<td><strong>ADX Min:</strong> 진입 허용 최소 추세강도. ADX &lt; 이 값이면 진입 무시. 낮으면 신호 증가·오신호↑</td>
+<td><strong>ADX Max:</strong> 진입 허용 최대 추세강도. ADX &gt; 이 값이면 진입 무시 (추세장 진입 차단)</td>
+</tr>
+<tr>
+<td class="td-param">ATR Mult</td>
+<td colspan="2">공통. 손절폭 = Entry ATR × ATR Mult. 낮으면 잦은 손절 / 높으면 한 번 손절 시 손실 증가</td>
+</tr>
+<tr>
+<td class="td-param">Vol Mult<br/>/ RSI Entry</td>
+<td><strong>Vol Mult:</strong> 거래량 ＞ Volume MA × Vol Mult. 낮으면 진입 빈도 증가</td>
+<td><strong>RSI Entry:</strong> LONG: RSI ≤ 이 값 / SHORT: RSI ≥ (100 − 이 값). 낮으면 극단 과매도만 포착</td>
+</tr>
+<tr>
+<td class="td-param">Trigger R<br/>/ BB Sigma</td>
+<td><strong>Trigger R:</strong> 트레일링 활성화 거리 = 손절폭 × Trigger R. 낮으면 수익 초기에 트레일링 시작</td>
+<td><strong>BB Sigma:</strong> Bollinger Band 밴드폭 배수(σ). 기본 2.0. 낮으면 진입 빈도 증가</td>
+</tr>
+<tr>
+<td class="td-param">Risk %</td>
+<td colspan="2">레짐별 포지션 사이즈 조정. 미입력 시 기본 설정의 Risk% 사용</td>
+</tr>
+<tr>
+<td class="td-param">Exit Mode</td>
+<td>trailing / partial_tp / fast_exit 선택 (아래 비교 참조)</td>
+<td>BB Mid / trailing / partial_tp / fast_exit 선택 가능. BB Mid는 진입 시점의 BB Middle을 목표가로 사용하며, 나머지 모드는 Trend Following과 동일한 청산 방식을 사용합니다.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3>Exit Mode 비교</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Exit Mode</th><th>동작</th><th>특성</th><th>추천 레짐</th></tr></thead>
+<tbody>
+<tr>
+<td class="td-param">trailing</td>
+<td>손절 또는 트레일링 스탑으로만 청산. 별도 TP 없음</td>
+<td>강한 추세를 길게 추적 가능. 횡보 전환 시 수익 반납 위험</td>
+<td>NORMAL, TREND</td>
+</tr>
+<tr>
+<td class="td-param">partial_tp</td>
+<td>1R 목표 도달 시 50% 선청산 → 나머지 50% 트레일링 계속. RSI 과매수/과매도 시에도 50% 선청산</td>
+<td>수익 일부 확정 + 추세 지속 시 추가 수익. 균형적</td>
+<td>NORMAL</td>
+</tr>
+<tr>
+<td class="td-param">fast_exit</td>
+<td>1R 목표 도달 즉시 전량 청산. 트레일링 없음</td>
+<td>급변동 구간에서 수익 빠른 확정. 큰 추세 놓칠 수 있음</td>
+<td>PANIC</td>
+</tr>
+<tr>
+<td class="td-param">BB Mid</td>
+<td>Mean Reversion 전용. BB 중간밴드(SMA20) 도달 시 전량 익절</td>
+<td>평균복귀 목표 달성 청산. 진입 시점 BB Mid로 타겟 고정</td>
+<td>QUIET (권장)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3>CI Filter (선택)</h3>
+<p>Choppiness Index(CI)를 이용해 횡보 구간에서 Trend Following 진입을 차단합니다. Mean Reversion 전략에는 적용되지 않습니다.</p>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>설정</th><th>설명</th></tr></thead>
+<tbody>
+<tr><td class="td-param">CI Filter ON</td><td>CI &lt; 61.8 조건 추가. CI ≥ 61.8 (횡보 구간)에서는 TF 진입 차단</td></tr>
+<tr><td class="td-param">Period</td><td>CI 계산 룩백 기간(봉 수). 기본값 14. 짧을수록 빠른 반응·노이즈 증가. 길수록 안정적·추세 초입 진입 지연</td></tr>
+</tbody>
+</table>
+</div>
+<h3 id="server-stop">서버 Stop (Server-side STOP_MARKET)</h3>
+<p>포지션 진입 시 Binance 서버에 <strong>STOP_MARKET 주문</strong>을 자동으로 등록합니다. 봇 프로세스가 다운되거나 네트워크가 끊어진 상황에서도 거래소가 손절을 대신 실행합니다.</p>
+<div class="callout green">
+<strong>이중 안전망:</strong> 로컬 stop monitor(봇 내부)와 서버 STOP_MARKET 주문이 동시에 동작합니다. 봇이 정상 실행 중이면 로컬 monitor가 먼저 청산하고 서버 stop을 취소합니다. 봇이 오프라인이면 서버 stop이 단독으로 작동합니다.
+</div>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>동작</th><th>설명</th></tr></thead>
+<tbody>
+<tr><td class="td-param">진입 시 등록</td><td>포지션 개설 직후 Binance에 STOP_MARKET 주문 자동 등록. <code>workingType=MARK_PRICE</code> 사용 — Last Price 스파이크로 불합리한 청산 방지</td></tr>
+<tr><td class="td-param">trailing 이동 시 갱신</td><td>트레일링 스탑이 이동할 때마다 기존 주문을 취소하고 새 가격으로 재등록. 서버 stop 가격이 항상 최신 trailing stop과 동기화</td></tr>
+<tr><td class="td-param">로컬 청산 시 취소</td><td>봇이 포지션을 청산할 때(STOP, TRAILING_TAKE, TIME_EXIT 등) 서버 stop 주문을 함께 취소. 청산 후 고아 주문이 남지 않음</td></tr>
+<tr><td class="td-param">Emergency Close 시 취소</td><td>[Emergency Close All] 버튼 클릭 시 각 포지션의 서버 stop을 먼저 취소한 뒤 시장가 청산 실행</td></tr>
+<tr><td class="td-param">외부 청산 감지 시 취소</td><td>봇이 모르는 사이 포지션이 사라진 경우(수동 청산 등) 다음 monitor 사이클에서 서버 stop을 자동 취소</td></tr>
+<tr><td class="td-param">재시작 후 복원</td><td>재시작 시 저장된 <code>server_stop_order_id</code>가 없으면 서버 stop을 자동 재등록 (repair path)</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout info">
+<strong>reduceOnly 보호:</strong> STOP_MARKET 주문은 <code>reduceOnly=true</code>로 등록됩니다. partial close 이후 서버 stop 수량이 실제 잔량보다 크더라도 Binance가 잔량만 청산하므로 초과 포지션이 열리지 않습니다.
+</div>
+<div class="callout warn">
+<strong>best-effort 동작:</strong> 서버 stop 등록에 실패해도 봇 동작은 중단되지 않습니다. <code>[SERVER STOP ERROR]</code> 로그가 찍히고 로컬 stop monitor는 계속 동작합니다. 단, 봇이 오프라인 상태에서는 서버 stop이 없으면 손절이 실행되지 않습니다.
+</div>
+<h3>정지 / 비상 청산</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>버튼</th><th>동작</th><th>주의</th></tr></thead>
+<tbody>
+<tr><td class="td-param">Stop</td><td>신규 진입 중단. 기존 포지션은 자동 관리 계속</td><td>포지션을 유지한 채 안전하게 종료 가능</td></tr>
+<tr><td class="td-param">Emergency Close All</td><td>각 포지션의 서버 STOP_MARKET 주문을 먼저 취소한 뒤, 거래소의 모든 포지션을 시장가 reduce-only로 즉시 청산</td><td>변동성 구간에서 슬리피지 발생 가능</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="scan-rule"/>
+<!-- ══ 5. Sweep Tab ══════════════════════════════════════════ -->
+<section class="section" id="workspace-panels">
+<div class="section-eyebrow">화면 사용법</div>
+<h2>Trading 화면 패널</h2>
+<p>실거래 중에는 설정값보다 상태 패널을 더 자주 확인하게 됩니다. 아래 네 영역만 익혀도 현재 프로그램 상태를 빠르게 판단할 수 있습니다.</p>
+<div class="tbl-wrap"><table>
+<thead><tr><th>패널</th><th>무엇을 보여 주나</th><th>확인 포인트</th></tr></thead>
+<tbody>
+<tr><td class="td-param">Account Dashboard</td><td>잔고, 손익, 포지션 수, 연결 상태</td><td>API 연결 직후 잔고가 맞는지 먼저 확인</td></tr>
+<tr><td class="td-param">Open Positions</td><td>현재 보유 중인 방향, 진입가, 현재가, Stop, PnL</td><td>거래소의 실제 포지션과 수량·방향 대조</td></tr>
+<tr><td class="td-param">Current Top N</td><td>현재 24시간 거래대금 기준 스캔 종목과 마지막 갱신 시각</td><td>보유 중인 종목은 파란색 굵은 글씨로 강조. 목록은 4시간마다 갱신</td></tr>
+<tr><td class="td-param">Log</td><td>유니버스 갱신, 신호, 주문, Stop, 청산, 오류</td><td>ERROR만 보지 말고 직전 SIGNAL/OPEN 흐름도 함께 확인</td></tr>
+<tr><td class="td-param">API Monitor</td><td>REST 호출, WebSocket, User Data Stream 상태</td><td>호출 급증, WS SILENT, 재연결 반복 여부 확인</td></tr>
+</tbody></table></div>
+<h3>Excluded Symbols</h3>
+<p>자동매매에서 제외할 심볼을 한 줄에 하나씩 입력합니다. 예: <code>BTCUSDT</code>. 저장된 목록은 실거래뿐 아니라 Sweep, Validation, Walk-forward에도 동일하게 적용됩니다.</p>
+<div class="callout warn"><strong>한국에서 거래 제한된 TRADFI 종목:</strong> 계정에서 주문할 수 없는 종목은 미리 제외 목록에 넣으세요. 거래 가능 여부는 사용자 계정과 지역에 따라 달라질 수 있습니다.</div>
+<h3>Start · Stop · Emergency Close</h3>
+<div class="tbl-wrap"><table>
+<thead><tr><th>버튼</th><th>동작</th><th>사용 시점</th></tr></thead>
+<tbody>
+<tr><td class="td-param">Start Auto Trade</td><td>설정값으로 신규 신호 탐색과 포지션 관리를 시작</td><td>설정·API·잔고를 모두 확인한 뒤</td></tr>
+<tr><td class="td-param">Stop</td><td>신규 진입을 중단하고 기존 포지션 관리는 계속</td><td>프로그램을 안전하게 멈추거나 신규 진입만 막을 때</td></tr>
+<tr><td class="td-param">Emergency Close All</td><td>서버 Stop을 취소한 뒤 모든 포지션을 시장가로 청산</td><td>정상 Stop이 어려운 긴급 상황에서만</td></tr>
+</tbody></table></div>
+</section>
+<hr class="scan-rule"/>
+<section class="section" id="trade-history">
+<div class="section-eyebrow">화면 사용법</div>
+<h2>Trade History</h2>
+<p>프로그램이 관리한 거래와 Binance 체결 내역을 바탕으로 진입·청산·실현손익을 보여 줍니다. 프로그램을 다시 실행하면 최근 3일의 Binance 거래 내역을 불러와 기록을 보완합니다.</p>
+<div class="tbl-wrap"><table>
+<thead><tr><th>항목</th><th>설명</th><th>확인 방법</th></tr></thead>
+<tbody>
+<tr><td class="td-param">OPEN</td><td>현재 열려 있는 거래. Open Time은 날짜와 시간을 함께 표시</td><td>Open Positions와 심볼·방향 대조</td></tr>
+<tr><td class="td-param">CLOSED</td><td>청산이 확인된 거래</td><td>Exit Reason과 Fill Price 확인</td></tr>
+<tr><td class="td-param">Realized PnL</td><td>Binance 체결 기준 실현손익</td><td>수수료·여러 번의 부분 체결 때문에 단순 가격차 계산과 다를 수 있음</td></tr>
+<tr><td class="td-param">SERVER STOP</td><td>Binance 서버의 STOP_MARKET 주문으로 청산</td><td>프로그램이 꺼져 있던 동안 체결된 경우도 재시작 후 동기화</td></tr>
+<tr><td class="td-param">Exit Reason</td><td>STOP, TRAILING_TAKE, TIME_EXIT, FAST_EXIT 등</td><td>전략 결과 분석 시 이유별 성과를 분리해 확인</td></tr>
+</tbody></table></div>
+<div class="callout info"><strong>숫자가 Binance와 다를 때:</strong> Trade History는 최근 체결 동기화 후 갱신될 수 있습니다. 즉시 일치하지 않으면 잠시 기다린 뒤 다시 확인하고, 최종 정산 기준은 Binance의 Futures Transaction History입니다.</div>
+</section>
+<hr class="scan-rule"/>
+<section class="section" id="sweep">
+<div class="section-eyebrow">탭 가이드</div>
+<h2>Backtest Sweep 탭</h2>
+<p>여러 파라미터 조합을 일괄 테스트해 레짐별 최적 파라미터를 탐색합니다. Sweep은 각 Regime을 독립적으로 테스트하여 후보 세팅을 찾는 단계이며, 실제 시간축 Adaptive 성과 검증은 Validation 탭에서 수행합니다.</p>
+<h3>Sweep 방식</h3>
+<div class="callout info">
+<strong>레짐별 독립 Cartesian Product:</strong> 각 레짐 내의 파라미터는 모든 조합(곱셈)으로 테스트하고, 레짐 간에는 합산합니다.<br/><br/>
+    예시: QUIET(3조합) + NORMAL(12조합) + TREND(6조합) = <strong>총 21회</strong> 실행 (21 = 3 + 12 + 6)
+  </div>
+<div class="callout green" data-manual-update="sweep-role">
+<strong>Sweep 결과의 의미:</strong> Sweep Test는 QUIET / NORMAL / TREND / PANIC을 각각 독립적으로 분리하여 최적 파라미터를 찾습니다.
+따라서 Sweep 탭에는 <strong>Adaptive Regime Best Settings</strong>와 <strong>Regime Best Top 10 Ranking</strong>만 표시합니다.
+실제 Top N과 시간축 Regime 전환을 함께 반영한 Adaptive Combined 성과는 Validation 탭에서 확인합니다.
+</div>
+<h3>파라미터 리스트 입력</h3>
+<p>각 파라미터 필드에 콤마(,)로 여러 값을 입력하면 해당 레짐의 Cartesian Product로 테스트됩니다.</p>
+<pre><span class="comment"># 예시: NORMAL 레짐</span>
+ADX Min:  <span class="val">20, 25, 30</span>
+ATR Mult: <span class="val">1.5, 2.0</span>
+Vol Mult: <span class="val">1.2</span>
+Trigger R:<span class="val">1.0, 1.5</span>
+Risk %:   <span class="val">0.5</span>
+
+<span class="comment"># NORMAL 조합 수: 3 × 2 × 1 × 2 × 1 = 12</span></pre>
+<div class="callout green">
+<strong>Exit Mode 참고:</strong> Backtest Sweep / Validation / Walk-forward에서는 Exit Mode는 Sweep 대상이 아닙니다.
+사용자가 선택한 Exit Mode 1개를 고정하여 테스트합니다. 다른 Exit Mode를 비교하려면 Exit Mode만 변경하여 다시 실행하십시오.
+</div>
+<h3>Sweep 설정 파라미터</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>파라미터</th><th>설명</th></tr></thead>
+<tbody>
+<tr><td class="td-param">Days / Date Range</td><td>백테스트 기간. Recent Days(최근 N일) 또는 날짜 범위 직접 지정 가능</td></tr>
+<tr><td class="td-param">Top N</td><td>백테스트에 사용할 종목 수. 많을수록 통계 신뢰도 증가·시간 증가</td></tr>
+<tr><td class="td-param">Decision TF / Execute TF / Trailing TF</td><td>백테스트에 사용할 3단계 타임프레임. 실거래와 동일하게 Decision은 방향 판단, Execute는 진입 타이밍, Trailing은 청산 관리에 사용</td></tr>
+<tr><td class="td-param">Leverage / Wallet</td><td>백테스트 레버리지·가상 초기 잔고(USDT)</td></tr>
+<tr><td class="td-param">Market Universe</td><td>CRYPTO / TRADFI / ALL. 백테스트 스캔 대상 결정</td></tr>
+<tr><td class="td-param">Regime 체크박스</td><td>해당 레짐을 sweep에 포함할지 여부</td></tr>
+</tbody>
+</table>
+</div>
+<h3>Sweep Combos 카드</h3>
+<p>Settings 박스 우측에 표시되는 카드입니다. 현재 입력값 기준으로 레짐별 조합 수와 총합, 예상 소요 시간을 실시간으로 계산합니다.</p>
+<div class="callout"><strong>예상 시간 계산식:</strong> 총 조합 수 × 0.04초 × Top N × (Days / 30) 기준. 실제 네트워크 환경에 따라 차이 있음.</div>
+<div class="callout info" data-manual-update="sweep-ui">
+<strong>표시 항목:</strong> Sweep 탭에서는 <code>Adaptive Combined Result</code>와 <code>Daily PnL Charts</code>를 표시하지 않습니다.
+Sweep의 목적은 성과 검증이 아니라 레짐별 후보 세팅 탐색이므로, 실제 Adaptive 성과와 일별 손익 차트는 Validation에서 확인합니다.
+</div>
+<h3>결과 해석</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>지표</th><th>의미</th><th>기준</th></tr></thead>
+<tbody>
+<tr><td class="td-param">PF (Profit Factor)</td><td>총 수익 / 총 손실</td><td>1.3 이상 우수, 1.0 미만 손실권</td></tr>
+<tr><td class="td-param">Net PnL</td><td>순 수익 (수수료 포함)</td><td>양수여야 유효</td></tr>
+<tr><td class="td-param">Win Rate</td><td>수익 거래 비율 (%)</td><td>전략마다 기준 다름. PF와 함께 해석</td></tr>
+<tr><td class="td-param">MDD</td><td>Maximum Drawdown — 최대 낙폭. <strong>USDT 절대값</strong>과 <strong>고점 대비 %</strong>를 함께 표시.<br/><span style="color:var(--text-lo);font-size:11px;">예: -234.50 (12.34%)</span></td><td>낮을수록 좋음. % 기준 20% 초과 주의</td></tr>
+<tr><td class="td-param">Trades</td><td>총 거래 횟수</td><td>10회 미만은 통계 신뢰도 낮음(INSUFFICIENT)</td></tr>
+<tr><td class="td-param">Score</td><td>PF×0.45 + Net PnL×0.30 + Trades×0.25 정규화 종합점수</td><td>레짐 내 Top 10 랭킹 기준</td></tr>
+</tbody>
+</table>
+</div>
+<h3>Apply Regime Best</h3>
+<p>Sweep 완료 후 [Apply Regime Best #1] 버튼을 클릭하면 레짐별 최적 파라미터가 Trading 탭의 Regime Settings에 자동 적용됩니다.</p><div class="callout info">Apply Regime Best #1은 Strategy, ADX, EMA Gap, ATR, Volume/RSI, Trigger/BB, Risk, Exit Mode를 모두 Trading 탭으로 복사합니다.</div>
+<div class="callout warn"><strong>주의:</strong> 적용 전 현재 Trading 탭 설정을 별도로 메모해두세요. 덮어쓰기 후 되돌리기 기능은 없습니다.</div>
+</section>
+<hr class="scan-rule"/>
+<!-- ══ 6. Validation Tab ═════════════════════════════════════ -->
+<section class="section" id="validation">
+<div class="section-eyebrow">탭 가이드</div>
+<h2>Backtest Validation 탭</h2>
+<p>Sweep으로 선정한 레짐별 Best Setting을 실제 시간축에서 Adaptive 방식으로 검증합니다. Top N 적용, Regime 전환, 포지션 제한, 손익 곡선을 함께 반영하여 실 운용에 가까운 결과를 확인합니다.</p>
+<h3>Sweep vs Validation 비교</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>항목</th><th>Sweep</th><th>Validation</th></tr></thead>
+<tbody>
+<tr><td>목적</td><td>레짐별 최적 파라미터 탐색</td><td>선정 세팅의 실제 Adaptive 성과 검증</td></tr>
+<tr><td>계산 방식</td><td>각 Regime을 독립적으로 분리하여 테스트</td><td>Top N과 시간축 Regime 전환을 반영하여 통합 실행</td></tr>
+<tr><td>입력</td><td>파라미터 리스트 (콤마 구분)</td><td>단일 파라미터 값 또는 Sweep Best 적용값</td></tr>
+<tr><td>결과</td><td>Adaptive Regime Best Settings + Regime Best Top 10 Ranking</td><td>Adaptive Regime Best Settings + Adaptive Combined Result + Daily PnL Charts</td></tr>
+<tr><td>용도</td><td>초기 탐색</td><td>최종 확인 및 과적합 검증</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout green" data-manual-update="validation-role">
+<strong>Validation 결과의 의미:</strong> Validation은 Sweep의 단순 합산 추정치가 아니라,
+선택된 Best Setting을 실제 시간 순서대로 재생하여 계산한 Adaptive Combined 결과입니다.
+해당 시점의 Dynamic Top N과 Regime이 함께 적용되므로 Sweep의 독립 레짐 결과와 수치가 달라질 수 있습니다.
+</div>
+<div class="callout info">
+<strong>권장 검증 절차:</strong><br/>
+    1. Sweep에서 최적 파라미터 선정<br/>
+    2. Validation으로 다른 기간(Out-of-Sample)에서 재검증<br/>
+    3. 두 기간 모두 PF ≥ 1.2 이상이면 실 운용 고려
+  </div>
+<div class="callout info" data-manual-update="validation-ui">
+<strong>표시 항목:</strong> Validation 탭에서는 <code>Regime Best Top 10 Ranking</code>을 표시하지 않습니다.
+Validation은 후보 탐색이 아니라 검증 단계이므로, 실제 Adaptive Combined Result와 Daily PnL Charts를 중심으로 확인합니다.
+</div>
+</section>
+<hr class="scan-rule"/>
+<!-- ══ 7. Walk-forward ══════════════════════════════════════ -->
+<section class="section" id="walkforward">
+<div class="section-eyebrow">탭 가이드</div>
+<h2>Walk-forward 탭</h2>
+<p>Validation 탭에 입력된 <strong>단일 설정값</strong>을 여러 시간 구간에 반복 적용하여, In-sample(IS) 성과가 Out-of-sample(OOS)에서도 얼마나 비슷하게 유지되는지 확인합니다. Walk-forward는 수익성이 좋은 설정을 찾는 기능이 아니라, 이미 선택한 설정의 <strong>시간축 일반화 안정성</strong>을 검사하는 기능입니다.</p>
+<h3>Sweep · Validation · Walk-forward 비교</h3>
+<div class="tbl-wrap"><table>
+<thead><tr><th>기능</th><th>목적</th><th>설정 출처</th></tr></thead>
+<tbody>
+<tr><td class="td-param">Sweep</td><td>여러 조합에서 후보 설정 탐색</td><td>Sweep 탭의 파라미터 목록</td></tr>
+<tr><td class="td-param">Validation</td><td>선택한 단일 설정의 절대 성과 검증</td><td>Validation 탭의 현재 설정</td></tr>
+<tr><td class="td-param">Walk-forward</td><td>동일 설정의 IS/OOS 성과 유사성·안정성 검증</td><td>실행 시점 Validation 설정 스냅샷</td></tr>
+</tbody></table></div>
+<div class="callout green"><strong>중요:</strong> Walk-forward 실행 전에 Sweep을 반드시 돌릴 필요가 없습니다. 실행 버튼을 누르는 순간 Validation 탭의 Top N, 기간 관련 공통값, Market, TF, 레버리지, 포지션 제한, 활성 Regime, Regime별 Strategy·ADX·ATR·Volume/RSI·Trigger/BB·Risk·Exit Mode, 필터 설정을 한 번 복사해 모든 Window에 동일하게 적용합니다.</div>
+<h3>동작 원리</h3>
+<div class="callout info"><strong>슬라이딩 Window 구조:</strong><br/>전체 기간을 지정한 Window 수로 나누고, 각 Window의 앞부분을 IS, 뒷부분을 OOS로 사용합니다. 동일한 Validation 설정으로 IS와 OOS를 각각 계산한 뒤 두 결과의 유사성을 비교합니다.</div>
+<pre><span class="comment"># 실행 시 한 번 고정</span>
+<span class="label">Validation Settings Snapshot</span> → 모든 Window 공통 적용
+
+<span class="label">W1</span> → IS 계산 + OOS 계산 → PF Similarity 평가
+<span class="label">W2</span> → IS 계산 + OOS 계산 → PF Similarity 평가
+<span class="label">W3</span> → IS 계산 + OOS 계산 → PF Similarity 평가</pre>
+<div class="callout warn"><strong>실행 중 설정 변경:</strong> Walk-forward가 시작된 뒤 Validation UI 값을 바꿔도 현재 실행에는 반영되지 않습니다. 다음 실행부터 새 설정이 사용됩니다.</div>
+<h3>세팅 방법</h3>
+<h4>① Validation 탭 — 검증할 단일 설정 준비</h4>
+<p>검증하려는 설정을 Validation 탭에 입력합니다. Sweep 결과를 적용해도 되고, 사용자가 직접 입력한 설정을 사용해도 됩니다.</p>
+<h4>② Walk-forward 탭 — 기간·Window 설정</h4>
+<div class="tbl-wrap"><table>
+<thead><tr><th>항목</th><th>설명</th><th>권장값</th></tr></thead>
+<tbody>
+<tr><td class="td-param">시작일 / 종료일</td><td>전체 분석 기간</td><td>시장 국면이 여러 번 포함되도록 충분히 길게 설정</td></tr>
+<tr><td class="td-param">Window 수</td><td>전체 기간을 몇 개의 슬라이딩 구간으로 나눌지 결정</td><td>4~6개</td></tr>
+<tr><td class="td-param">IS 비율 (%)</td><td>각 Window에서 IS가 차지하는 비율. 나머지는 OOS</td><td>70% 전후</td></tr>
+</tbody></table></div>
+<h3>결과 테이블 컬럼</h3>
+<div class="tbl-wrap"><table>
+<thead><tr><th>컬럼</th><th>의미</th><th>해석</th></tr></thead>
+<tbody>
+<tr><td class="td-param">IS 거래 / OOS 거래</td><td>각 구간의 거래 횟수</td><td>거래 수가 너무 적으면 PF·WR 비교 신뢰도가 낮음</td></tr>
+<tr><td class="td-param">IS PF / OOS PF</td><td>각 구간의 Profit Factor</td><td>절대 수익성은 Validation 결과와 함께 해석</td></tr>
+<tr><td class="td-param">OOS MDD</td><td>OOS 최대 낙폭의 USDT·% 표시</td><td>OOS에서 발생한 하락 위험 확인</td></tr>
+<tr><td class="td-param">IS WR / OOS WR</td><td>각 구간 승률</td><td>PF와 함께 사용</td></tr>
+<tr><td class="td-param">WR Δ</td><td>OOS WR − IS WR</td><td>0에 가까울수록 승률 유지가 안정적</td></tr>
+<tr><td class="td-param">Trade Ratio</td><td>OOS 거래 수 ÷ IS 거래 수</td><td>기간 길이가 다르므로 단독 평가보다 신호 밀도 변화 참고용</td></tr>
+<tr><td class="td-param">PF Similarity</td><td><code>min(OOS PF ÷ IS PF, IS PF ÷ OOS PF) × 100</code></td><td>100%에 가까울수록 IS와 OOS PF가 유사함. OOS가 더 좋아져도 100%를 초과하지 않음</td></tr>
+<tr><td class="td-param">일반화 평가</td><td>PF Similarity 기반 자동 등급</td><td>절대 수익성이 아닌 IS/OOS 유사성 평가</td></tr>
+<tr><td class="td-param">Validation Settings</td><td>이번 실행에 고정된 설정 스냅샷</td><td>어떤 조건으로 결과가 산출됐는지 재현할 때 사용</td></tr>
+</tbody></table></div>
+<h3>일반화 평가 기준</h3>
+<div class="tbl-wrap"><table>
+<thead><tr><th>등급</th><th>PF Similarity</th><th>의미</th></tr></thead>
+<tbody>
+<tr><td><span style="background:#DBEAFE;color:#1E40AF;padding:1px 8px;border-radius:3px;font-weight:700;font-size:12px;">Excellent</span></td><td>90% 이상</td><td>IS와 OOS 성과가 매우 유사</td></tr>
+<tr><td><span style="background:#D1FAE5;color:#065F46;padding:1px 8px;border-radius:3px;font-weight:700;font-size:12px;">Good</span></td><td>75% 이상</td><td>일반화 안정성이 양호</td></tr>
+<tr><td><span style="background:#FEF3C7;color:#92400E;padding:1px 8px;border-radius:3px;font-weight:700;font-size:12px;">Fair</span></td><td>60% 이상</td><td>차이가 있으므로 추가 확인 필요</td></tr>
+<tr><td><span style="background:#FFEDD5;color:#9A3412;padding:1px 8px;border-radius:3px;font-weight:700;font-size:12px;">Weak</span></td><td>40% 이상</td><td>IS/OOS 성과 편차가 큼</td></tr>
+<tr><td><span style="background:#FEE2E2;color:#991B1B;padding:1px 8px;border-radius:3px;font-weight:700;font-size:12px;">Poor</span></td><td>40% 미만</td><td>시간 구간에 따른 성과 불안정성이 매우 큼</td></tr>
+</tbody></table></div>
+<div class="callout info"><strong>대칭 계산을 사용하는 이유:</strong> 예를 들어 IS PF=1.0, OOS PF=1.6이면 단순 OOS/IS는 160%지만 두 성과가 비슷하다고 볼 수는 없습니다. PF Similarity는 약 62.5%로 계산되어 성과 차이를 올바르게 반영합니다.</div>
+<h3>마지막 요약 창</h3>
+<div class="tbl-wrap"><table>
+<thead><tr><th>항목</th><th>설명</th></tr></thead>
+<tbody>
+<tr><td class="td-param">평균 PF Similarity</td><td>전체 Window의 평균 유사성</td></tr>
+<tr><td class="td-param">최저 PF Similarity</td><td>가장 불안정했던 Window의 유사성</td></tr>
+<tr><td class="td-param">OOS PF ≥ 1.0 Window</td><td>OOS가 수익권이었던 Window 수. 일반화 점수와 별도 참고</td></tr>
+<tr><td class="td-param">Generalization Risk</td><td>전체 Window의 유사성과 최저 구간을 종합한 위험도. <span style="color:var(--green);font-weight:700;">낮음</span> / <span style="color:var(--yellow);font-weight:700;">중간</span> / <span style="color:var(--red);font-weight:700;">높음</span>으로 색상 표시</td></tr>
+</tbody></table></div>
+<div class="callout warn"><strong>해석 원칙:</strong> Validation은 “이 설정이 돈을 잘 버는가”를 판단하고, Walk-forward는 “기간이 바뀌어도 비슷하게 작동하는가”를 판단합니다. 두 결과를 함께 통과해야 실전 후보로 볼 수 있습니다.</div>
+<h3>권장 사용 절차</h3>
+<ul class="steps">
+<li><span class="step-num">1</span><span class="step-body"><strong>Sweep</strong><br/>필요한 경우 여러 조합에서 후보 설정을 탐색합니다.</span></li>
+<li><span class="step-num">2</span><span class="step-body"><strong>Validation</strong><br/>선택한 단일 설정의 PF, Net PnL, MDD, 거래 수 등 절대 성과를 확인합니다.</span></li>
+<li><span class="step-num">3</span><span class="step-body"><strong>Walk-forward</strong><br/>같은 Validation 설정으로 여러 Window의 PF Similarity와 Generalization Risk를 확인합니다.</span></li>
+<li><span class="step-num">4</span><span class="step-body"><strong>최종 판단</strong><br/>Validation 수익성이 충분하고 Walk-forward Risk가 낮거나 허용 가능한 수준일 때 실전 후보로 검토합니다.</span></li>
+</ul>
+<h3>실행 시간</h3>
+<div class="callout green"><strong>Window별 Sweep 제거:</strong> 각 Window에서 파라미터 조합을 다시 탐색하지 않고 단일 Validation 설정을 IS와 OOS에 각각 한 번씩 적용합니다. 따라서 실행량은 대략 <strong>Window 수 × 2회</strong>이며, 이전의 Window별 최적화 방식보다 훨씬 빠릅니다.</div>
+</section>
+<hr class="scan-rule"/>
+<section class="section" id="live-checklist">
+<div class="section-eyebrow">실거래 전환</div>
+<h2>실거래 시작 전 최종 체크</h2>
+<p>아래 항목 중 하나라도 확인되지 않았다면 실거래 시작을 미루세요.</p>
+<ul class="checklist">
+<li>API 설정에서 Testnet이 아닌 실거래 모드와 실거래 API Key를 선택했다.</li>
+<li>API에 Reading/Futures 권한만 있고 Withdraw 권한은 없다.</li>
+<li>Account Dashboard 잔고와 Binance Futures 잔고가 일치한다.</li>
+<li>Sweep 후보를 다른 기간의 Validation과 Walk-forward로 검증했다.</li>
+<li>수수료와 슬리피지를 포함한 결과에서도 PF, MDD, 거래 수가 허용 범위다.</li>
+<li>Apply Best Settings 후 Market, Top N, TF, 레짐별 값을 Trading 탭에서 다시 확인했다.</li>
+<li>거래 제한 종목과 원치 않는 종목을 Excluded Symbols에 입력했다.</li>
+<li>Leverage 3~5배, Risk 0.25~0.5%, Max Position 10~15% 등 보수적 값에서 시작한다.</li>
+<li>Start 후 Binance 앱에서 실제 주문·서버 Stop·포지션 수량을 직접 대조한다.</li>
+<li>인터넷 장애나 프로그램 종료 시에도 대응할 수 있도록 Binance 앱에 로그인할 수 있다.</li>
+</ul>
+<div class="callout danger"><strong>첫 실거래 원칙:</strong> 잃어도 운영에 영향이 없는 소액으로 시작하고, 최소 수십 건의 실제 체결에서 주문·수수료·슬리피지·손익 동기화를 확인한 뒤 규모를 늘리세요.</div>
+</section>
+<hr class="scan-rule"/>
+<!-- ══ 8. Regime ═════════════════════════════════════════════ -->
+<section class="section" id="regime">
+<div class="section-eyebrow">전략 원리</div>
+<h2>시장 Regime 분류</h2>
+<p>봉 마감 시점마다 <strong>ATR%</strong>(= ATR ÷ 현재가 × 100)를 계산해 4가지 레짐으로 분류합니다. 레짐에 따라 전략·파라미터가 자동 전환됩니다.</p>
+<div class="regime-grid">
+<div class="regime-card rc-quiet">
+<div class="r-name" style="color:var(--mr)">QUIET</div>
+<div class="r-atr">ATR% &lt; 2</div>
+<div class="r-strat"><span class="badge badge-mr">Mean Reversion</span></div>
+<div class="r-exit">Exit: BB Mid</div>
+</div>
+<div class="regime-card rc-normal">
+<div class="r-name" style="color:var(--tf)">NORMAL</div>
+<div class="r-atr">2 ≤ ATR% &lt; 4</div>
+<div class="r-strat"><span class="badge badge-tf">Trend Following</span></div>
+<div class="r-exit">Exit: trailing / partial_tp</div>
+</div>
+<div class="regime-card rc-trend">
+<div class="r-name" style="color:var(--green)">TREND</div>
+<div class="r-atr">4 ≤ ATR% &lt; 8</div>
+<div class="r-strat"><span class="badge badge-tf">Trend Following</span></div>
+<div class="r-exit">Exit: trailing</div>
+</div>
+<div class="regime-card rc-panic">
+<div class="r-name" style="color:var(--red)">PANIC</div>
+<div class="r-atr">ATR% ≥ 8</div>
+<div class="r-strat"><span class="badge badge-tf">Trend Following</span></div>
+<div class="r-exit">Exit: fast_exit</div>
+</div>
+</div>
+<div class="callout"><strong>레짐 변경 빈도:</strong> 레짐은 봉 마감마다 재분류됩니다. 진입 시점의 레짐이 해당 포지션의 청산 전략을 결정하며, 보유 중 레짐이 바뀌어도 기존 포지션의 청산 로직은 변경되지 않습니다.</div>
+<h3>레짐별 파라미터 튜닝 가이드</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>레짐</th><th>ATR Mult</th><th>권장 이유</th></tr></thead>
+<tbody>
+<tr><td class="td-param">QUIET</td><td>1.0 ~ 1.5</td><td>저변동 구간이므로 좁은 손절로 MR 리스크 제한</td></tr>
+<tr><td class="td-param">NORMAL</td><td>1.5 ~ 2.0</td><td>균형 설정. partial_tp와 함께 사용 시 적합</td></tr>
+<tr><td class="td-param">TREND</td><td>2.0 ~ 2.5</td><td>강한 추세에서 손절 폭 넓혀 조기 손절 방지</td></tr>
+<tr><td class="td-param">PANIC</td><td>2.0 ~ 3.0</td><td>극단 변동성. 단, fast_exit이므로 실제 손절까지 안 가는 경우 많음</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="scan-rule"/>
+<!-- ══ 8. TF Strategy ════════════════════════════════════════ -->
+<section class="section" id="tf">
+<div class="section-eyebrow">전략 상세</div>
+<h2>Trend Following 전략</h2>
+<p>NORMAL · TREND · PANIC 레짐에서 사용합니다. EMA 크로스 + Donchian 돌파 + 거래량 급증 + ADX 필터 4가지 조건이 모두 충족될 때 진입합니다.</p>
+<h3>사용 지표</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>지표</th><th>계산 방식</th><th>역할</th></tr></thead>
+<tbody>
+<tr><td class="td-param">EMA 20 / 60</td><td>지수이동평균, 기간 20·60</td><td>추세 방향 판단. EMA20 &gt; EMA60 = 상승추세</td></tr>
+<tr><td class="td-param">ATR</td><td>SMA 방식, 기간 14 (Wilder RMA 아님)</td><td>손절폭·트레일링 거리·Regime ATR% 계산</td></tr>
+<tr><td class="td-param">ADX</td><td>SMA 방식, 기간 14</td><td>추세 강도 필터. ADX ≥ ADX Min이어야 진입</td></tr>
+<tr><td class="td-param">Donchian Channel</td><td>최근 20봉 최고가/최저가</td><td>돌파 신호. 종가 &gt; 이전 봉 Donchian High → LONG</td></tr>
+<tr><td class="td-param">Volume MA</td><td>20봉 단순이동평균</td><td>거래량 급증 필터. 거래량 &gt; MA × Vol Mult</td></tr>
+<tr><td class="td-param">RSI</td><td>Wilder RSI, 기간 14</td><td>partial_tp 모드 보조 청산 신호 (과매수/과매도)</td></tr>
+<tr><td class="td-param">CI</td><td>Choppiness Index, 기간 14 (기본)</td><td>선택적. CI &lt; 61.8 조건 추가 시 횡보 진입 차단</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout"><strong>ATR·ADX 정확도:</strong> 표준 Wilder 방식이 아닌 SMA 방식을 사용합니다. TradingView 등 외부 차트와 ADX 수치가 다를 수 있으나, 라이브·백테스트 모두 동일한 공식을 사용하므로 내부 일관성은 유지됩니다.</div>
+<h3>진입 조건 (4+1)</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>조건</th><th>LONG 진입</th><th>SHORT 진입</th></tr></thead>
+<tbody>
+<tr><td>① 추세 방향</td><td>EMA20 &gt; EMA60</td><td>EMA20 &lt; EMA60</td></tr>
+<tr><td>② 추세 강도</td><td>ADX ≥ ADX Min</td><td>ADX ≥ ADX Min</td></tr>
+<tr><td>③ 거래량 급증</td><td>거래량 &gt; Volume MA × Vol Mult</td><td>거래량 &gt; Volume MA × Vol Mult</td></tr>
+<tr><td>④ 가격 돌파</td><td>완성봉 종가 &gt; 이전봉 Donchian High</td><td>완성봉 종가 &lt; 이전봉 Donchian Low</td></tr>
+<tr><td>⑤ CI 필터 <em style="color:var(--text-lo)">(선택)</em></td><td colspan="2">CI Filter ON 시 추가: CI &lt; 61.8</td></tr>
+</tbody>
+</table>
+</div>
+<h3>트레일링 스탑 메커니즘</h3>
+<div class="formula">
+<div><span class="lhs">손절폭</span><span class="op">=</span> <span class="rhs">Entry ATR × ATR Mult</span></div>
+<div><span class="lhs">트레일링 활성 거리</span><span class="op">=</span> <span class="rhs">손절폭 × Trigger R</span></div>
+<div><span class="lhs">트레일링 활성 조건</span><span class="op">=</span> <span class="rhs">가격 이동 ≥ 트레일링 활성 거리</span></div>
+<div><span class="lhs">트레일링 스탑 갱신</span><span class="op">=</span> <span class="rhs">최고가(LONG) − 손절폭</span></div>
+</div>
+<p>Trailing TF 봉 기준 ATR이 변경되면 트레일링 거리도 동적으로 갱신됩니다.</p>
+<h3>Time Exit</h3>
+<p>포지션 개설 후 <strong>72시간</strong>이 경과하면 강제 청산합니다. 평균복귀가 장기간 실패하는 케이스를 방어하는 안전망입니다.</p>
+</section>
+<hr class="scan-rule"/>
+<!-- ══ 9. MR Strategy ════════════════════════════════════════ -->
+<section class="section" id="mr">
+<div class="section-eyebrow">전략 상세</div>
+<h2>Mean Reversion 전략</h2>
+<p>QUIET 레짐(ATR% &lt; 2, 저변동 횡보)에서 사용합니다. Bollinger Band 이탈 + RSI 과매도/과매수 + ADX Max 필터 3가지 조건이 모두 충족될 때 진입하고, BB 중간밴드(SMA20) 복귀 시 익절합니다.</p>
+<h3>사용 지표</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>지표</th><th>계산 방식</th><th>역할</th></tr></thead>
+<tbody>
+<tr><td class="td-param">Bollinger Bands</td><td>20봉 SMA ± BB Sigma × σ</td><td>진입 경계: 하단밴드 이탈(LONG) / 상단밴드 이탈(SHORT). 중간밴드(SMA20)가 익절 목표</td></tr>
+<tr><td class="td-param">RSI</td><td>Wilder RSI, 기간 14</td><td>과매도/과매수 확인. RSI ≤ RSI Entry → LONG / RSI ≥ (100 − RSI Entry) → SHORT</td></tr>
+<tr><td class="td-param">ATR</td><td>SMA 방식, 기간 14</td><td>손절폭. 손절가 = 진입가 ± ATR × ATR Mult</td></tr>
+<tr><td class="td-param">ADX</td><td>SMA 방식, 기간 14</td><td>횡보 확인용 상한 필터. ADX ≤ ADX Max이어야 진입</td></tr>
+</tbody>
+</table>
+</div>
+<h3>진입 조건 (3가지 모두)</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>조건</th><th>LONG (과매도 반등)</th><th>SHORT (과매수 반락)</th></tr></thead>
+<tbody>
+<tr><td>① ADX 횡보 확인</td><td>ADX ≤ ADX Max</td><td>ADX ≤ ADX Max</td></tr>
+<tr><td>② RSI 과매도/과매수</td><td>RSI ≤ RSI Entry</td><td>RSI ≥ (100 − RSI Entry)</td></tr>
+<tr><td>③ BB 밴드 이탈</td><td>종가 &lt; BB Lower (= SMA20 − BB Sigma × σ)</td><td>종가 &gt; BB Upper (= SMA20 + BB Sigma × σ)</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout warn">
+<strong>CI 필터 비적용:</strong> MR 전략은 CI Filter를 무시합니다. CI &lt; 61.8(추세 구간 판단)이 MR 진입 조건에 맞지 않기 때문입니다. ADX Max가 동일한 역할을 합니다.
+  </div>
+<h3>청산 로직</h3>
+<div class="formula">
+<div><span class="lhs">익절 조건 (LONG)</span><span class="op">→</span> <span class="rhs">현재가 ≥ 진입 시점 BB Mid (SMA20)</span></div>
+<div><span class="lhs">익절 조건 (SHORT)</span><span class="op">→</span> <span class="rhs">현재가 ≤ 진입 시점 BB Mid (SMA20)</span></div>
+<div><span class="lhs">손절 조건</span><span class="op">→</span> <span class="rhs">현재가 ≤ 진입가 − ATR × ATR Mult (LONG)</span></div>
+<div><span class="lhs">Time Exit</span><span class="op">→</span> <span class="rhs">포지션 보유 72시간 초과 시 강제 청산</span></div>
+</div>
+<div class="callout"><strong>BB Mid 타겟 고정:</strong> 익절 목표는 진입 시점의 BB Mid로 고정됩니다. 포지션 보유 중 실제 BB Mid가 이동해도 타겟은 변하지 않습니다. 장기 보유 시 타겟 도달 전 72h Time Exit으로 청산될 수 있습니다.</div>
+</section>
+<hr class="scan-rule"/>
+<!-- ══ 10. Exit ══════════════════════════════════════════════ -->
+<section class="section" id="exit">
+<div class="section-eyebrow">청산 전략</div>
+<h2>청산 우선순위</h2>
+<p>포지션 모니터링 루프에서 다음 순서로 청산 조건을 확인합니다.</p>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>우선순위</th><th>청산 조건</th><th>해당 전략</th></tr></thead>
+<tbody>
+<tr><td class="td-default">1</td><td>fast_exit: 1R 목표 도달 시 전량 청산</td><td><span class="badge badge-tf">TF</span> PANIC</td></tr>
+<tr><td class="td-default">2</td><td>partial_tp: 1R 도달 또는 RSI 과매수/과매도 시 50% 선청산</td><td><span class="badge badge-tf">TF</span> NORMAL</td></tr>
+<tr><td class="td-default">3</td><td>BB Mid 도달 시 전량 익절</td><td><span class="badge badge-mr">MR</span> QUIET</td></tr>
+<tr><td class="td-default">4</td><td>Time Exit: 보유 72시간 초과</td><td>전략 공통</td></tr>
+<tr><td class="td-default">5</td><td>Stop/Trailing Stop: 가격이 손절가 도달 (로컬 monitor)</td><td>전략 공통</td></tr>
+<tr><td class="td-default" style="color:var(--text-lo)">보조</td><td>서버 STOP_MARKET: 봇 오프라인 시 Binance 서버가 직접 실행. 로컬 청산과 중복되지 않도록 로컬 청산 시 자동 취소</td><td>전략 공통</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="scan-rule"/>
+<!-- ══ 11. Sizing ════════════════════════════════════════════ -->
+<section class="section" id="sizing">
+<div class="section-eyebrow">리스크 관리</div>
+<h2>포지션 사이징</h2>
+<p>두 가지 기준으로 수량을 계산한 뒤 더 작은 값을 최종 수량으로 사용합니다.</p>
+<div class="formula">
+<div><span class="lhs">손절폭</span> <span class="op">=</span> <span class="rhs">Entry ATR × ATR Mult</span></div>
+<div><span class="lhs">Risk 기준 수량</span><span class="op">=</span> <span class="rhs">(총잔고 × Risk%) ÷ 손절폭</span></div>
+<div><span class="lhs">Cap 기준 수량</span> <span class="op">=</span> <span class="rhs">(총잔고 × Max Position% × Leverage) ÷ 현재가</span></div>
+<div><span class="lhs">최종 수량</span> <span class="op">=</span> <span class="rhs">min(Risk 기준 수량, Cap 기준 수량)</span></div>
+</div>
+<div class="callout info">
+<strong>주문 생략 조건 (안전 장치):</strong><br/>
+    • 최종 수량이 거래소 minQty 미만인 경우<br/>
+    • 필요 증거금이 가용잔고의 95%를 초과하는 경우<br/>
+    • 같은 종목이 이미 로컬 포지션 또는 거래소에 존재하는 경우
+  </div>
+<h3>계산 예시</h3>
+<pre><span class="comment"># 설정: 잔고=1000 USDT, Risk%=0.5, ATR=50, ATR Mult=2.0
+# 레버리지=5, Max Position%=15, 현재가=2000 USDT</span>
+
+<span class="label">손절폭</span>          = <span class="val">50 × 2.0 = 100 USDT</span>
+<span class="label">Risk 기준 수량</span>  = <span class="val">(1000 × 0.5%) ÷ 100 = 0.05 개</span>
+<span class="label">Cap 기준 수량</span>   = <span class="val">(1000 × 15% × 5) ÷ 2000 = 0.375 개</span>
+<span class="label">최종 수량</span>       = <span class="val">min(0.05, 0.375) = 0.05 개</span>
+<span class="comment"># → 노셔널 0.05 × 2000 = 100 USDT / 증거금 = 100 ÷ 5 = 20 USDT</span></pre>
+</section>
+<hr class="scan-rule"/>
+<!-- ══ 12. WebSocket ═════════════════════════════════════════ -->
+<section class="section" id="websocket">
+<div class="section-eyebrow">운영</div>
+<h2>WebSocket &amp; API 구조</h2>
+<h3>PriceWebSocketManager</h3>
+<p>현재 보유 포지션 종목만 구독하는 mark-price WebSocket입니다. 포지션 변경 시 자동으로 구독 종목을 재동기화합니다.</p>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>항목</th><th>내용</th></tr></thead>
+<tbody>
+<tr><td class="td-param">백엔드 우선순위</td><td><code>websockets</code> (async) → <code>websocket-client</code> (fallback)</td></tr>
+<tr><td class="td-param">구독 방식</td><td>Active-position only: 보유 종목만 bookTicker/markPrice 구독</td></tr>
+<tr><td class="td-param">SSL</td><td>cert_reqs=NONE (일부 환경의 인증서 문제 대응)</td></tr>
+<tr><td class="td-param">재연결</td><td>구독 종목 변경 시 기존 연결 종료 → 신규 URL로 자동 재연결</td></tr>
+<tr><td class="td-param">가격 max_age</td><td>10초 이상 경과한 WS 가격은 무효 처리 → REST fallback</td></tr>
+</tbody>
+</table>
+</div>
+<h3>UserDataWebSocketManager (UDS)</h3>
+<p>Binance User Data Stream으로 계정 이벤트(포지션 변경, 주문 체결)를 실시간 수신합니다.</p>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>항목</th><th>내용</th></tr></thead>
+<tbody>
+<tr><td class="td-param">목적</td><td>REST 폴링 없이 포지션 변경 실시간 감지</td></tr>
+<tr><td class="td-param">Listen Key</td><td>자동 발급 + 30분마다 keepalive 갱신</td></tr>
+<tr><td class="td-param">max_age</td><td>300초 이상 UDS 이벤트 없으면 REST safety sync 수행</td></tr>
+</tbody>
+</table>
+</div>
+<h3>REST Fallback</h3>
+<p>WS가 연결되었으나 5초 이상 페이로드가 없으면 DashboardThread가 REST로 전체 가격 스냅샷을 가져와 <code>GLOBAL_PRICE_CACHE</code>를 보충합니다.</p>
+<div class="callout info">
+<strong>WS가 "Connected"인데 가격이 갱신 안 될 때:</strong> API 모니터의 <em>WS Msg/min</em>이 0이면 WS는 연결만 됐고 페이로드는 안 오는 상태입니다. REST fallback이 자동으로 동작하므로 기능에는 문제없으나, <code>pip install websockets</code>를 확인하세요.
+  </div>
+</section>
+<hr class="scan-rule"/>
+<!-- ══ 13. Monitor ═══════════════════════════════════════════ -->
+<section class="section" id="monitor">
+<div class="section-eyebrow">운영</div>
+<h2>API 모니터</h2>
+<p>Trading 탭 상단의 API Monitor 패널에서 API 호출 현황을 실시간으로 확인할 수 있습니다.</p>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>지표</th><th>표시값 예시</th><th>설명 및 정상 기준</th></tr></thead>
+<tbody>
+<tr>
+<td class="td-param">Health</td>
+<td class="td-default">🟢 Healthy<br/>🟡 Warning<br/>🔴 Critical</td>
+<td>전체 데이터 수신 상태 종합. <strong>Healthy</strong> = WS LIVE + 가격 캐시 90% 이상 + fallback 5회 이하. <strong>Warning</strong> = 부분 정상. <strong>Critical</strong> = 가격 수신 불가</td>
+</tr>
+<tr>
+<td class="td-param">Data Source</td>
+<td class="td-default">LIVE / MIXED<br/>/ REST / OFFLINE</td>
+<td>가격·계정 데이터 공급원. <strong>LIVE</strong> = WS+UDS 모두 정상. <strong>MIXED</strong> = 일부 REST 혼용. <strong>REST</strong> = WS 없이 REST만. <strong>OFFLINE</strong> = 데이터 수신 없음</td>
+</tr>
+<tr>
+<td class="td-param">Price WS</td>
+<td class="td-default">🟢 LIVE<br/>🟡 Connected(No Data)<br/>🔴 Disconnected</td>
+<td>가격 WebSocket 상태. <strong>LIVE</strong> = 5초 내 페이로드 수신 + 캐시 80% 이상. <strong>Connected(No Data)</strong> = 연결됐으나 페이로드 미수신 → REST fallback 작동 중</td>
+</tr>
+<tr>
+<td class="td-param">UDS</td>
+<td class="td-default">🟢 LIVE<br/>● Connected<br/>● Reconnecting</td>
+<td>User Data Stream 상태. <strong>LIVE</strong> = 연결 + 300초 내 이벤트 수신. <strong>Connected</strong> = 연결됐으나 이벤트 없음(거래 없을 때 정상). <strong>Reconnecting</strong> = 재연결 중</td>
+</tr>
+<tr>
+<td class="td-param">Price Cache</td>
+<td class="td-default">28 / 30 (93%)</td>
+<td>현재 가격이 캐시된 종목 수 / 전체 스캔 종목 수 (비율). 90% 이상이면 정상. 낮으면 WS 구독 누락 또는 REST fallback 불충분</td>
+</tr>
+<tr>
+<td class="td-param">Last Price</td>
+<td class="td-default">1.2 sec<br/>waiting</td>
+<td>가격 캐시 마지막 갱신 후 경과 시간(WS 또는 REST fallback 포함). 10초 이내 정상. <strong>waiting</strong> = 아직 가격 수신 없음</td>
+</tr>
+<tr>
+<td class="td-param">Last UDS</td>
+<td class="td-default">42.3 sec<br/>no event yet<br/>waiting</td>
+<td>UDS(User Data Stream) 마지막 계정 이벤트 수신 후 경과 시간. 거래가 없으면 오래될 수 있음 — 300초 이내면 LIVE 판정. <strong>no event yet</strong> = 연결됐으나 아직 이벤트 없음(정상). <strong>waiting</strong> = UDS 미연결</td>
+</tr>
+<tr>
+<td class="td-param">REST/min</td>
+<td class="td-default">45 (1.9%)</td>
+<td>지난 1분간 REST API 호출 수 (바이낸스 분당 한도 2,400 대비 비율). 10% 초과 시 과도한 호출 주의</td>
+</tr>
+<tr>
+<td class="td-param">WS Msg/min</td>
+<td class="td-default">120</td>
+<td>지난 1분간 가격 WS 페이로드 수신 수. 0이면 WS 연결만 됐고 데이터 미수신 → REST fallback 작동 중. 보유 종목 수에 비례해 증가</td>
+</tr>
+<tr>
+<td class="td-param">REST Fallback/min</td>
+<td class="td-default">0 / 3</td>
+<td>최근 1분 동안 WS 대신 REST 가격을 사용한 횟수. WS LIVE 시 보통 0이며, WS가 일시적으로 지연되면 증가합니다. 값은 최근 1분 기준으로 자동 갱신됩니다. Health는 이 값뿐 아니라 Price WS, Cache Fill, Price Age를 함께 종합 판단합니다.</td>
+</tr>
+<tr>
+<td class="td-param">Reconnects</td>
+<td class="td-default">2</td>
+<td>누적 WS 재연결 횟수. 소량은 정상(네트워크 일시 끊김). 빠른 속도로 계속 증가하면 엔드포인트·방화벽 확인</td>
+</tr>
+<tr>
+<td class="td-param">Last REST Sync</td>
+<td class="td-default">38 sec<br/>-</td>
+<td>마지막 REST safety sync(포지션 전체 대조) 후 경과 시간. UDS 이벤트 공백이 길어지면 자동 수행. <strong>-</strong> = 아직 sync 없음</td>
+</tr>
+<tr>
+<td class="td-param">WS Version</td>
+<td class="td-default">1.8.0</td>
+<td>설치된 websocket-client 버전. 권장 버전은 1.8.0. 불일치 시 시작 로그에 VERSION WARNING 출력</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="scan-rule"/>
+<!-- ══ 14. Troubleshoot ══════════════════════════════════════ -->
+<section class="section" id="troubleshoot">
+<div class="section-eyebrow">운영</div>
+<h2>트러블슈팅</h2>
+<h3>진입 신호가 전혀 없을 때</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>원인</th><th>확인·해결</th></tr></thead>
+<tbody>
+<tr><td>레짐 체크박스 OFF</td><td>해당 레짐(NORMAL/TREND 등) 체크박스가 ON인지 확인</td></tr>
+<tr><td>ADX Min이 너무 높음</td><td>ADX 30 이상이면 신호 드물 수 있음. Sweep으로 최적값 탐색</td></tr>
+<tr><td>Vol Mult가 너무 높음</td><td>거래량 폭발 조건이 너무 엄격함. 1.2~1.5 범위 권장</td></tr>
+<tr><td>CI Filter 과도 차단</td><td>CI Filter OFF 후 신호 발생 확인. 횡보 시장에서는 CI가 항상 높을 수 있음</td></tr>
+<tr><td>Max Positions 도달</td><td>기존 포지션이 Max Long/Short 한도에 도달해 있으면 신규 진입 건너뜀</td></tr>
+<tr><td>Top N 너무 적음</td><td>스캔 대상 종목이 너무 적으면 조건 충족 가능성 낮음. Top N 늘리거나 TRADFI 전환</td></tr>
+</tbody>
+</table>
+</div>
+<h3>WS 연결 문제</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>증상</th><th>해결</th></tr></thead>
+<tbody>
+<tr><td>Price WS: SILENT</td><td><code>pip install websockets</code> 후 재시작. websockets 패키지 없으면 websocket-client fallback이 일부 환경에서 페이로드 미수신</td></tr>
+<tr><td>자주 재연결 발생</td><td>네트워크 안정성을 확인하고 API 설정 창의 Testnet/실거래 선택이 Key와 일치하는지 확인</td></tr>
+<tr><td>UDS 연결 안 됨</td><td>API 설정 창에서 Key 저장 여부와 Enable Futures 권한, IP 제한을 확인</td></tr>
+</tbody>
+</table>
+</div>
+<h3>포지션 관련</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>증상</th><th>해결</th></tr></thead>
+<tbody>
+<tr><td>[POSITION UNMANAGED] 로그</td><td>포지션 상태 파일(state/open_positions.json)에 stop 정보 없음. 해당 포지션은 수동 청산 또는 재시작으로 복원 필요</td></tr>
+<tr><td>재시작 후 포지션 사라짐</td><td>state/ 폴더에 open_positions.json이 있는지 확인. 파일 손상 시 거래소 현황과 수동 대조</td></tr>
+<tr><td>수량 계산 오류로 주문 생략</td><td>잔고 부족 또는 가격 대비 minQty 미달. 잔고를 늘리거나 레버리지/Risk%를 조정</td></tr>
+<tr><td>같은 종목 중복 진입 시도</td><td>정상 동작. 이미 보유 중인 종목은 자동으로 건너뜀</td></tr>
+<tr><td>[SERVER STOP ERROR] 반복 출력</td><td>Binance API 오류로 STOP_MARKET 등록 실패. 로컬 stop monitor는 계속 작동. API Key에 Enable Futures 권한이 있는지 확인. 네트워크 문제일 경우 다음 사이클에 자동 재시도</td></tr>
+<tr><td>SERVER_STOP_FILLED로 청산 기록됨</td><td>봇이 오프라인인 동안 Binance 서버 stop이 체결된 정상 동작. 재시작 후 다음 monitor 사이클에서 자동 감지·기록</td></tr>
+<tr><td>Binance에 오래된 STOP 주문이 남아 있음</td><td>이전에 생성되었거나 비정상 종료로 남은 고아 주문일 수 있음. Binance 앱/웹에서 수동 취소 후 봇 재시작 권장</td></tr>
+</tbody>
+</table>
+</div>
+<h3>백테스트 속도 느림</h3>
+<div class="callout">
+<strong>병렬 다운로드는 workers=2로 제한되어 있습니다.</strong> 과거 IP 밴 사례가 있어 의도적으로 제한한 설정입니다. Top N과 기간을 줄이거나, 이미 다운로드한 캐시가 있다면 재실행 시 빠릅니다.
+  </div>
+<h3>Apply Regime Best 버튼 비활성화</h3>
+<p>Sweep 완료 후에도 버튼이 비활성화이면 <code>backtest_results/parameter_sweep_summary.csv</code> 파일이 없는 것입니다. Sweep이 정상 완료됐는지 로그를 확인하세요.</p>
+<div class="callout warn">
+<strong>실거래 전환:</strong> API 설정 창에서 실거래 모드와 실거래 Key를 선택한 뒤 <a href="#live-checklist" style="color:var(--accent2)">실거래 최종 체크리스트</a>를 모두 확인하세요.
+  </div>
+</section>
+<hr class="scan-rule"/>
+<!-- ══ 15. Logs ════════════════════════════════════════════ -->
+<section class="section" id="logs">
+<div class="section-eyebrow">참고</div>
+<h2>로그 해석</h2>
+<p>Log 창에 출력되는 메시지의 형식과 의미를 시간 순서별로 정리합니다. 메시지에서 <code>{}</code> 부분은 실제 값으로 치환됩니다.</p>
+<!-- ─ 시작 ─ -->
+<h3>① 시작 시 (Startup)</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th style="width:46%">로그 메시지</th><th>의미 / 조치</th></tr></thead>
+<tbody>
+<tr>
+<td class="td-param" style="white-space:normal">Strategy : universe=ALL, top_n=30, entry=15m, trailing=5m, ...</td>
+<td>시작 시 설정 요약 출력. 파라미터가 의도대로 적용됐는지 확인</td>
+</tr>
+<tr>
+<td class="td-param">BASE_URL=https://fapi.binance.com</td>
+<td>메인넷 접속 확인. testnet이면 <code>testnet.binancefuture.com</code> 표시</td>
+</tr>
+<tr>
+<td class="td-param">Server time synced. offset={n} ms</td>
+<td>바이낸스 서버와 시간 동기화 완료. offset이 1,000ms 이상이면 서버 시간 불일치 주의</td>
+</tr>
+<tr>
+<td class="td-param" style="color:var(--red)">API KEY / SECRET KEY missing in .env</td>
+<td><strong>오류.</strong> 저장된 API 정보가 없음. 프로그램 상단의 API 설정 버튼에서 Key와 Secret을 입력·저장</td>
+</tr>
+<tr>
+<td class="td-param">[WS] Price websocket enabled: active-position bookTicker + REST fallback</td>
+<td>가격 WebSocket 정상 시작. 보유 포지션 종목만 구독하고 REST가 대기 중</td>
+</tr>
+<tr>
+<td class="td-param">[UDS] User data stream enabled (REST safety sync kept)</td>
+<td>계정 이벤트 스트림 시작. 체결·포지션 변경을 실시간 수신</td>
+</tr>
+<tr>
+<td class="td-param" style="white-space:normal">[WS VERSION WARNING] websocket-client 1.9.x may not receive...</td>
+<td><strong>경고.</strong> websocket-client 버전이 권장(1.8.0)과 다름. <code>pip install websocket-client==1.8.0</code> 후 재시작</td>
+</tr>
+<tr>
+<td class="td-param">Symbol universe refresh: 4h fixed</td>
+<td>스캔 종목 유니버스를 4시간마다 자동 갱신함을 알리는 안내</td>
+</tr>
+<tr>
+<td class="td-param" style="white-space:normal">Position restore: supervised=3, exchange-only=1</td>
+<td>재시작 시 포지션 복원 결과. supervised = 자동 관리 복원 수, exchange-only = 상태 파일 없이 거래소에만 있는 포지션 수</td>
+</tr>
+<tr>
+<td class="td-param" style="white-space:normal;color:var(--yellow)">WARNING: Some existing exchange positions have no saved SL/TP...</td>
+<td><strong>주의.</strong> 상태 파일이 없는 포지션 존재 → 자동 손절 관리 불가. 수동 청산 또는 Emergency Close 필요</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- ─ 신호 ─ -->
+<h3>② 진입 신호 (Signal)</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th style="width:46%">로그 메시지</th><th>의미 / 조치</th></tr></thead>
+<tbody>
+<tr>
+<td class="td-param" style="white-space:normal">SIGNAL BTCUSDT LONG / trend_following / REGIME=TREND ATR%=5.21 SET=STRATEGY=trend_following,ADX_MIN25.0,VOL1.5,TRIG1.0,ATR_TRAIL2.0,RISK0.50%</td>
+<td>진입 신호 감지. 종목·방향·전략·레짐·ATR%·파라미터 조합 확인. 이후 포지션 사이징 진행</td>
+</tr>
+<tr>
+<td class="td-param" style="white-space:normal">BTCUSDT sizing: balance=1000.0, available=850.0, risk=5.0000(0.50%), stop_atr_mult=2.00, notional=240.0000, required_margin≈48.0000</td>
+<td>수량 계산 상세. risk=포지션 최대 손실 금액, notional=포지션 명목금액, required_margin=필요 증거금</td>
+</tr>
+<tr>
+<td class="td-param" style="white-space:normal;color:var(--text-mid)">BTCUSDT skipped: required_margin=820.0, available=850.0</td>
+<td>증거금이 가용잔고 95%를 초과해 주문 건너뜀. 잔고 부족 또는 레버리지·Risk% 조정 필요</td>
+</tr>
+<tr>
+<td class="td-param" style="color:var(--text-mid)">BTCUSDT already in local positions</td>
+<td>이미 보유 중인 종목. 중복 진입 방지 — 정상 동작</td>
+</tr>
+<tr>
+<td class="td-param" style="color:var(--text-mid)">BTCUSDT already exists on exchange</td>
+<td>거래소에 같은 종목 포지션 있음. 중복 진입 방지 — 정상 동작</td>
+</tr>
+<tr>
+<td class="td-param" style="color:var(--text-mid)">BTCUSDT adjusted qty below minQty</td>
+<td>계산된 수량이 최소 주문 수량 미달. 잔고를 늘리거나 Risk%·레버리지 조정 필요</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- ─ 진입 ─ -->
+<h3>③ 포지션 개설 (Open)</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th style="width:46%">로그 메시지</th><th>의미 / 조치</th></tr></thead>
+<tbody>
+<tr>
+<td class="td-param" style="white-space:normal">OPEN BTCUSDT LONG qty=0.050 entry=42000.000000 SL=41520.000000 TRAIL_TRIGGER=42480.000000 TRAIL_DIST=480.000000 TRAIL_TF=5m TRIGGER_R=1.0 ATR_MULT=2.0 RISK=0.50% STRATEGY=trend_following REGIME=TREND ATR%=5.21</td>
+<td>
+            주문 체결 완료 로그.<br/>
+<strong>SL</strong> = 손절가 / <strong>TRAIL_TRIGGER</strong> = 트레일링 활성화 가격 / <strong>TRAIL_DIST</strong> = 트레일링 간격
+          </td>
+</tr>
+<tr>
+<td class="td-param" style="white-space:normal">OPEN ETHUSDT SHORT qty=0.200 ... STRATEGY=mean_reversion REGIME=QUIET ATR%=1.43</td>
+<td>MR 전략으로 진입. TRAIL_TRIGGER가 BB Mid 청산 목표가로 설정됨</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- ─ 모니터 ─ -->
+<h3>④ 포지션 모니터링 (Monitor)</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th style="width:46%">로그 메시지</th><th>의미 / 조치</th></tr></thead>
+<tbody>
+<tr>
+<td class="td-param">TRAILING ON BTCUSDT LONG trigger=42480.000000</td>
+<td>트레일링 스탑 활성화. 가격이 TRAIL_TRIGGER에 도달. 이후 최고가 추적 시작</td>
+</tr>
+<tr>
+<td class="td-param">TRAIL UPDATE BTCUSDT LONG SL=42200.000000 high=42680.000000</td>
+<td>트레일링 손절가 상향 갱신. high=현재까지 최고가, SL=갱신된 손절가</td>
+</tr>
+<tr>
+<td class="td-param">TRAIL UPDATE BTCUSDT SHORT SL=41800.000000 low=41600.000000</td>
+<td>SHORT 트레일링. low=최저가, SL=갱신된 손절가(상승 방향)</td>
+</tr>
+<tr>
+<td class="td-param">RSI EXIT SIGNAL BTCUSDT LONG RSI=74.2</td>
+<td>RSI 과매수 도달 → partial_tp 모드에서 50% 선청산 트리거. 이후 PARTIAL CLOSE 로그 따라옴</td>
+</tr>
+<tr>
+<td class="td-param" style="color:var(--yellow)">[POSITION UNMANAGED] BTCUSDT: stop/ATR state is missing...</td>
+<td><strong>주의.</strong> 해당 포지션의 손절 상태 정보가 없어 자동 관리 불가. 수동 청산하거나 state 파일 복구 후 재시작</td>
+</tr>
+<tr>
+<td class="td-param">[POSITION SYNC] REST safety sync OK (3 open exchange positions); next in 60s</td>
+<td>거래소와 포지션 상태 동기화 성공. UDS 이벤트 공백 시 주기적으로 수행</td>
+</tr>
+<tr>
+<td class="td-param" style="white-space:normal">[SERVER STOP] BTCUSDT LONG stop=41520.000000 orderId=12345678</td>
+<td>Binance에 STOP_MARKET 주문 등록 완료. 봇이 오프라인 상태에서도 해당 가격에서 손절 실행됨</td>
+</tr>
+<tr>
+<td class="td-param" style="white-space:normal">[SERVER STOP CANCEL] BTCUSDT orderId=12345678 TRAILING_TAKE</td>
+<td>서버 stop 주문 취소 완료. 로컬에서 정상 청산했으므로 고아 주문 제거. reason 필드에 청산 원인 표시</td>
+</tr>
+<tr>
+<td class="td-param" style="color:var(--yellow)">[SERVER STOP WARN] BTCUSDT cancel failed: {e}</td>
+<td><strong>경고.</strong> 서버 stop 취소 실패 — 이미 체결됐거나 주문 ID가 만료된 경우. 로컬 청산과 중복 청산 가능성이 낮으므로 일반적으로 무시 가능</td>
+</tr>
+<tr>
+<td class="td-param" style="color:var(--red)">[SERVER STOP ERROR] BTCUSDT: {e}</td>
+<td><strong>오류.</strong> STOP_MARKET 주문 등록 실패. 로컬 stop monitor는 계속 동작하나 봇 오프라인 시 서버 손절이 없음. API 권한·네트워크 확인</td>
+</tr>
+<tr>
+<td class="td-param">MANUAL CLOSE DETECTED BTCUSDT LONG PnL=+32.5000 USDT</td>
+<td>프로그램 외부(앱·웹)에서 포지션이 수동 청산됨. 로컬 상태에서 자동 제거</td>
+</tr>
+<tr>
+<td class="td-param">Universe added: XRPUSDT, SOLUSDT</td>
+<td>4시간 유니버스 갱신 시 새로 추가된 종목</td>
+</tr>
+<tr>
+<td class="td-param">Universe removed: DOGEUSDT</td>
+<td>거래대금 순위 하락으로 스캔 대상에서 제외된 종목</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- ─ 청산 ─ -->
+<h3>⑤ 청산 (Close)</h3>
+<p>모든 청산 로그는 <code>reason</code> 필드로 원인을 구분합니다.</p>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th style="width:46%">로그 메시지</th><th>의미</th></tr></thead>
+<tbody>
+<tr>
+<td class="td-param" style="white-space:normal">CLOSE BTCUSDT LONG reason=STOP price=41520.000000 PnL=-5.0000 USDT</td>
+<td><strong>손절 청산.</strong> 가격이 최초 손절가(SL)에 도달. 트레일링이 활성화되기 전에 손절된 경우</td>
+</tr>
+<tr>
+<td class="td-param" style="white-space:normal">CLOSE BTCUSDT LONG reason=TRAILING_TAKE price=42200.000000 PnL=+35.0000 USDT</td>
+<td><strong>트레일링 스탑 익절.</strong> 최고가 대비 trail_distance만큼 하락해 트레일링 손절가 도달. 수익권에서 청산</td>
+</tr>
+<tr>
+<td class="td-param" style="white-space:normal">CLOSE ETHUSDT SHORT reason=MEAN_REVERSION_TAKE price=2050.000000 PnL=+18.0000 USDT</td>
+<td><strong>MR 익절.</strong> 가격이 진입 시점 BB Mid에 도달. Mean Reversion 목표 달성</td>
+</tr>
+<tr>
+<td class="td-param" style="white-space:normal">CLOSE SOLUSDT LONG reason=TIME_EXIT price=98.500000 PnL=-2.0000 USDT</td>
+<td><strong>72시간 시간 초과 강제 청산.</strong> 포지션이 72시간 이상 보유됨. 수익·손실 여부와 무관하게 청산</td>
+</tr>
+<tr>
+<td class="td-param" style="white-space:normal">CLOSE XRPUSDT SHORT reason=fast_exit price=0.620000 PnL=+8.0000 USDT</td>
+<td><strong>빠른 익절.</strong> fast_exit 모드에서 1R 목표 도달 즉시 전량 청산</td>
+</tr>
+<tr>
+<td class="td-param" style="white-space:normal">SERVER_STOP_FILLED BTCUSDT LONG PnL=-5.2000 USDT</td>
+<td><strong>서버 stop 체결.</strong> 봇이 오프라인인 동안 Binance의 STOP_MARKET 주문이 체결되어 포지션 청산. 봇 재시작 후 다음 monitor 사이클에서 감지·기록됨</td>
+</tr>
+<tr>
+<td class="td-param" style="white-space:normal">PARTIAL CLOSE BTCUSDT LONG reason=RSI_EXIT qty=0.025 price=43100.000000 PnL=+27.5000 USDT remaining=0.025</td>
+<td><strong>RSI 과매수/과매도 50% 선청산.</strong> partial_tp 모드에서 RSI 신호로 절반 청산. remaining=남은 수량</td>
+</tr>
+<tr>
+<td class="td-param" style="white-space:normal">PARTIAL CLOSE BTCUSDT LONG reason=partial_tp qty=0.025 price=42480.000000 PnL=+12.0000 USDT remaining=0.025</td>
+<td><strong>1R 목표 도달 50% 선청산.</strong> partial_tp 모드에서 1R(손절폭) 달성 시 절반 청산</td>
+</tr>
+<tr>
+<td class="td-param" style="color:var(--text-mid)">{symbol} close skipped: invalid qty</td>
+<td>청산 수량 계산 실패 → 청산 건너뜀. 거래소 minQty 이하이거나 포지션 수량 오류</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- ─ 에러 ─ -->
+<h3>⑥ 경고 및 오류 (Warning &amp; Error)</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th style="width:46%">로그 메시지</th><th>의미 / 조치</th></tr></thead>
+<tbody>
+<tr>
+<td class="td-param" style="color:var(--yellow)">[WS WARN] active price symbol sync failed: {e}</td>
+<td>WS 구독 종목 업데이트 실패. 다음 주기에 자동 재시도. 반복 시 네트워크 확인</td>
+</tr>
+<tr>
+<td class="td-param" style="color:var(--yellow)">[DASHBOARD] REST fallback standby activated for stale WS price cache</td>
+<td>WS 가격이 오래됨 → REST로 전환. WS가 SILENT 상태일 때 자동 발생. 정상 동작이나 WS 확인 권장</td>
+</tr>
+<tr>
+<td class="td-param" style="color:var(--yellow)">[TRAIL INDICATOR ERROR] BTCUSDT: {e}</td>
+<td>트레일링 ATR 계산 중 오류. 캔들 데이터 수신 실패 가능. 해당 봉은 이전 ATR 유지</td>
+</tr>
+<tr>
+<td class="td-param" style="color:var(--yellow)">[PARTIAL CLOSE ERROR] BTCUSDT: {e}</td>
+<td>50% 선청산 주문 실패. 포지션 전량은 유지됨. 네트워크 오류 또는 거래소 오류</td>
+</tr>
+<tr>
+<td class="td-param" style="color:var(--yellow)">[POSITION SYNC ERROR] {e}</td>
+<td>REST safety sync 실패. 다음 주기에 재시도. 반복 시 API Key 권한 또는 네트워크 확인</td>
+</tr>
+<tr>
+<td class="td-param" style="color:var(--red)">[SCAN ERROR] BTCUSDT: {e}</td>
+<td>해당 종목 스캔 중 오류. 종목 건너뜀, 다음 루프에서 재시도. 반복 시 상세 오류 내용 확인</td>
+</tr>
+<tr>
+<td class="td-param" style="color:var(--red)">[UNIVERSE REFRESH ERROR] keep previous symbols: {e}</td>
+<td>유니버스 갱신 실패 → 이전 종목 유지. 네트워크 또는 API 오류</td>
+</tr>
+<tr>
+<td class="td-param" style="color:var(--red)">[FATAL] {e}</td>
+<td><strong>자동매매 스레드 치명적 오류.</strong> 루프 강제 종료. 로그 내용으로 원인 파악 후 재시작 필요</td>
+</tr>
+<tr>
+<td class="td-param">Auto trader stopped</td>
+<td>Stop 버튼으로 정상 종료됨. 기존 포지션은 유지 (자동 관리 중단)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- ─ 백테스트 ─ -->
+<h3>⑦ 백테스트 로그 (Backtest)</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th style="width:46%">로그 메시지</th><th>의미</th></tr></thead>
+<tbody>
+<tr>
+<td class="td-param">Backtest started. Downloading public Binance Futures kline data...</td>
+<td>백테스트 시작. 캔들 데이터 다운로드 중</td>
+</tr>
+<tr>
+<td class="td-param">[DATA 5/30] BTCUSDT</td>
+<td>데이터 다운로드 진행 상황. 30개 종목 중 5번째 다운로드 중</td>
+</tr>
+<tr>
+<td class="td-param">[BACKTEST DATA ERROR] XYZUSDT: {e}</td>
+<td>해당 종목 데이터 다운로드 실패. 해당 종목 건너뜀. 상장폐지·심볼 변경 등</td>
+</tr>
+<tr>
+<td class="td-param">[TREND SWEEP 3/12] ADX25.0_VOL1.5_TRIG1.0_ATR2.0_RISK0.50</td>
+<td>TREND 레짐 Sweep 진행 상황. 12개 조합 중 3번째 실행 중. 파라미터 조합 표시</td>
+</tr>
+<tr>
+<td class="td-param">Stop Backtest requested.</td>
+<td>사용자가 백테스트 중단 요청. 현재 조합 완료 후 종료</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- ─ 정상 흐름 예시 ─ -->
+<h3>정상 진입~청산 로그 흐름 예시</h3>
+<pre><span class="comment"># ① 신호 감지</span>
+<span class="val">SIGNAL BTCUSDT LONG / trend_following / REGIME=TREND ATR%=5.21 SET=...</span>
+<span class="comment"># ② 수량 계산</span>
+BTCUSDT sizing: balance=1000.0, available=850.0, risk=5.0000(0.50%), ...
+<span class="comment"># ③ 진입 체결</span>
+<span class="val">OPEN BTCUSDT LONG qty=0.050 entry=42000.000000 SL=41520.000000 TRAIL_TRIGGER=42480.000000 ...</span>
+<span class="comment"># ④ 서버 stop 등록</span>
+[SERVER STOP] BTCUSDT LONG stop=41520.000000 orderId=12345678
+<span class="comment"># ⑤ WS 구독 갱신</span>
+[WS] Active price stream symbols=3 reason=position_open
+<span class="comment"># ⑥ 트레일링 활성화</span>
+<span class="val">TRAILING ON BTCUSDT LONG trigger=42480.000000</span>
+<span class="comment"># ⑦ 손절가 갱신 + 서버 stop 갱신 (반복)</span>
+TRAIL UPDATE BTCUSDT LONG SL=42200.000000 high=42680.000000
+[SERVER STOP] BTCUSDT LONG stop=42200.000000 orderId=12345679
+TRAIL UPDATE BTCUSDT LONG SL=42400.000000 high=42880.000000
+[SERVER STOP] BTCUSDT LONG stop=42400.000000 orderId=12345680
+<span class="comment"># ⑧ 청산 + 서버 stop 취소</span>
+<span class="val">CLOSE BTCUSDT LONG reason=TRAILING_TAKE price=42400.000000 PnL=+20.0000 USDT</span>
+[SERVER STOP CANCEL] BTCUSDT orderId=12345680 TRAILING_TAKE</pre>
+</section>
+<hr class="scan-rule"/>
+<!-- ══ 16. Glossary ═════════════════════════════════════════ -->
+<section class="section" id="glossary">
+<div class="section-eyebrow">참고</div>
+<h2>용어 사전</h2>
+<p>프로그램 UI 및 로그에 등장하는 모든 용어를 알파벳·가나다 순으로 정리합니다.</p>
+<!-- ─ 지표 ─ -->
+<h3>기술 지표 (Indicators)</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th style="width:140px">용어</th><th>설명 및 예시</th></tr></thead>
+<tbody>
+<tr>
+<td class="td-param">ATR<br/><span style="color:var(--text-lo);font-size:10px">Average True Range</span></td>
+<td>
+<strong>평균 진폭 — 변동성의 기준 단위.</strong> 14봉의 High-Low 범위를 단순평균(SMA)한 값. 손절폭·포지션 사이즈·Regime 판단에 모두 사용.<br/>
+<em>예: 15분봉 BTCUSDT ATR = 120 USDT → 한 봉에서 평균 120 USDT 움직임</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">ATR%<br/><span style="color:var(--text-lo);font-size:10px">ATR Percent</span></td>
+<td>
+<strong>ATR을 현재가로 나눈 비율.</strong> Regime 분류 기준. ATR% = ATR ÷ 현재가 × 100<br/>
+<em>예: ATR = 120, 가격 = 60,000 → ATR% = 0.2% (QUIET), ATR = 2,400 → ATR% = 4% (TREND)</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">ADX<br/><span style="color:var(--text-lo);font-size:10px">Average Directional Index</span></td>
+<td>
+<strong>추세 강도 지표 (0~100).</strong> 방향 없이 추세 자체의 세기만 측정. 25 이상이면 추세 있음으로 일반적으로 판단. 이 프로그램은 Wilder RMA 대신 SMA 방식 사용.<br/>
+<em>예: ADX = 15 → 추세 약함(횡보), ADX = 35 → 강한 추세 진행 중</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">EMA<br/><span style="color:var(--text-lo);font-size:10px">Exponential Moving Average</span></td>
+<td>
+<strong>지수이동평균 — 최근 봉에 더 높은 가중치.</strong> EMA20(단기)이 EMA60(장기) 위면 상승추세, 아래면 하락추세로 판단.<br/>
+<em>예: EMA20 = 42,500 / EMA60 = 41,800 → EMA20 &gt; EMA60 → LONG 방향 허용</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">RSI<br/><span style="color:var(--text-lo);font-size:10px">Relative Strength Index</span></td>
+<td>
+<strong>과매수/과매도 지표 (0~100).</strong> Wilder RSI 14봉. 30 이하 = 과매도, 70 이상 = 과매수. MR 진입 필터와 partial_tp 보조 청산에 사용.<br/>
+<em>예: RSI = 22, RSI Entry = 30 → RSI ≤ 30 충족 → MR LONG 진입 조건 하나 통과</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">BB<br/><span style="color:var(--text-lo);font-size:10px">Bollinger Bands</span></td>
+<td>
+<strong>이동평균 ± 표준편차 밴드.</strong> SMA20 ± BB Sigma × σ(표준편차). 상단/하단 이탈 시 MR 진입 신호. 중간밴드(SMA20)가 MR 익절 목표.<br/>
+<em>예: SMA20 = 41,000 / σ = 800 / Sigma = 2.0 → Upper = 42,600, Lower = 39,400, Mid = 41,000</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Donchian Channel</td>
+<td>
+<strong>최근 N봉의 최고가/최저가 채널.</strong> 20봉 기준. 종가가 채널 상단 돌파 → LONG, 하단 돌파 → SHORT. TF 전략 진입 조건.<br/>
+<em>예: 최근 20봉 최고가 = 43,100, 현재봉 종가 = 43,250 → Donchian 상단 돌파 → 조건 충족</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">CI<br/><span style="color:var(--text-lo);font-size:10px">Choppiness Index</span></td>
+<td>
+<strong>횡보/추세 판별 지표 (1~100).</strong> 값이 높을수록 횡보(choppiness), 낮을수록 추세. 61.8 이상이면 횡보로 판단해 TF 진입 차단. CI Filter ON 시에만 적용.<br/>
+<em>예: CI = 68 → 횡보 구간 → CI Filter ON이면 TF 진입 건너뜀</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Volume MA</td>
+<td>
+<strong>거래량 이동평균 (20봉 SMA).</strong> TF 진입 조건 중 거래량 급증 필터. 현재 봉 거래량 &gt; Volume MA × Vol Mult 이어야 진입.<br/>
+<em>예: Volume MA = 500 BTC / Vol Mult = 1.5 → 750 BTC 이상 거래량이어야 조건 충족</em>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- ─ 파라미터 ─ -->
+<h3>설정 파라미터 (Parameters)</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th style="width:140px">용어</th><th>설명 및 예시</th></tr></thead>
+<tbody>
+<tr>
+<td class="td-param">Decision TF</td>
+<td>
+<strong>진입 신호 판단용 캔들 타임프레임.</strong> 완성된 봉(Closed Candle)만 신호에 사용. 짧을수록 신호 빈도↑ 노이즈↑.<br/>
+<em>예: 15m → 15분마다 완성 봉으로 신호 확인</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Trailing TF</td>
+<td>
+<strong>트레일링 스탑 ATR 계산용 타임프레임.</strong> Decision TF보다 짧게 설정해야 트레일링이 빠르게 반응.<br/>
+<em>예: Decision TF = 15m / Execute TF = 5m / Trailing TF = 5m → 5분봉 ATR로 손절폭 갱신</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">ATR Mult</td>
+<td>
+<strong>ATR 배수 — 손절폭을 결정.</strong> 손절폭 = 진입 ATR × ATR Mult. 낮으면 좁은 손절(잦은 손절), 높으면 넓은 손절(한 번에 큰 손실).<br/>
+<em>예: ATR = 120, ATR Mult = 2.0 → 손절폭 = 240 USDT (진입가 ± 240)</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Trigger R</td>
+<td>
+<strong>(TF) 트레일링 활성화 거리 배수.</strong> Trigger R × 손절폭만큼 가격이 유리하게 이동해야 트레일링 시작. 낮으면 빠른 트레일링 활성.<br/>
+<em>예: 손절폭 = 240, Trigger R = 1.5 → 360 USDT 이상 수익 시 트레일링 시작</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">BB Sigma</td>
+<td>
+<strong>(MR) Bollinger Band 표준편차 배수.</strong> 높을수록 밴드 폭이 넓어져 진입 빈도 감소. 기본값 2.0.<br/>
+<em>예: Sigma = 2.0 → SMA20 ± 2σ / Sigma = 1.5 → 더 좁은 밴드, 진입 기회 증가</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Vol Mult<br/>/ RSI Entry</td>
+<td>
+<strong>전략에 따라 의미가 다른 이중 파라미터.</strong><br/>
+            • TF: Vol Mult — 거래량 급증 배수 (거래량 &gt; MA × Vol Mult)<br/>
+            • MR: RSI Entry — 과매도/과매수 기준선 (LONG: RSI ≤ 이 값)<br/>
+<em>예: TF Vol Mult = 1.5 / MR RSI Entry = 30</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">ADX Min<br/>/ ADX Max</td>
+<td>
+<strong>전략에 따라 의미가 다른 이중 파라미터.</strong><br/>
+            • TF ADX Min: 추세 강도 하한. ADX &lt; 이 값이면 진입 안 함<br/>
+            • MR ADX Max: 추세 강도 상한. ADX &gt; 이 값이면 진입 안 함 (추세장 차단)<br/>
+<em>예: TF ADX Min = 25 / MR ADX Max = 20</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Risk %</td>
+<td>
+<strong>포지션 1개 최대 손실 허용 비율.</strong> 한 포지션이 손절될 때 잔고의 Risk%만 잃도록 수량 계산.<br/>
+<em>예: 잔고 1,000 USDT / Risk% = 0.5% → 한 포지션 최대 손실 5 USDT</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Max Position %</td>
+<td>
+<strong>포지션 1개 노셔널 상한 비율.</strong> 잔고 × Max Position% × 레버리지가 최대 주문 가능 노셔널. Risk 기준 수량과 비교해 더 작은 값 사용.<br/>
+<em>예: 잔고 1,000 / Max Position% = 15% / 레버리지 5 → 노셔널 상한 = 750 USDT</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Leverage</td>
+<td>
+<strong>선물 레버리지 배수.</strong> 증거금 대비 포지션 크기 배수. 수익과 손실이 모두 배수로 증폭. 진입 시 거래소에 자동 설정.<br/>
+<em>예: 레버리지 5배 / 증거금 100 USDT → 노셔널 500 USDT 포지션 가능</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Top N</td>
+<td>
+<strong>24시간 거래대금 상위 N개 종목을 스캔 대상으로 선정.</strong> 4시간마다 자동 갱신. 많을수록 기회 증가·API 부하 증가.<br/>
+<em>예: Top N = 30 → 거래대금 1~30위 USDT 선물 종목만 진입 신호 스캔</em>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- ─ 전략/레짐 ─ -->
+<h3>전략 및 레짐 (Strategy &amp; Regime)</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th style="width:140px">용어</th><th>설명 및 예시</th></tr></thead>
+<tbody>
+<tr>
+<td class="td-param">Regime</td>
+<td>
+<strong>시장 상태 분류.</strong> ATR%로 QUIET / NORMAL / TREND / PANIC 4단계로 분류. 레짐에 따라 전략·파라미터가 자동 전환.<br/>
+<em>예: ATR% = 5.2% → TREND 레짐 → TF 전략 적용</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Trend Following (TF)</td>
+<td>
+<strong>추세추종 전략.</strong> 상승/하락 추세가 시작되는 돌파 시점에 진입해 추세를 따라가는 전략. NORMAL·TREND·PANIC 레짐에서 사용.<br/>
+<em>핵심: 돌파 진입 → 트레일링 스탑으로 추세 끝까지 추적</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Mean Reversion (MR)</td>
+<td>
+<strong>평균복귀 전략.</strong> 가격이 평균(BB 중간밴드)에서 크게 벗어났을 때 진입해 평균으로 돌아오는 것을 기대하는 전략. QUIET 레짐에서 사용.<br/>
+<em>핵심: BB 하단 이탈 + 과매도(RSI) → LONG 진입 → BB Mid 복귀 시 익절</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Closed Candle</td>
+<td>
+<strong>완성된 봉 — 아직 진행 중인 봉은 제외.</strong> 라이브 거래에서 신호 판단 시 현재 진행 중인 봉(미완성)은 제외하고 직전 완성 봉까지만 사용.<br/>
+<em>이유: 진행 중인 봉의 가격은 계속 변해 신호가 수시로 바뀜 → 허위 신호 방지</em>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- ─ 청산 ─ -->
+<h3>청산 및 리스크 (Exit &amp; Risk)</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th style="width:140px">용어</th><th>설명 및 예시</th></tr></thead>
+<tbody>
+<tr>
+<td class="td-param">Stop Loss</td>
+<td>
+<strong>손절가.</strong> 진입 시 계산. 진입가 ± ATR × ATR Mult. 가격이 이 지점 도달 시 자동 청산.<br/>
+<em>예: LONG 진입가 42,000 / 손절폭 240 → 손절가 = 41,760</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Trailing Stop</td>
+<td>
+<strong>이동 손절 — 수익 구간에서 손절가를 따라 올림.</strong> Trigger R 도달 후 활성화. 최고가(LONG) − 손절폭으로 손절가 갱신. 수익을 보호하면서 추세를 더 따라감.<br/>
+<em>예: 최고가 43,200 / 손절폭 240 → 트레일링 스탑 = 42,960 (손절가 갱신됨)</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">partial_tp</td>
+<td>
+<strong>부분 익절 모드.</strong> 1R(손절폭만큼의 수익) 달성 시 포지션의 50%를 먼저 청산하고 나머지 50%는 트레일링 계속.<br/>
+<em>예: 손절폭 240 → 수익 240 USDT 달성 시 절반 청산, 나머지는 트레일링</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">fast_exit</td>
+<td>
+<strong>빠른 전량 익절 모드.</strong> 1R 목표 달성 즉시 전량 청산. 추세를 더 타지 않고 수익 확정.<br/>
+<em>주로 PANIC(급변동) 레짐에서 사용 — 큰 추세보다 빠른 수익 확정 우선</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">BB Mid (Exit)</td>
+<td>
+<strong>MR 전용 익절 모드.</strong> 진입 시점의 BB 중간밴드(SMA20)를 목표가로 설정. 가격이 해당 수준 도달 시 전량 익절. 보유 중 실제 BB Mid가 이동해도 목표가는 고정.<br/>
+<em>예: 진입 시 BB Mid = 41,000 → 가격이 41,000 도달하면 LONG 전량 청산</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Time Exit</td>
+<td>
+<strong>시간 초과 강제 청산.</strong> 포지션 개설 후 72시간이 경과하면 전략·수익 여부에 관계없이 시장가 청산.<br/>
+<em>목적: MR이 장기간 실패해 자본이 묶이는 상황 방지</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Emergency Close</td>
+<td>
+<strong>긴급 전량 청산 버튼.</strong> 거래소에 있는 모든 선물 포지션을 시장가(Reduce-only)로 즉시 청산. 급락·급등 상황에서 수동 개입용.<br/>
+<em>주의: 슬리피지 발생 가능. 이미 손익이 발생한 상태에서 추가 손실 가능</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Reduce-only</td>
+<td>
+<strong>청산 전용 주문 플래그.</strong> 해당 플래그가 설정된 주문은 포지션을 늘리지 않고 줄이는 방향으로만 체결. 실수로 반대 포지션이 열리는 것을 방지.<br/>
+<em>Emergency Close·익절 주문·서버 STOP_MARKET에 자동 적용</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">STOP_MARKET<br/><span style="color:var(--text-lo);font-size:10px">Server Stop</span></td>
+<td>
+<strong>Binance 서버에 등록된 손절 주문.</strong> 지정 가격 도달 시 거래소가 시장가로 자동 청산. <code>workingType=MARK_PRICE</code>를 사용해 Last Price 스파이크에 의한 불합리한 체결을 방지. <code>reduceOnly=true</code>이므로 포지션 잔량만 청산.<br/>
+<em>봇이 오프라인 상태에서도 손절이 실행되는 이중 안전망. 로컬 청산 시 자동 취소됨</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Notional</td>
+<td>
+<strong>포지션 명목 금액.</strong> 수량 × 현재가. 증거금이 아닌 실제 포지션 크기.<br/>
+<em>예: 0.05 BTC × 42,000 USDT = 2,100 USDT 노셔널 (증거금은 레버리지로 나눈 420 USDT)</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Mark Price</td>
+<td>
+<strong>청산 기준 가격.</strong> 바이낸스가 제공하는 공정 가격. 일반 거래가(Last Price)와 다를 수 있음. 이 프로그램은 Mark Price 기준으로 손절 판단.<br/>
+<em>이유: Last Price는 일시적 스파이크가 있어 Mark Price로 불합리한 청산 방지</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Liquidation</td>
+<td>
+<strong>강제 청산 (롤).)</strong> 증거금이 유지증거금 이하로 떨어지면 거래소가 강제로 포지션 청산. 이 프로그램의 손절(Stop Loss)은 강제청산이 오기 전 선제적으로 청산.<br/>
+<em>예방: 레버리지를 낮추고 Max Position%를 제한하면 강제청산 위험 감소</em>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- ─ 성과 지표 ─ -->
+<h3>백테스트 성과 지표 (Performance Metrics)</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th style="width:140px">용어</th><th>설명 및 예시</th></tr></thead>
+<tbody>
+<tr>
+<td class="td-param">PF<br/><span style="color:var(--text-lo);font-size:10px">Profit Factor</span></td>
+<td>
+<strong>수익성 비율 = 총수익 ÷ 총손실.</strong> 1.0 = 본전, 1.0 미만 = 손실, 1.3 이상이면 우수한 편.<br/>
+<em>예: 총수익 1,300 USDT / 총손실 1,000 USDT → PF = 1.3</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">MDD<br/><span style="color:var(--text-lo);font-size:10px">Max Drawdown</span></td>
+<td>
+<strong>최대 낙폭 — USDT 절대값과 고점 대비 %를 함께 표시.</strong> 낮을수록 좋음. % 기준 20% 초과 시 주의.<br/>
+<em>예: 고점 잔고 1,200 USDT → 저점 900 USDT → MDD = <strong>-300.00 (25.00%)</strong></em><br/>
+<span style="color:var(--text-lo);font-size:11px;">
+              % 계산 기준: <strong>전체 고점이 아닌 MDD 발생 시점의 직전 고점(running peak)</strong> 대비.<br/>
+              예를 들어 MDD 이후 더 높은 고점이 형성됐어도 % 계산에는 영향 없음 — "당시 실제 낙폭률"이 의미 있기 때문.
+            </span>
+</td>
+</tr>
+<tr>
+<td class="td-param">Win Rate</td>
+<td>
+<strong>수익 거래 비율.</strong> 총 거래 중 이익으로 끝난 비율(%). PF와 함께 봐야 의미 있음. Win Rate 낮아도 PF 높으면 큰 수익·작은 손실 구조.<br/>
+<em>예: Win Rate 40% + PF 2.0 → 질로 이기는 구조 (추세추종 전형)</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Net PnL</td>
+<td>
+<strong>순 손익 — 수수료 포함한 최종 손익.</strong> 양수여야 유효한 전략.<br/>
+<em>예: 총거래 수익 +800 USDT / 총손실 -600 USDT / 수수료 -50 USDT → Net PnL = +150 USDT</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Score</td>
+<td>
+<strong>Sweep 랭킹 종합 점수.</strong> PF × 0.45 + Net PnL × 0.30 + Trades × 0.25를 정규화. 레짐 내 Top 10 선정 기준.<br/>
+<em>거래 횟수가 너무 적으면 PF가 높아도 Score가 낮게 나올 수 있음</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">INSUFFICIENT</td>
+<td>
+<strong>거래 횟수 부족.</strong> 백테스트 결과 거래 횟수가 10회 미만이면 통계 신뢰도가 낮아 이 표시로 경고.<br/>
+<em>해결: 기간을 늘리거나 Top N을 늘리거나 파라미터를 완화</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Cartesian Product</td>
+<td>
+<strong>모든 조합의 곱.</strong> 파라미터 A에 3가지, B에 2가지 값을 입력하면 3 × 2 = 6개 조합을 모두 테스트.<br/>
+<em>예: ADX [20,25,30] × ATR Mult [1.5,2.0] = 6개 조합 sweep</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Out-of-Sample</td>
+<td>
+<strong>최적화에 사용하지 않은 검증 기간.</strong> Sweep에서 찾은 파라미터를 다른 기간(OOS)에서 Validation으로 재검증해 과적합 여부 확인.<br/>
+<em>예: Sweep 기간 2025.01~03 → Validation 기간 2025.04~06으로 OOS 검증</em>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- ─ 인프라 ─ -->
+<h3>인프라 및 API (Infrastructure)</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th style="width:140px">용어</th><th>설명 및 예시</th></tr></thead>
+<tbody>
+<tr>
+<td class="td-param">WebSocket (WS)</td>
+<td>
+<strong>실시간 양방향 연결 프로토콜.</strong> REST처럼 매번 요청하지 않고 서버가 데이터를 밀어주는(push) 방식. 가격 실시간 수신에 사용.<br/>
+<em>이점: REST 대비 API 호출 횟수 대폭 감소, 지연(latency) 감소</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">REST API</td>
+<td>
+<strong>요청-응답 방식 HTTP API.</strong> 클라이언트가 요청할 때만 데이터를 받음. 주문 실행, 잔고 조회, 캔들 데이터 다운로드에 사용.<br/>
+<em>WS가 끊어지면 REST가 자동으로 가격 폴백 역할을 수행</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">UDS<br/><span style="color:var(--text-lo);font-size:10px">User Data Stream</span></td>
+<td>
+<strong>계정 이벤트 전용 WebSocket.</strong> 체결·포지션변경·잔고변경 등 계정 관련 이벤트를 실시간 수신. Listen Key가 필요하며 30분마다 자동 갱신(keepalive).<br/>
+<em>이점: REST 폴링 없이 체결 즉시 포지션 상태 갱신 가능</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Listen Key</td>
+<td>
+<strong>UDS 인증 토큰.</strong> User Data Stream 구독 시 필요한 일회용 키. 60분 유효, 30분마다 keepalive 요청으로 갱신.<br/>
+<em>만료되면 UDS 연결이 끊어지므로 프로그램이 자동으로 keepalive 유지</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">bookTicker</td>
+<td>
+<strong>실시간 최우선 호가 스트림.</strong> 최우선 매수/매도 호가가 바뀔 때마다 즉시 전송. 가격 WebSocket의 구독 채널.<br/>
+<em>이 프로그램은 보유 포지션 종목의 bookTicker만 구독 (active-position only)</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">REST Fallback/min</td>
+<td>
+<strong>WS 대신 REST로 가격 조회하는 보조 수단.</strong> WS가 연결됐으나 데이터가 오지 않을 때 자동으로 전환. API 모니터의 REST Fallback 카운터로 확인 가능.<br/>
+<em>WS 정상 시 0, WS SILENT 상태에서 증가</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">Testnet</td>
+<td>
+<strong>바이낸스 테스트 환경.</strong> 실제 자금이 오가지 않는 모의 거래 환경. API 설정 창에서 선택하며 테스트넷 API Key는 실거래와 별도 발급 필요.<br/>
+<em>반드시 Testnet에서 먼저 검증 후 실거래 전환 권장</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">USDT-M Futures</td>
+<td>
+<strong>USDT 기반 무기한 선물.</strong> 바이낸스 USDⓈ-M 무기한 선물 시장. 증거금과 손익이 모두 USDT로 정산. 이 프로그램의 거래 대상.<br/>
+<em>코인-M(COIN-M) 선물과는 다름 — 이 프로그램은 COIN-M 미지원</em>
+</td>
+</tr>
+<tr>
+<td class="td-param">state/ 폴더</td>
+<td>
+<strong>포지션 상태 영속성 저장소.</strong> atomic write로 저장되며 재시작 시 자동 복원.<br/>
+            • <code>open_positions.json</code> — 진입가·손절가·전략 등 포지션 정보. <code>server_stop_order_id</code>·<code>server_stop_price</code>·<code>server_stop_status</code> 필드도 함께 저장되어 재시작 후 서버 stop 상태 복원<br/>
+            • <code>reentry_cooldowns.json</code> — 청산 후 재진입 차단 쿨다운 상태. 재시작해도 쿨다운이 유지되어 청산 직후 동일 종목 즉시 재진입을 막음. 복원 시 <code>[REENTRY] 쿨다운 복원: ['BTCUSDT'] (만료까지 최대 N초)</code> 로그 출력<br/>
+<em>파일이 손상되면 포지션·쿨다운 복원 불가 — 정기적으로 백업 권장</em>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="scan-rule"/>
+<section class="section" id="architecture">
+<div class="section-eyebrow">내부 구조</div>
+<h2>전체 아키텍처</h2>
+<div class="callout info" data-manual-update="sweep-validation-flow">
+<strong>Sweep / Validation 역할 분리:</strong> Sweep은 Regime별 독립 최적화이며, Validation은 선택된 Regime Best 세팅을 Top N과 시간축 Regime 전환에 맞춰 실제 Adaptive 방식으로 재생합니다.
+</div>
+<p>프로그램은 GUI, 데이터 수집, 캐시, 백테스트 엔진, 실거래 엔진, 주문 실행 계층으로 나누어 동작합니다. 핵심 목표는 실거래와 백테스트의 종목 선정·지표 계산·진입/청산 로직을 최대한 동일하게 유지하면서, 반복 실행 속도를 캐시로 개선하는 것입니다.</p>
+<h3>아키텍처 다이어그램</h3>
+<pre>PySide6 GUI
+  │
+  ├─ Trading Tab
+  │    ├─ AutoTradeThread
+  │    ├─ Price WebSocket
+  │    ├─ User Data Stream
+  │    └─ Order / Position Manager
+  │
+  ├─ Backtest Sweep
+  │    └─ BacktestThread
+  │
+  ├─ Backtest Validation
+  │    └─ BacktestThread
+  │
+  └─ Walk-forward
+       └─ WalkForwardThread
+
+Binance REST / WebSocket
+  │
+  ├─ Public Market Data
+  │    └─ Candle Cache
+  │         └─ Historical Build
+  │              └─ Indicator Cache
+  │                   └─ market_data Memory Cache
+  │                        └─ Backtest / Validation / Walk-forward
+  │
+  └─ Private Account Data
+       ├─ UserDataStream
+       ├─ Position State Store
+       └─ Order Engine
+</pre>
+<h3>주요 구성 요소</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>구성 요소</th><th>역할</th><th>비고</th></tr></thead>
+<tbody>
+<tr><td class="td-param">GUI</td><td>Trading, Sweep, Validation, Walk-forward 설정과 결과 표시</td><td>PySide6 기반</td></tr>
+<tr><td class="td-param">AutoTradeThread</td><td>실시간 진입 스캔, 포지션 관리, 청산 처리</td><td>실거래 엔진</td></tr>
+<tr><td class="td-param">BacktestThread</td><td>Sweep 및 Validation 백테스트 실행</td><td>실거래 로직과 동일한 전략 조건 사용</td></tr>
+<tr><td class="td-param">WalkForwardThread</td><td>IS 최적화와 OOS 검증을 반복 실행</td><td>과최적화 검증용</td></tr>
+<tr><td class="td-param">Candle Cache</td><td>캔들 데이터를 로컬에 저장하고 재사용</td><td>최초 구축 후 증분 업데이트</td></tr>
+<tr><td class="td-param">Historical Build</td><td>캐시 캔들을 읽어 내부 market_data 구조 생성</td><td>OHLCV DataFrame 생성 단계</td></tr>
+<tr><td class="td-param">Indicator Cache</td><td>EMA, ATR, ADX, RSI, CI 등 계산 결과 재사용</td><td>반복 백테스트 속도 개선</td></tr>
+<tr><td class="td-param">Memory Cache</td><td>동일 데이터 조건의 market_data를 메모리에 보관</td><td>전략 파라미터 변경 시에도 재사용</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout info">
+<strong>핵심 원칙:</strong> 전략 파라미터가 바뀌어도 캔들 데이터 자체는 변하지 않습니다. 따라서 ADX, ATR Mult, Volume Mult, Trigger R, Risk %, Exit Mode, Regime 설정이 바뀌어도 Historical Build는 재사용할 수 있습니다.
+  </div>
+</section>
+<hr class="scan-rule"/>
+<section class="section" id="data-flow">
+<div class="section-eyebrow">데이터 흐름</div>
+<h2>데이터 흐름</h2>
+<div class="callout info" data-manual-update="sweep-validation-flow">
+<strong>Sweep / Validation 역할 분리:</strong> Sweep은 Regime별 독립 최적화이며, Validation은 선택된 Regime Best 세팅을 Top N과 시간축 Regime 전환에 맞춰 실제 Adaptive 방식으로 재생합니다.
+</div>
+<p>데이터는 REST와 WebSocket에서 들어와 캐시와 메모리 구조를 거친 뒤 전략 엔진에 전달됩니다. 실거래와 백테스트는 실행 시점만 다를 뿐, 가능한 한 같은 지표와 조건을 사용하도록 설계되어 있습니다.</p>
+<h3>실거래 데이터 흐름</h3>
+<pre>Price WebSocket
+      │
+      ▼
+Global Price Cache
+      │
+      ▼
+Position Monitor / Trailing Stop
+      │
+      ▼
+Order Engine
+      │
+      ▼
+Binance Futures
+
+User Data Stream
+      │
+      ▼
+Balance / Position / Order Event
+      │
+      ▼
+Dashboard / Position State Store
+</pre>
+<h3>백테스트 데이터 흐름</h3>
+<pre>Binance REST 또는 Local Candle Cache
+      │
+      ▼
+OHLCV DataFrame
+      │
+      ▼
+Historical Build
+      │
+      ▼
+Indicator Cache
+      │
+      ▼
+market_data
+      │
+      ▼
+Dynamic Top N Universe
+      │
+      ▼
+Strategy Signal
+      │
+      ▼
+Virtual Position / Exit Simulation
+      │
+      ▼
+PnL / MDD / PF / Trade Log
+</pre>
+<h3>데이터별 사용 위치</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>데이터</th><th>사용 위치</th><th>설명</th></tr></thead>
+<tbody>
+<tr><td class="td-param">OHLCV</td><td>Backtest / Validation / Walk-forward</td><td>캔들 기반 지표 계산과 진입/청산 시뮬레이션에 사용</td></tr>
+<tr><td class="td-param">quote_volume</td><td>Dynamic Top N</td><td>4시간마다 과거 24시간 거래량 순위 계산</td></tr>
+<tr><td class="td-param">WebSocket Price</td><td>Trading</td><td>실시간 트레일링 스탑, 현재가 표시, 포지션 모니터링</td></tr>
+<tr><td class="td-param">User Data Event</td><td>Trading / Dashboard</td><td>체결, 포지션 변경, 잔고 변화를 실시간 반영</td></tr>
+<tr><td class="td-param">Trade CSV</td><td>분석 / 검증</td><td>실거래 결과 분석 및 향후 AI 분석 데이터로 활용</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="scan-rule"/>
+<section class="section" id="cache-structure">
+<div class="section-eyebrow">캐시 구조</div>
+<h2>캐시 구조</h2>
+<p>캐시는 <strong>디스크 파일(재시작 후에도 유지)</strong>과 <strong>실행 중 메모리(백테스트 1회 동안 유지)</strong>로 구성됩니다. 각 계층이 역할을 분담하여 API 호출과 디스크 I/O를 최소화합니다.</p>
+<h3>캐시 계층 구조</h3>
+<pre>── 디스크 (재시작 후에도 유지) ──────────────────────────────
+
+1. manifest.json                 candle_cache/manifest.json
+   심볼별 first/last open_time 인덱스 (65KB 수준)
+   API 호출 없이 캐시 신선도를 즉시 판단하는 데 사용
+
+2. Candle Cache (parquet)        candle_cache/{SYMBOL}/{interval}.parquet
+   실제 OHLCV 캔들 데이터 (심볼당 100~200KB)
+   CacheUpdateThread가 5분마다 새 캔들만 증분 추가
+
+── 메모리 (백테스트 1회 실행 중 유지) ──────────────────────────
+
+3. manifest_cache                백테스트 시작 시 manifest.json 전체 로드
+   심볼별 O(1) 신선도 체크 → API skip 여부 결정
+   다운로드 중 메모리만 갱신, Pass 종료 시 디스크에 1회 저장
+
+4. market_data                   {symbol: {entry/execute/trailing: DataFrame}}
+   parquet 읽기 결과를 메모리에 보관
+   같은 실행 내 파라미터 조합 변경 시 재사용 (TF·기간 동일할 때)
+
+5. Indicator Cache               {symbol: DataFrame with EMA/ADX/ATR/RSI/CI}
+   _precompute_indicators() 결과
+   같은 실행 내 모든 파라미터 조합이 공유
+</pre>
+<h3>market_data 재사용 조건</h3>
+<p>같은 백테스트 실행 내에서 파라미터 조합을 바꿀 때, OHLCV 데이터(market_data)는 아래 조건에 따라 재사용 여부가 결정됩니다.</p>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>변경 항목</th><th>market_data 재사용</th><th>설명</th></tr></thead>
+<tbody>
+<tr><td class="td-param">ADX</td><td style="color:var(--green)">재사용</td><td>전략 조건만 바뀌며 OHLCV 데이터는 동일</td></tr>
+<tr><td class="td-param">ATR Mult</td><td style="color:var(--green)">재사용</td><td>손절폭 계산값만 바뀜</td></tr>
+<tr><td class="td-param">Volume Mult</td><td style="color:var(--green)">재사용</td><td>진입 필터 임계값만 바뀜</td></tr>
+<tr><td class="td-param">Trigger R</td><td style="color:var(--green)">재사용</td><td>트레일링 활성화 기준만 바뀜</td></tr>
+<tr><td class="td-param">Risk %</td><td style="color:var(--green)">재사용</td><td>포지션 수량 계산만 바뀜</td></tr>
+<tr><td class="td-param">Exit Mode</td><td style="color:var(--green)">재사용</td><td>청산 로직만 바뀜</td></tr>
+<tr><td class="td-param">Regime ON/OFF</td><td style="color:var(--green)">재사용</td><td>신호 사용 여부만 바뀜</td></tr>
+<tr><td class="td-param">Top N</td><td style="color:var(--green)">재사용</td><td>Dynamic Top N 목록은 다시 계산하지만 OHLCV는 동일</td></tr>
+<tr><td class="td-param">Market Universe</td><td style="color:var(--yellow)">재빌드</td><td>CRYPTO/TRADFI/ALL Universe가 달라짐</td></tr>
+<tr><td class="td-param">Decision TF</td><td style="color:var(--yellow)">재빌드</td><td>진입 판단 캔들 자체가 달라짐</td></tr>
+<tr><td class="td-param">Execute TF</td><td style="color:var(--yellow)">재빌드</td><td>실제 진입 타이밍 캔들이 달라짐</td></tr>
+<tr><td class="td-param">Trailing TF</td><td style="color:var(--yellow)">재빌드</td><td>ATR Trailing 계산 캔들이 달라짐</td></tr>
+<tr><td class="td-param">기간</td><td style="color:var(--yellow)">재빌드</td><td>필요한 캔들 범위가 달라짐</td></tr>
+<tr><td class="td-param">새 백테스트 실행</td><td style="color:var(--yellow)">재빌드</td><td>메모리 캐시는 실행 간 공유하지 않음. 단, 캔들 파일(parquet)은 재사용</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout info">
+<strong>참고:</strong> 백테스트를 새로 실행하면 market_data는 항상 처음부터 구성됩니다. 단, Candle Cache(parquet)가 이미 구축되어 있고 manifest가 신선도를 확인하면 API 호출 없이 SSD 읽기만으로 빠르게 완료됩니다.
+  </div>
+</section>
+<hr class="scan-rule"/>
+<section class="section" id="dynamic-topn">
+<div class="section-eyebrow">종목 선정</div>
+<h2>Dynamic Top N 알고리즘</h2>
+<p>Dynamic Top N은 실거래와 백테스트의 종목 선정 차이를 줄이기 위한 기능입니다. 고정된 Top N 목록을 전체 기간에 사용하지 않고, 4시간마다 과거 24시간 거래량 기준으로 Top N을 다시 선정합니다.</p>
+<h3>기본 개념</h3>
+<pre>매 4시간마다:
+  1. 각 종목의 직전 24시간 quote_volume 합산
+  2. 거래량 기준 내림차순 정렬
+  3. 상위 N개를 해당 4시간 구간의 활성 Universe로 지정
+  4. 기존 보유 포지션은 계속 관리
+  5. 신규 진입만 해당 시점의 Top N에 포함된 종목으로 제한
+</pre>
+<h3>왜 전체 Universe 데이터를 준비하는가?</h3>
+<p>장기 백테스트에서는 어떤 종목이 특정 시점에 거래량 급증으로 Top N에 들어올지 사전에 알 수 없습니다. 따라서 Dynamic Top N의 정확도를 유지하려면 전체 Universe의 거래량 데이터를 기준으로 각 4시간 버킷의 Top N을 계산해야 합니다.</p>
+<h3>2-pass 다운로드와 ever-active</h3>
+<p>거래량 순위 계산에는 4h 캔들만 사용하고, 전략 TF(15m/5m 등)는 한 번이라도 Top N에 들어간 심볼(ever-active)에 대해서만 다운로드합니다. 4h 캔들은 Cache Manager가 백그라운드에서 미리 구축하므로, Sweep 실행 시 Pass 1은 대부분 캐시 읽기만 수행합니다. 이를 통해 전략 TF 다운로드 범위를 전체 Universe(~500개)에서 ever-active(~100개)로 대폭 줄입니다.</p>
+<pre>Pass 1: 전체 Universe(~500개) × 4h 캔들
+        → 4h 캐시는 시작 시 백그라운드에서 사전 구축
+        → Sweep 실행 시 manifest 신선 구간은 API 없이 parquet만 읽음
+        → 4h vol_data 기반 Dynamic Top N 계산
+        → ever_active = 어느 한 버킷에서라도 Top N에 포함된 심볼 집합
+
+Pass 2: ever_active(~100개) × Decision / Execute / Trailing TF
+        → 실제 전략 시뮬레이션에 사용할 market_data 구성
+
+※ ever_active가 비어있으면(Pass 1 실패 등) "[WARN] Dynamic TopN empty; fallback to static TopN"
+  로그와 함께 Static Top N으로 자동 전환됩니다.
+</pre>
+<div class="callout info">
+<strong>첫 버킷 이전 구간 동작:</strong> 백테스트 시작 직후 첫 번째 4h 버킷이 생성되기 전 구간에서는 거래량 데이터가 없으므로 모든 종목의 진입을 차단합니다. Dynamic Top N의 정확도를 유지하기 위한 보수적 설계이며, 이 구간의 신호는 발생해도 실제 거래로 이어지지 않습니다.
+  </div>
+<div class="callout info">
+<strong>왜 4h 캔들로 거래량을 계산하는가?</strong> Dynamic Top N은 4h 버킷으로 Universe를 갱신합니다. 4h 캔들의 close_time이 4h 버킷 경계와 정확히 맞아떨어지므로 24h 롤링 윈도우 집계 오차가 없습니다. 1d 캔들은 UTC 자정 기준 마감이라 버킷과 ±8h 불일치가 생기고, 15m 캔들은 데이터량이 16배로 늘어나 실익이 없습니다.
+  </div>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>방식</th><th>장점</th><th>단점</th><th>정확도</th></tr></thead>
+<tbody>
+<tr><td class="td-param">Static Top N</td><td>빠름</td><td>기간 내 거래량 변화 반영 부족</td><td>실거래와 차이 가능</td></tr>
+<tr><td class="td-param">Dynamic Top N</td><td>실거래 종목 갱신 방식과 유사</td><td>장기 기간에서 데이터 준비량 증가</td><td>높음</td></tr>
+</tbody>
+</table>
+</div>
+<h3>Top N 변경 시 동작</h3>
+<p>Top N 값을 50에서 100으로 바꾸면 OHLCV 데이터는 재사용하고, 4시간 버킷별 활성 종목 목록만 다시 계산합니다. 따라서 Market, 기간, Timeframe이 같다면 Historical Build는 재사용할 수 있습니다.</p>
+<div class="callout info">
+<strong>핵심:</strong> Top N은 데이터 로딩 범위가 아니라 진입 가능 Universe를 결정하는 필터입니다. Dynamic Top N에서는 전체 Universe 데이터를 바탕으로 각 시점의 Top N을 계산합니다.
+  </div>
+</section>
+<hr class="scan-rule"/>
+<section class="section" id="backtest-engine">
+<div class="section-eyebrow">백테스트 엔진</div>
+<h2>백테스트 엔진 동작 방식</h2>
+<div class="callout info" data-manual-update="sweep-validation-flow">
+<strong>Sweep / Validation 역할 분리:</strong> Sweep은 Regime별 독립 최적화이며, Validation은 선택된 Regime Best 세팅을 Top N과 시간축 Regime 전환에 맞춰 실제 Adaptive 방식으로 재생합니다.
+</div>
+<p>백테스트 엔진은 데이터 준비, 지표 계산, Dynamic Top N 생성, 신호 탐색, 가상 체결, 포지션 관리, 결과 집계 순서로 동작합니다.</p>
+<h3>실행 순서</h3>
+<ul class="steps">
+<li><div class="step-num">1</div><div class="step-body"><strong>기간 설정</strong><br/>Recent Days 또는 Date Range 기준으로 테스트 기간을 결정합니다. 지표 안정화를 위해 앞쪽 warm-up 구간을 추가로 확보합니다.</div></li>
+<li><div class="step-num">2</div><div class="step-body"><strong>manifest 사전 로드</strong><br/>manifest.json을 메모리에 로드합니다. 이후 심볼별 신선도 체크가 O(1)로 동작하여 API 호출 생략 여부를 즉시 결정합니다.</div></li>
+<li><div class="step-num">3</div><div class="step-body"><strong>Pass 1 — 4h 볼륨 캐시 로드</strong><br/>전체 Universe(~500개) × 4h 캔들을 읽습니다. 4h 캔들은 시작 시 백그라운드에서 미리 업데이트되며, manifest가 신선하면 API 호출 없이 parquet만 읽습니다. 부족한 구간만 보충 다운로드하고 결과를 vol_data로 수집합니다.</div></li>
+<li><div class="step-num">4</div><div class="step-body"><strong>Dynamic Top N 생성 / ever-active 계산</strong><br/>vol_data 기반으로 4h 버킷별 Top N 목록을 빌드하고, ever-active(전체 기간 중 한 번이라도 Top N에 포함된 심볼 집합)를 도출합니다.</div></li>
+<li><div class="step-num">5</div><div class="step-body"><strong>Pass 2 — 전략 TF 다운로드</strong><br/>ever-active 심볼(~100개)만 Decision / Execute / Trailing TF 캔들을 읽습니다. 역시 manifest 신선 시 API 0회. 결과를 market_data로 수집합니다.</div></li>
+<li><div class="step-num">6</div><div class="step-body"><strong>Indicator 계산</strong><br/>EMA, ADX, ATR, RSI, CI 등을 심볼당 1회 계산합니다. <strong>Sweep</strong>은 프로세스 경계를 OHLCV만 통과시키고, 각 worker 프로세스 초기화 시 독립 계산합니다 (pickle 전송량 감소). <strong>Walk-forward</strong>는 부모 프로세스에서 1회 계산 후 전체 윈도우가 재사용합니다.</div></li>
+<li><div class="step-num">7</div><div class="step-body"><strong>신호 탐색</strong><br/>Regime, Strategy, ADX, Volume/RSI, Donchian/BB 조건을 확인해 진입 후보를 만듭니다.</div></li>
+<li><div class="step-num">8</div><div class="step-body"><strong>가상 체결 및 포지션 관리</strong><br/>Risk %, Max Position %, Max Long/Short, Leverage, 수수료, 슬리피지를 반영해 포지션을 시뮬레이션합니다.</div></li>
+<li><div class="step-num">9</div><div class="step-body"><strong>결과 집계</strong><br/>Net PnL, PF, Win Rate, MDD, Trades, Daily PnL, 레짐별 성과를 계산합니다.</div></li>
+</ul>
+<h3>Sweep / Validation / Walk-forward 차이</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>모드</th><th>목적</th><th>데이터 다운로드</th><th>파라미터 실행</th></tr></thead>
+<tbody>
+<tr><td class="td-param">Sweep</td><td>레짐별 최적 파라미터 탐색</td><td>2-pass (4h all + 3TF ever-active)</td><td>전체 조합 grid search, 결과 표로 비교</td></tr>
+<tr><td class="td-param">Validation</td><td>단일 파라미터 조합 상세 검증</td><td>동일 2-pass</td><td>1회 실행, 레짐별 상세 결과 출력</td></tr>
+<tr><td class="td-param">Walk-forward</td><td>단일 Validation 설정의 IS/OOS 유사성 검증 × N윈도우</td><td>동일 2-pass (전체 기간 1회)</td><td>실행 시 Validation 설정을 고정하고 각 Window의 IS·OOS에 동일 적용. 데이터는 모든 Window가 재사용</td></tr>
+</tbody>
+</table>
+</div>
+<h3>체결 모델</h3>
+<p>백테스트는 실제 주문을 내지 않고 가상 포지션을 생성합니다. 수수료와 슬리피지를 반영하여 실거래에 가까운 결과를 계산합니다.</p>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>항목</th><th>반영 방식</th></tr></thead>
+<tbody>
+<tr><td class="td-param">수수료</td><td>진입과 청산에 각각 fee rate 적용</td></tr>
+<tr><td class="td-param">슬리피지</td><td>진입/청산 가격에 bps 단위로 보수적 반영</td></tr>
+<tr><td class="td-param">레버리지</td><td>노셔널 계산과 Max Position 제한에 반영</td></tr>
+<tr><td class="td-param">Risk %</td><td>손절폭 기준 포지션 수량 계산</td></tr>
+<tr><td class="td-param">동시 포지션 제한</td><td>Max Long / Max Short 개수 제한 적용</td></tr>
+<tr><td class="td-param">같은 봉 내 SL/TP 동시 터치</td><td>같은 캔들에서 고가가 TP, 저가가 SL을 동시에 터치했을 때 <strong>SL 우선 처리</strong>. OHLC만으로 봉 내 체결 순서를 알 수 없으므로 보수적 가정을 적용. 실거래 대비 결과가 소폭 낮게 나올 수 있음</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="scan-rule"/>
+<section class="section" id="performance">
+<div class="section-eyebrow">성능 최적화</div>
+<h2>성능 최적화</h2>
+<p>백테스트 속도는 <strong>API 다운로드 → SSD 읽기(parquet) → Indicator 계산 → 전략 조합 실행</strong> 순으로 나뉩니다. 각 단계를 캐시와 skip 로직으로 최소화하는 구조입니다.</p>
+<h3>실행 상황별 속도</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>상황</th><th>주요 작업</th><th>속도 특성</th></tr></thead>
+<tbody>
+<tr><td class="td-param">최초 실행 (캐시 없음)</td><td>전체 Universe 캔들 API 다운로드 + parquet 저장</td><td>가장 오래 걸림 (수분)</td></tr>
+<tr><td class="td-param">캐시 구축 후 백테스트</td><td>manifest 체크 → API 0회 → parquet 읽기 → Indicator 계산</td><td>SSD 읽기만 (~10초)</td></tr>
+<tr><td class="td-param">같은 실행 내 파라미터 변경</td><td>market_data + Indicator Cache 재사용, 전략 조건만 재평가</td><td>가장 빠름 (초 단위)</td></tr>
+<tr><td class="td-param">TF·기간·Market 변경</td><td>parquet 재읽기 + market_data 재구성</td><td>SSD 읽기 (~10초)</td></tr>
+<tr><td class="td-param">프로그램 재시작 후 백테스트</td><td>manifest 체크 → API 0회 → parquet 읽기 (캐시 있으면)</td><td>SSD 읽기만</td></tr>
+</tbody>
+</table>
+</div>
+<h3>최적화 기법 목록</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>기법</th><th>효과</th></tr></thead>
+<tbody>
+<tr><td class="td-param">CacheUpdateThread 5분 주기</td><td>백테스트 실행 전 캐시가 항상 신선하게 유지됨</td></tr>
+<tr><td class="td-param">manifest 사전 로드</td><td>백테스트 시작 시 manifest 1회 로드 → 심볼별 O(1) 신선도 체크</td></tr>
+<tr><td class="td-param">Manifest-based API skip</td><td>캐시 신선 시 API 호출 0회, parquet만 읽음 (Pass 1 × 500회 절약)</td></tr>
+<tr><td class="td-param">2-pass 다운로드</td><td>전체 Universe는 4h 1회, 전략 TF는 ever-active(~100개)만</td></tr>
+<tr><td class="td-param">manifest 일괄 저장</td><td>심볼별 저장 → Pass 종료 시 최대 2회 일괄 저장</td></tr>
+<tr><td class="td-param">임시 파일 정리 1회화</td><td>백테스트 시작 시 1회만 .tmp 파일 정리 (반복 호출 방지)</td></tr>
+<tr><td class="td-param">Indicator Cache</td><td>EMA/ATR/ADX/RSI/CI를 심볼당 1회 계산, 모든 파라미터 조합이 공유</td></tr>
+<tr><td class="td-param">Sweep worker-side 지표 계산</td><td>OHLCV만 프로세스 경계 전송 → 각 worker가 초기화 시 독립 계산. 지표 컬럼이 포함된 큰 DataFrame을 N회 복사하지 않아 pickle 전송량 감소</td></tr>
+<tr><td class="td-param">Dynamic Top N 재계산 분리</td><td>Top N 변경 시 OHLCV는 재사용, 활성 Universe만 재계산</td></tr>
+</tbody>
+</table>
+</div>
+<h3>주요 로그 해석</h3>
+<pre>[Pass 1/2] 볼륨 랭킹용 4h 캔들 다운로드: N개 심볼
+  → 전체 Universe × 4h 캔들 읽기 시작
+  → manifest 신선하면 API 0회, parquet만 읽음
+
+[Pass 2/2] ever-active N개 심볼 전략 TF 다운로드
+  → 적어도 한 번 TopN에 든 심볼만 전략 TF 읽기
+
+VOL N/M {sym}     → Pass 1 진행 현황
+STRAT N/M {sym}   → Pass 2 진행 현황
+
+[WF-VOL N/M]  / [WF-STRAT N/M]
+  → Walk-forward 2-pass 진행 현황
+</pre>
+<div class="callout green">
+<strong>권장 사용 방식:</strong> 백테스트 기간과 Timeframe을 먼저 정한 뒤, ADX/Volume/Trigger/Risk 값만 바꿔 반복 검증하면 Indicator Cache와 market_data 재사용 효과가 극대화됩니다. TF나 기간을 바꾸면 parquet 재읽기가 필요하지만 API 호출은 발생하지 않습니다(캐시 신선 시).
+  </div>
+</section>
+</main>
+<script>
+// Active menu highlight
+// Keep sidebar state consistent with actual reading order, including nested anchors.
+const links = Array.from(document.querySelectorAll('#sidebar a'));
+const targets = links
+  .map(link => {
+    const href = link.getAttribute('href');
+    return { link, href, el: href ? document.querySelector(href) : null };
+  })
+  .filter(item => item.el);
+
+function setActiveLink() {
+  const probeY = window.scrollY + Math.max(96, window.innerHeight * 0.24);
+  let current = targets[0];
+
+  for (const item of targets) {
+    const top = item.el.getBoundingClientRect().top + window.scrollY;
+    if (top <= probeY) {
+      current = item;
+    } else {
+      break;
+    }
+  }
+
+  links.forEach(link => link.classList.remove('active'));
+  if (current) current.link.classList.add('active');
+}
+
+window.addEventListener('scroll', setActiveLink, { passive: true });
+window.addEventListener('resize', setActiveLink);
+window.addEventListener('load', setActiveLink);
+setActiveLink();
+</script>
+</body>
+</html>
