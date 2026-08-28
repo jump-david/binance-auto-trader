@@ -54,7 +54,7 @@ h1 { max-width: 760px; margin: 24px 0 20px; font-size: clamp(1.9rem, 3.1vw, 2.7r
 .button:hover { transform: translateY(-2px); border-color: rgba(255,255,255,.28); }
 .button.primary { background: linear-gradient(135deg, var(--gold-2), var(--gold)); color: #17130a; border-color: transparent; box-shadow: 0 12px 32px rgba(243,186,47,.22); }
 .meta { margin-top: 18px; color: #8494a3; font-size: .88rem; }
-.terminal { border: 1px solid var(--line); border-radius: 20px; background: linear-gradient(160deg, rgba(20,35,49,.95), rgba(10,19,28,.95)); box-shadow: var(--shadow); overflow: hidden; transform: rotate(1deg); }
+.terminal { border: 1px solid var(--line); border-radius: 20px; background: linear-gradient(160deg, rgba(20,35,49,.95), rgba(10,19,28,.95)); box-shadow: var(--shadow); overflow: hidden; transform: rotate(0deg); }
 .terminal-head { display: flex; align-items: center; gap: 7px; padding: 14px 16px; border-bottom: 1px solid var(--line); }
 .terminal-head i { width: 9px; height: 9px; border-radius: 50%; background: #526270; }
 .terminal-head i:first-child { background: #ff6b6b; }
