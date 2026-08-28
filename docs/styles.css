@@ -149,6 +149,10 @@ h2 { margin: 10px 0 15px; font-size: clamp(2rem, 4vw, 3.4rem); line-height: 1.08
 .cta p { margin: 0; color: var(--muted); }
 footer { padding: 40px 0 60px; color: #768694; font-size: .88rem; }
 .footer-inner { display: flex; justify-content: space-between; gap: 20px; border-top: 1px solid var(--line); padding-top: 28px; }
+.footer-brand { display: flex; align-items: center; flex-wrap: wrap; gap: 14px 18px; }
+.download-total { display: inline-flex; align-items: baseline; gap: 8px; padding-left: 18px; border-left: 1px solid var(--line); color: #8798a7; font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
+.download-total strong { color: var(--gold-2); font-size: 1rem; letter-spacing: 0; }
+.footer-links { text-align: right; }
 @media (max-width: 820px) {
   .nav-links { gap: 10px; }
   .nav-links a:not(.lang):not(.manual-tab):not(.about-tab) { display: none; }
@@ -162,6 +166,7 @@ footer { padding: 40px 0 60px; color: #768694; font-size: .88rem; }
   .cards, .steps { grid-template-columns: 1fr; }
   .seal { max-width: 260px; }
   .cta, .footer-inner { align-items: flex-start; flex-direction: column; }
+  .footer-links { text-align: left; }
 }
 @media (max-width: 480px) {
   .wrap { width: min(100% - 26px, 1120px); }
