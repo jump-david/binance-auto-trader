@@ -67,6 +67,10 @@
 .checklist li { position: relative; padding: 6px 0 6px 26px; border-bottom: 1px solid var(--border); }
 .checklist li::before { content: '✓'; position: absolute; left: 4px; color: var(--green); font-weight: 800; }
 .kbd { font: 700 10px/1 var(--mono); color: var(--text-hi); background: var(--surface2); border: 1px solid var(--border2); border-bottom-width: 2px; border-radius: 5px; padding: 3px 6px; }
+.manual-referral { display: flex; align-items: center; flex-wrap: wrap; gap: 9px 13px; margin: 14px 0 20px; }
+.manual-referral a { display: inline-flex; align-items: center; min-height: 38px; padding: 0 15px; border: 1px solid rgba(245,158,11,.65); border-radius: 8px; color: #FBBF24; background: rgba(245,158,11,.08); font-weight: 800; text-decoration: none; }
+.manual-referral a:hover { border-color: #F59E0B; background: rgba(245,158,11,.15); }
+.manual-referral span { color: var(--text-lo); font-size: 10.5px; }
 
 html { font-size: 14px; scroll-behavior: smooth; }
 
@@ -426,7 +430,8 @@ pre .label   { color: var(--yellow); }
 <div class="section-eyebrow">Account linking</div>
 <h2>Sign up for Binance and set up API</h2>
 <h3>1. Prepare a Binance account</h3>
-<p>at the top of the program <span class="kbd">Sign up for Binance</span> Click the button to open the signup page. Complete account creation, identity verification, and USDⓈ-M Futures activation in order. If you already have an account, skip this step.</p>
+<p>Click <span class="kbd">Sign up for Binance</span> at the top of the program to open the registration page. Complete account creation, identity verification, and USDⓈ-M Futures activation in order. If you already have an account, skip this step.</p>
+<div class="manual-referral"><a href="https://accounts.binance.com/en/register?ref=JUMPDAVID" target="_blank" rel="sponsored noopener noreferrer">🎁 Create a Binance account ↗</a><span>Referral link · Jump David Lab may receive a portion of trading fees.</span></div>
 <div class="callout warn"><strong>Futures trading availability:</strong> Trades for some products may be restricted depending on country/region and account status. If you are not allowed to trade, add them to Excluded Symbols.</div>
 <h3>2. Generate API Key on Binance</h3>
 <ol class="steps">
